@@ -1,0 +1,14 @@
+# Questo file di Properties contiene i parametri di
+# configurazione del Servizio
+
+# Endpoint Servizi
+
+galileo.galeve.api=http://localhost:8080/galileo/galeve/
+
+# Sezione dedicata alla configurazione degli eventi
+# 
+# parrot.source.databases					PostgreSQL source databases list
+# parrot.source.schemas						PostgreSQL source schema list
+
+parrot.source.databases=galeve,galfid
+parrot.source.schemas=galeve,galfid

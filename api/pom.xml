@@ -1,0 +1,262 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.parrot</groupId>
+	<artifactId>parrot-api</artifactId>
+	<version>${version.prefix}${version}${version.suffix}</version>
+	<packaging>jar</packaging>
+	<name>parrot-api</name>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.wildfly.bom</groupId>
+				<artifactId>wildfly-javaee7</artifactId>
+				<version>${version.wildfly.bom}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<!-- JEE Apis -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.ejb</groupId>
+			<artifactId>jboss-ejb-api_3.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.servlet</groupId>
+			<artifactId>jboss-servlet-api_3.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson2-provider</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Swagger -->
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${version.swagger.annotations}</version>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${artifact.name}</finalName>
+
+		<defaultGoal>package</defaultGoal>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${version.build.helper.maven.plugin}</version>
+					<executions>
+						<execution>
+							<id>add-source</id>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>add-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<!-- SWAGGER API -->
+									<source>src/gen/api/main/java</source>
+									<source>src/gen/api/src/main/java</source>
+									<source>src/gen/api/src/main/resources</source>
+								</sources>
+							</configuration>
+						</execution>
+						<execution>
+							<id>add-source-test</id>
+							<phase>generate-test-sources</phase>
+							<goals>
+								<goal>add-test-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<!-- SWAGGER -->
+									<source>src/gen/swagger/test/java</source>
+								</sources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.maven.compiler.plugin}</version>
+					<configuration>
+						<source>${java.compiler.source}</source>
+						<target>${java.compiler.source}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>${version.maven.scm.plugin}</version>
+					<configuration>
+						<tag>${project.version}</tag>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<profiles>
+		<profile>
+			<id>api</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.swagger</groupId>
+						<artifactId>swagger-codegen-maven-plugin</artifactId>
+						<version>${version.swagger.codegen.maven.plugin}</version>
+						<executions>
+							<execution>
+								<id>swagger-server</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<inputSpec>api/src/main/resources/swagger/${api.input.spec.file}</inputSpec>
+									<language>jaxrs-resteasy</language>
+									<modelPackage>${api.model.package.name}</modelPackage>
+									<apiPackage>${api.api.package.name}</apiPackage>
+									<invokerPackage>${api.invoker.package.name}</invokerPackage>
+									<output>src/gen/api</output>
+									<modelNameSuffix>${api-model.suffix}</modelNameSuffix>
+									<configOptions>
+										<sourceFolder>main/java</sourceFolder>
+										<dateLibrary>java8</dateLibrary>
+										<hideGenerationTimestamp>true</hideGenerationTimestamp>
+									</configOptions>
+									<environmentVariables>
+										<models></models>
+										<apis></apis>
+										<supportingFiles></supportingFiles>
+									</environmentVariables>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>${version.maven.antrun.plugin}</version>
+						<executions>
+							<execution>
+								<id>delete-swagger</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<delete failonerror="false">
+											<fileset dir="src/gen/api/main/java" includes="**/Error${api-model.suffix}.java" />
+											<fileset dir="src/gen/api/test/java"
+												includes="**/Error${api-model.suffix}TestConst.java" />
+											<fileset dir="src/gen/api/src/main/java" includes="**/*Factory.java" />
+										</delete>
+										<delete failonerror="false">
+											<fileset dir="src/gen/api" includes="*" />
+										</delete>
+										<delete dir="src/gen/api/src/main/java/${api.factories.dir}"
+											failonerror="false" />
+										<delete dir="src/gen/api/src/main/resources/generate"
+											failonerror="false" />
+										<delete dir="src/gen/api/docs" failonerror="false" />
+										<delete dir="src/gen/api/gradle" failonerror="false" />
+										<delete dir="src/gen/api/src/main/webapp" failonerror="false">
+										</delete>
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<properties>
+
+		<!-- SWAGGER API -->
+		<api.model.package.name>io.parrot.api.model</api.model.package.name>
+		<api.api.package.name>io.parrot.api</api.api.package.name>
+		<api.invoker.package.name>io.parrot.api.invoker</api.invoker.package.name>
+		<api.factories.dir>io/parrot/api/factories</api.factories.dir>
+
+		<api-model.suffix>Api</api-model.suffix>
+		<api.input.spec.file>api.yaml</api.input.spec.file>
+
+		<!-- MAVEN PLUGINS -->
+		<version.maven.antrun.plugin>1.8</version.maven.antrun.plugin>
+		<version.maven.compiler.plugin>3.5.1</version.maven.compiler.plugin>
+		<version.maven.scm.plugin>1.9.5</version.maven.scm.plugin>
+		<version.build.helper.maven.plugin>1.7</version.build.helper.maven.plugin>
+		<version.swagger.codegen.maven.plugin>2.3.1.CDP-rc.2254</version.swagger.codegen.maven.plugin>
+
+		<version.wildfly.bom>10.1.0.Final</version.wildfly.bom>
+		<version.swagger.annotations>1.5.9</version.swagger.annotations>
+
+		<!-- COMMON -->
+		<artifact.name>${project.artifactId}-${project.version}</artifact.name>
+
+		<version>0.0.0</version>
+		<version.prefix></version.prefix>
+		<version.suffix>-SNAPSHOT</version.suffix>
+
+		<java.compiler.source>1.8</java.compiler.source>
+		<java.compiler.target>1.8</java.compiler.target>
+
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>cdp</id>
+			<name>CDP Maven Repository</name>
+			<url>http://repo.maven.cdp.it:8080/repository/cdp</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>cdp</id>
+			<name>CDP Maven Mirror</name>
+			<url>http://repo.maven.cdp.it:8080/repository/cdp</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

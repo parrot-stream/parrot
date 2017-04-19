@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<!-- parent> <groupId>it.cdp.galileo</groupId> <artifactId>galileo-ejb-parent</artifactId> 
+		<version>0.0.1-rc.1424</version> </parent -->
+	<groupId>io.parrot</groupId>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>parrot-cfg</artifactId>
+	<version>${version.prefix}${version}${version.suffix}</version>
+	<packaging>jar</packaging>
+	<name>parrot-cfg</name>
+
+	<repositories>
+		<repository>
+			<id>cdp</id>
+			<name>CDP Maven Repository</name>
+			<url>http://repo.maven.cdp.it:8080/repository/cdp</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<version>0.0.0</version>
+		<version.prefix></version.prefix>
+		<version.suffix>-SNAPSHOT</version.suffix>
+	</properties>
+	
+</project>

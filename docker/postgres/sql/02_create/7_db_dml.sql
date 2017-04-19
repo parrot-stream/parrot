@@ -1,0 +1,3 @@
+select parrot.loadall();
+
+commit;

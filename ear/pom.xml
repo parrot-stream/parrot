@@ -1,0 +1,172 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.parrot</groupId>
+	<artifactId>parrot-ear</artifactId>
+	<version>${version.prefix}${version}${version.suffix}</version>
+	<packaging>ear</packaging>
+	<name>parrot-ear</name>
+
+	<build>
+		<finalName>${artifact.name}</finalName>
+		<defaultGoal>package</defaultGoal>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-ear-plugin</artifactId>
+					<version>${version.maven.ear.plugin}</version>
+					<configuration>
+						<version>7</version>
+						<skinnyWars>true</skinnyWars>
+						<defaultLibBundleDir>lib</defaultLibBundleDir>
+						<modules>
+							<webModule>
+								<groupId>io.parrot</groupId>
+								<artifactId>parrot-war</artifactId>
+								<contextRoot>/parrot</contextRoot>
+							</webModule>
+							<jarModule>
+								<groupId>io.parrot</groupId>
+								<artifactId>parrot-api</artifactId>
+							</jarModule>
+							<jarModule>
+								<groupId>io.parrot</groupId>
+								<artifactId>parrot-cfg</artifactId>
+							</jarModule>
+							<ejbModule>
+								<groupId>io.parrot</groupId>
+								<artifactId>parrot-ejb</artifactId>
+							</ejbModule>
+						</modules>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.parrot</groupId>
+			<artifactId>parrot-war</artifactId>
+			<version>${version.parrot-war}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>io.parrot</groupId>
+			<artifactId>parrot-ejb</artifactId>
+			<version>${version.parrot-ejb}</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>io.parrot</groupId>
+			<artifactId>parrot-api</artifactId>
+			<version>${version.parrot-api}</version>
+			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>io.parrot</groupId>
+			<artifactId>parrot-cfg</artifactId>
+			<version>${version.parrot-cfg}</version>
+			<type>jar</type>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+
+		<profile>
+			<id>local-unit-test</id>
+			<properties>
+				<postgresql.hostname>localhost</postgresql.hostname>
+			</properties>
+		</profile>
+		<profile>
+			<id>local-integration</id>
+			<properties>
+				<artifact.name>${project.artifactId}-${project.version}</artifact.name>
+				<postgresql.hostname>swagger.cdp.it</postgresql.hostname>
+			</properties>
+		</profile>
+		<profile>
+			<id>pipeline-build</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-maven-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>pipeline-unit-test</id>
+			<properties>
+				<wildfly.hostname>docker</wildfly.hostname>
+				<postgresql.hostname>docker</postgresql.hostname>
+			</properties>
+		</profile>
+		<profile>
+			<id>pipeline-integration</id>
+			<properties>
+				<wildfly.hostname>docker</wildfly.hostname>
+				<postgresql.hostname>docker</postgresql.hostname>
+				<artifact.name>${project.artifactId}-${project.version}</artifact.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>pipeline-test</id>
+			<properties>
+				<wildfly.hostname>jboss</wildfly.hostname>
+				<artifact.name>${project.artifactId}-${project.version}</artifact.name>
+			</properties>
+		</profile>
+		<profile>
+			<id>pipeline-production</id>
+			<properties>
+				<wildfly.hostname>jboss</wildfly.hostname>
+				<artifact.name>${project.artifactId}-${project.version}</artifact.name>
+			</properties>
+		</profile>
+	</profiles>
+
+	<properties>
+
+		<version.parrot-ejb>${version.prefix}${version}${version.suffix}</version.parrot-ejb>
+		<version.parrot-api>${version.prefix}${version}${version.suffix}</version.parrot-api>
+		<version.parrot-war>${version.prefix}${version}${version.suffix}</version.parrot-war>
+		<version.parrot-cfg>${version.prefix}${version}${version.suffix}</version.parrot-cfg>
+
+		<!-- PLUGINS -->
+		<version.maven.ear.plugin>2.10.1</version.maven.ear.plugin>
+
+		<!-- COMMONS -->
+		<artifact.name>parrot</artifact.name>
+
+		<version>0.0.0</version>
+		<version.prefix></version.prefix>
+		<version.suffix>-SNAPSHOT</version.suffix>
+
+		<postgresql.hostname>localhost</postgresql.hostname>
+		<postgresql.port>5490</postgresql.port>
+
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>cdp</id>
+			<name>CDP Maven Repository</name>
+			<url>http://repo.maven.cdp.it:8080/repository/cdp</url>
+		</repository>
+	</repositories>
+
+</project>

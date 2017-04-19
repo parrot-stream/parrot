@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>io.parrot</groupId>
+	<artifactId>parrot</artifactId>
+	<version>${version.prefix}${version}${version.suffix}</version>
+	<packaging>pom</packaging>
+	<name>parrot</name>
+
+	<modules>
+		<module>api</module>
+		<module>jpa</module>
+		<module>ejb</module>
+		<module>ear</module>
+		<module>war</module>
+		<module>cfg</module>
+	</modules>
+
+	<repositories>
+		<repository>
+			<id>cdp</id>
+			<name>CDP Maven Repository</name>
+			<url>http://repo.maven.cdp.it:8080/repository/cdp</url>
+		</repository>
+	</repositories>
+
+	<properties>
+
+		<version>0.0.0</version>
+		<version.prefix></version.prefix>
+		<version.suffix>-SNAPSHOT</version.suffix>
+
+	</properties>
+
+
+</project>
