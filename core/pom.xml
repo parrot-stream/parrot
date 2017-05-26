@@ -1,0 +1,486 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.parrot</groupId>
+		<artifactId>parrot</artifactId>
+		<version>0.1.0</version>
+	</parent>
+	<artifactId>parrot-core</artifactId>
+	<packaging>ejb</packaging>
+	<name>parrot-core</name>
+
+	<dependencies>
+
+		<!-- SCALA -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>${version.scala}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- SWAGGER -->
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${version.swagger}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-jaxrs</artifactId>
+			<version>${version.swagger}</version>
+		</dependency>
+
+		<!-- JACKSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${version.jackson}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${version.jackson}</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${version.jackson}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${version.jackson}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+			<version>${version.jackson}</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson2-provider</artifactId>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- APACHE CURATOR -->
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-framework</artifactId>
+			<version>${version.curator}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>${version.curator}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-client</artifactId>
+			<version>${version.curator}</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-x-discovery</artifactId>
+			<version>${version.curator}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-test</artifactId>
+			<version>${version.curator}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- DELTASPIKE -->
+		<dependency>
+			<groupId>org.apache.deltaspike.core</groupId>
+			<artifactId>deltaspike-core-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.deltaspike.core</groupId>
+			<artifactId>deltaspike-core-impl</artifactId>
+		</dependency>
+
+		<!-- KAFKA -->
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.11</artifactId>
+			<version>${version.kafka}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- TESTING -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit4}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-weld</artifactId>
+			<scope>provided</scope>
+			<version>${version.wildfly.bom}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<version>${version.hamcrest}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${version.rest.assured}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- LOG4J -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${version.log4j}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${version.log4j}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- REST -->
+		<dependency>
+			<groupId>com.squareup.retrofit2</groupId>
+			<artifactId>retrofit</artifactId>
+			<version>${version.retrofit}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.retrofit2</groupId>
+			<artifactId>converter-jackson</artifactId>
+			<version>${version.retrofit}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>logging-interceptor</artifactId>
+			<version>${version.okhttp.logging.interceptor}</version>
+		</dependency>
+
+		<!-- COMMONS -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${version.commons-io}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<defaultGoal>package</defaultGoal>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-ejb-plugin</artifactId>
+					<version>${version.maven.ejb.plugin}</version>
+					<configuration>
+						<ejbVersion>3.0</ejbVersion>
+						<archive>
+							<manifest>
+								<addClasspath>true</addClasspath>
+							</manifest>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${version.build.helper.maven.plugin}</version>
+					<executions>
+						<execution>
+							<id>add-source</id>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>add-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<!-- SWAGGER API -->
+									<source>src/gen/api/main/java</source>
+									<source>src/gen/api/src/main/java</source>
+									<source>src/gen/api/src/main/resources</source>
+								</sources>
+							</configuration>
+						</execution>
+						<execution>
+							<id>add-source-test</id>
+							<phase>generate-test-sources</phase>
+							<goals>
+								<goal>add-test-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<!-- SWAGGER -->
+									<source>src/gen/swagger/test/java</source>
+								</sources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${version.maven.antrun.plugin}</version>
+					<executions>
+						<execution>
+							<id>delete-swagger</id>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>run</goal>
+							</goals>
+							<configuration>
+								<target>
+									<delete failonerror="false">
+										<fileset dir="src/gen/api/main/java" includes="**/Error${api-model.suffix}.java" />
+										<fileset dir="src/gen/api/test/java"
+											includes="**/Error${api-model.suffix}TestConst.java" />
+										<fileset dir="src/gen/api/src/main/java" includes="**/*Factory.java" />
+									</delete>
+									<delete failonerror="false">
+										<fileset dir="src/gen/api" includes="*" />
+									</delete>
+									<delete dir="src/gen/api/src/main/java/${api.factories.dir}"
+										failonerror="false" />
+									<delete dir="src/gen/api/src/main/resources/generate"
+										failonerror="false" />
+									<delete dir="src/gen/api/docs" failonerror="false" />
+									<delete dir="src/gen/api/gradle" failonerror="false" />
+									<delete dir="src/gen/api/src/main/webapp" failonerror="false">
+									</delete>
+								</target>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>${version.wildfly.maven.plugin}</version>
+					<executions>
+						<execution>
+							<phase>pre-integration-test</phase>
+							<configuration>
+								<skip>${wildfly.skipDeploy}</skip>
+								<hostname>${wildfly.hostname}</hostname>
+								<port>${wildfly.port}</port>
+								<filename>../../ear/target/parrot.ear</filename>
+								<username>${wildfly.username}</username>
+								<password>${wildfly.password}</password>
+								<targetDir>../ear/target</targetDir>
+							</configuration>
+							<goals>
+								<goal>${wildfly.goal}</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<profiles>
+		<profile>
+			<id>api</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.swagger</groupId>
+						<artifactId>swagger-codegen-maven-plugin</artifactId>
+						<version>${version.swagger.codegen.maven.plugin}</version>
+						<executions>
+							<execution>
+								<id>generate-swagger</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<inputSpec>api/src/main/resources/swagger/${api.input.spec.file}</inputSpec>
+									<language>jaxrs-resteasy-eap</language>
+									<modelPackage>${api.model.package.name}</modelPackage>
+									<apiPackage>${api.api.package.name}</apiPackage>
+									<invokerPackage>${api.invoker.package.name}</invokerPackage>
+									<output>src/gen/api</output>
+									<modelNameSuffix>${api-model.suffix}</modelNameSuffix>
+									<configOptions>
+										<sourceFolder>main/java</sourceFolder>
+										<dateLibrary>java8</dateLibrary>
+										<hideGenerationTimestamp>true</hideGenerationTimestamp>
+									</configOptions>
+									<environmentVariables>
+										<models></models>
+										<apis></apis>
+										<supportingFiles></supportingFiles>
+									</environmentVariables>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>${version.maven.antrun.plugin}</version>
+						<executions>
+							<execution>
+								<id>delete-swagger</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<delete dir="src/gen/api/src/main/java" failonerror="false" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<properties>
+
+		<!-- SWAGGER API -->
+		<api.model.package.name>io.parrot.api.model</api.model.package.name>
+		<api.api.package.name>io.parrot.api</api.api.package.name>
+		<api.invoker.package.name>io.parrot.api.invoker</api.invoker.package.name>
+		<api.factories.dir>io/parrot/api/factories</api.factories.dir>
+
+		<api-model.suffix>Api</api-model.suffix>
+		<api.input.spec.file>api.yaml</api.input.spec.file>
+
+		<!-- MAVEN PLUGINS -->
+		<version.maven.ejb.plugin>2.5.1</version.maven.ejb.plugin>
+		<version.maven.antrun.plugin>1.8</version.maven.antrun.plugin>
+		<version.build.helper.maven.plugin>1.7</version.build.helper.maven.plugin>
+		<version.swagger.codegen.maven.plugin>2.2.2</version.swagger.codegen.maven.plugin>
+		<version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
+
+		<!-- WILDFLY BOM -->
+		<version.wildfly.bom>10.1.0.Final</version.wildfly.bom>
+
+		<!-- SCALA -->
+		<version.scala>2.11.11</version.scala>
+
+		<!-- EXTERNAL LIBRARIES -->
+		<version.swagger>1.5.13</version.swagger>
+		<version.jackson>2.8.6</version.jackson>
+
+		<version.curator>3.3.0</version.curator>
+		<version.deltaspike>1.7.2</version.deltaspike>
+		<version.kafka>0.10.2.0</version.kafka>
+		<version.cdiunit>3.1.4</version.cdiunit>
+		<version.junit4>4.12</version.junit4>
+		<version.weld>2.4.3.Final</version.weld>
+		<version.hamcrest>1.3</version.hamcrest>
+		<version.rest.assured>3.0.2</version.rest.assured>
+		<version.log4j>2.7</version.log4j>
+		<version.retrofit>2.2.0</version.retrofit>
+		<version.okhttp.logging.interceptor>3.7.0</version.okhttp.logging.interceptor>
+		<version.commons-io>2.1</version.commons-io>
+		
+		<!-- JBOSS -->
+		<wildfly.hostname>127.0.0.1</wildfly.hostname>
+		<wildfly.port>9990</wildfly.port>
+		<wildfly.goal>deploy</wildfly.goal>
+		<wildfly.username>parrot</wildfly.username>
+		<wildfly.password>parrot</wildfly.password>
+		<wildfly.skipDeploy>false</wildfly.skipDeploy>
+
+	</properties>
+
+	<!-- repositories> <repository> <id>cdp</id> <name>CDP Maven Repository</name> 
+		<url>http://repo.maven.cdp.it:8080/repository/cdp</url> </repository> </repositories> 
+		<pluginRepositories> <pluginRepository> <id>cdp</id> <name>CDP Maven Mirror</name> 
+		<url>http://repo.maven.cdp.it:8080/repository/cdp</url> </pluginRepository> 
+		</pluginRepositories -->
+
+</project>

@@ -3,11 +3,12 @@ version: "2"
 services:
 
     zookeeper:
-        image: mcapitanio/zookeeper
+        image: mcapitanio/zookeeper:3.5.3
         ports:
             - "2181:2181"
             - "2888:2888"
             - "3888:3888"
+            - "8085:8080"
         networks:
             - parrot
         volumes:
@@ -16,5 +17,8 @@ services:
             - zookeeper_conf:/opt/zookeeper/conf
 
 networks:
+    default:
+      external:
+        name: parrot
     parrot:
         driver: bridge

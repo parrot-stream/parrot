@@ -1,7 +1,12 @@
 version: "2"
 
 services:
-                  
+                
+    postgres:
+        extends:
+            file: postgres.yml
+            service: postgres
+              
     debezium:
         build:
             context: .
@@ -12,6 +17,8 @@ services:
         volumes:
             - debezium_logs:/kafka/logs
             - debezium_conf:/kafka/conf
+        links:
+            - postgres
         ports:
             - "8083:8083"
         environment:
@@ -23,6 +30,7 @@ services:
 volumes:
     debezium_logs:
     debezium_conf:
+    postgres_parrot_data:
 
 networks:
     default:

@@ -144,23 +144,6 @@
 		</subsystem>
 		<subsystem xmlns="urn:jboss:domain:bean-validation:1.0" />
 		<subsystem xmlns="urn:jboss:domain:datasources:4.0">
-			<datasources>
-				<datasource jndi-name="java:/jdbc/${env.DB_DATASOURCE}"
-					pool-name="${env.DB_DATASOURCE}" enabled="true">
-					<connection-url>jdbc:postgresql://${env.DB_HOSTNAME}:5432/${env.DB_NAME}
-					</connection-url>
-					<driver>postgres</driver>
-					<security>
-						<user-name>postgres</user-name>
-						<password>postgres</password>
-					</security>
-				</datasource>
-				<drivers>
-					<driver name="postgres" module="org.postgres">
-						<driver-class>org.postgresql.Driver</driver-class>
-					</driver>
-				</drivers>
-			</datasources>
 		</subsystem>
 		<subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
 			<deployment-scanner path="deployments"

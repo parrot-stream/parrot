@@ -1,0 +1,20 @@
+{
+	"schema": {
+		"type": "struct",
+		"name": "PostgreSQL_server.public.customers.Key",
+		"optional": false,
+		"fields": [
+			{
+				"name": "id",
+				"index": "0",
+				"schema": {
+					"type": "INT32",
+					"optional": "false"
+				}
+			}
+		]
+	},
+	"payload": {
+		"id": "1"
+	}
+}

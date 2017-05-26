@@ -5,44 +5,52 @@ export DOCKER_IMAGE=mcapitanio/parrot
 
 function usage {
     echo -e "#################################################################################################################################################"
-    echo -e "  Utilizzo:                                                                                                                                      "
-    echo -e "             ./parrot-cli start|start-kafka|stop|stop-kafka|start-debezium|stop-debezium|stop-all|restart|deploy|test|build [-d|--debug] [-m=<TYPE>|--mode=<TYPE>]"
-    echo -e "  Esempi:"
-    echo -e "             ./parrot-cli start -d"
-    echo -e "                                                                                                                                                 "
-    echo -e "                 -> Effettua lo start del servizio con rebuild dell'immagine e avvia JBoss in Standalone Mode (Debug)"
+    echo -e "  Usage:"
+    echo -e "             ./parrot-cli COMMAND [OPTIONS]"
     echo -e ""
-    echo -e "             ./parrot-cli start -m=LOCAL_INTEGRATION"
+    echo -e "  Commands:"
+    echo -e "     start				Starts Parrot"
+    echo -e "     start-kafka		Starts Apache Kafka"
+    echo -e "     start-debezium	Starts Debezium"
+    echo -e "     restart           Restarts Parrot"
+    echo -e "     stop				Stops Parrot"
+    echo -e "     stop-kafka        Stops Apache Kafka"
+    echo -e "     stop-debezium     Stops Debezium"
+    echo -e "     stop-all          Stops Apache Kafka, Debeziume and Parrot""
+    echo -e "     deploy            Deploy Parrot"
+    echo -e "     test              Runs Parrot Integration Tests"
+    echo -e "     build             Builds Parrot"
     echo -e ""
-    echo -e "                 -> Effettua lo start del servizio in modalita' di test integrazione locali"
-    echo -e ""
-    echo -e "                    Le modalita' previste sono:"
-    echo -e "                         LOCAL_UNIT           -> Test unitari locali (avvio per l'eesecuzione dei test unitari locali)"
-    echo -e "                         LOCAL_INTEGRATION    -> Test integrazione locali  (avvio per l'esecuzione dei test di integrazione locali)"
-    echo -e "                         PIPELINE_UNIT        -> Test unitari in GitLab Pipeline (avvio per l'esecizione dei test unitari da GitLab pipeline)"
-    echo -e "                         PIPELINE_INTEGRATION -> Test integrazione in GitLab Pipeline (avvio per l'esecuzione dei test di integrazione da GitLab pipeline)"
-    echo -e "                         DEVELOPMENT          -> Development Mode (avvio per utilizzo in fase di sviluppo)"
-    echo -e "                         PRODUCTION           -> Production mode"
-    echo -e ""
-    echo -e "             ./parrot-cli stop"
-    echo -e "                                                                                                                                                 "
-    echo -e "                 -> Effettua lo stop del servizio e del relativo database, del database degli eventi e di Kafka"
+    echo -e "  Options:"
+    echo -e "     -d, --detach		Executes command in background"
+    echo -e "         --debug       Starts Parrot in Debug Mode"
+    echo -e "     -m, --mode        One of:"
+    echo -e "                          LOCAL_UNIT"
+    echo -e "                                Default: starts Parrot with the configuration for Local Unit Test with Properties.properties.local-ut file."
+    echo -e "                          PIPELINE_UNIT"
+    echo -e "                                Starts Parrot with the configuration for Trevis Pipeline Unit Test with Properties.properties.pipeline-ut file."
     echo -e ""    
-    echo -e "                    Le porte esposte sono determinate in base all'ID fornito, quindi:"
-    echo -e "                         54$ID  ->  PostgreSQL port"
-    echo -e "                         80$ID  ->  JBoss Http"
-    echo -e "                         99$ID  ->  JBoss Management"
-    echo -e "                         87$ID  ->  JBoss Debug"
+    echo -e " Exposed Ports:
+    echo -e ""
+    echo -e "                         8090  ->  JBoss Http"
+    echo -e "                         9990  ->  JBoss Management"
+    echo -e "                         8790  ->  JBoss Debug"
+    echo -e "                         5432  ->  PostgreSQL"
+    echo -e "                         3306  ->  MySQL"
+    echo -e "                         1521  ->  Oracle Database"
+    echo -e "                         5500  ->  Oracle Enterprise Manager"
+    echo -e "                         27017 ->  MongoDB"
     echo -e "#################################################################################################################################################"
 }
 
 function print_env {
     echo -e "#################################################################################################################################################"
-    echo -e "  Esecuzione con:                                                                                                                                "
-    echo -e "             command              -> $COMMAND"
-    echo -e "             debug                -> $DEBUG"
-    echo -e "             id                   -> $ID"
-    echo -e "             mode                 -> $MODE"
+    echo -e "  Executing with:                                                                                                                                "
+    echo -e "             Command              -> $COMMAND"
+    echo -e "             Debug                -> $DEBUG"
+    echo -e "             ID                   -> $ID"
+    echo -e "             Mode                 -> $MODE"
+    echo -e "			  Volume Root Path     -> $VOLUME_ROOT_PATH"
     echo -e "#################################################################################################################################################"
 }
 
@@ -53,7 +61,6 @@ export LOCAL_UNIT="false"
 export LOCAL_INTEGRATION="false"
 export PIPELINE_UNIT="false"
 export PIPELINE_INTEGRATION="false"
-export DEVELOPMENT="false"
 export PRODUCTION="false"
 export HOSTNAME=localhost
 export DOCKER_COMPOSE_FILE="docker-compose.yml"
@@ -113,8 +120,12 @@ case $i in
     MODE=${Array[1]}
     shift
     ;;
-    -d*|--debug*)
+    --debug*)
     export DEBUG="true"
+    shift
+    ;;
+    -d*|--detach*)
+    export DETACH="-d"
     shift
     ;;
     -stop*)
@@ -146,22 +157,13 @@ fi
 if [[ ($MODE = "LOCAL_UNIT") ]]; then
     export LOCAL_UNIT="true"
 fi
-if [[ ($MODE = "LOCAL_INTEGRATION") ]]; then
-    export LOCAL_INTEGRATION="true"
-fi
+
 if [[ ($MODE = "PIPELINE_UNIT") ]]; then
     export PIPELINE_UNIT="true"
     export DOCKER_COMPOSE_FILE="docker-compose-pipeline.yml"
     HOSTNAME=docker
 fi
-if [[ ($MODE = "PIPELINE_INTEGRATION") ]]; then
-    export PIPELINE_INTEGRATION="true"
-    export DOCKER_COMPOSE_FILE="docker-compose-pipeline.yml"
-    HOSTNAME=docker
-fi
-if [[ ($MODE = "DEVELOPMENT") ]]; then
-    export DEVELOPMENT="true"
-fi
+
 if [[ ($MODE = "PRODUCTION") ]]; then
     export PRODUCTION="true"
 fi
@@ -175,7 +177,7 @@ if [[ ($COMMAND = "stop-kafka") ]]; then
 fi
 
 if [[ ($COMMAND = "start-kafka") ]]; then
-	docker-compose -f docker/kafka.yml up -d
+	docker-compose -f docker/kafka.yml up $DETACH
 fi
 
 if [[ ($COMMAND = "stop-debezium") ]]; then
@@ -183,7 +185,7 @@ if [[ ($COMMAND = "stop-debezium") ]]; then
 fi
 
 if [[ ($COMMAND = "start-debezium") ]]; then
-	docker-compose -f docker/debezium.yml up
+	docker-compose -f docker/debezium.yml up $DETACH
 fi
 
 if [[ ($COMMAND = "stop-all") ]]; then
@@ -196,7 +198,7 @@ if [[ ($COMMAND = "stop") || ($COMMAND = "stop-kafka") || ($COMMAND = "start-kaf
 	exit 0
 fi
 
-mvn clean package -DskipTests -U
+mvn clean package -DskipTests
 
 if [ $? -ne 0 ]; then
 	exit 1
@@ -233,7 +235,7 @@ if [[ ($COMMAND = "start") || ($COMMAND = "restart") ]]; then
 
 	docker exec -it docker_${SERVICE}_1 bash /opt/parrot/docker/wildfly/deploy.sh
 
-	if [[ ($MODE = "LOCAL_UNIT") || ($MODE = "LOCAL_INTEGRATION") || ($MODE = "DEVELOPMENT") ]]; then
+	if [[ ($MODE = "LOCAL_UNIT") || ($MODE = "LOCAL_INTEGRATION") ]]; then
 		docker-compose -f docker/$DOCKER_COMPOSE_FILE logs -f
     fi
 fi

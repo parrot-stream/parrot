@@ -1,43 +1,58 @@
 version: "2"
 
 services:
+          
+ #   oracle:
+ #       extends:
+ #           file: oracle.yml
+ #           service: oracle
 
     postgres:
         extends:
             file: postgres.yml
             service: postgres
 
+    mysql:
+        extends:
+            file: mysql.yml
+            service: mysql
+               
     parrot:
         build:
             context: ..
             dockerfile: Dockerfile
         image: ${DOCKER_IMAGE}:${DOCKER_TAG}
+        image: test:test
         networks:
             - parrot
         links:
             - postgres
+            - mysql
+ #           - oracle
         ports:
             - "80${ID}:8080"
             - "99${ID}:9990"
             - "87${ID}:8787"
         privileged: true
         environment:
-            - DB_HOSTNAME=postgres
-            - DB_NAME=parrot
-            - DB_DATASOURCE=ParrotDS
-            - KAFKA_BROKER_HOSTNAME=kafka
-            - DEBEZIUM_HOSTNAME=debezium
-            - LOCAL_UNIT=${LOCAL_UNIT}
-            - LOCAL_INTEGRATION=${LOCAL_INTEGRATION}
-            - PIPELINE_UNIT=${PIPELINE_UNIT}
-            - PIPELINE_INTEGRATION=${PIPELINE_INTEGRATION}
-            - DEVELOPMENT=${DEVELOPMENT}
-            - DEBUG=${DEBUG}
+            DB_NAME: parrot
+            POSTGRESQL_HOSTNAME: postgres
+            MYSQL_HOSTNAME: mysql
+            MONGODB_HOSTNAME: mongodb
+            ORACLE_HOSTNAME: oracle
+            KAFKA_BROKER_HOSTNAME: kafka
+            DEBEZIUM_HOSTNAME: debezium
+            LOCAL_UNIT: ${LOCAL_UNIT}
+            PIPELINE_UNIT: ${PIPELINE_UNIT}
+            DEBUG: ${DEBUG}
 
 volumes:
-    postgres_data:
-    wiremock_files:
-    wiremock_mappings:
+    postgres_parrot_data:
+    oracle_parrot_data:
+    mysql_parrot_data:
+    mysql_parrot_conf:
+    mysql_conf:
+    mysql_data:
 
 networks:
     default:

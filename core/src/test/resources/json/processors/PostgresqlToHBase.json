@@ -1,0 +1,12 @@
+{
+	"id": "Processor_PostgresqlToHBase",
+	"source": {
+		"logical.name": "parrot_source",
+		"source.class": "io.parrot.source.PostgresqlSource",
+		"bootstrap.servers": "kafka:9092",
+		"table.whitelist": "parrot.table_with_simple_pk"
+	},
+	"sink": {
+		"id": "Sink_HBase"
+	}
+}

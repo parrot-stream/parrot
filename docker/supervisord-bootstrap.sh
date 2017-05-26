@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wait-for-it.sh $DB_HOSTNAME:5432 -t 120
+wait-for-it.sh $POSTGRESQL_HOSTNAME:5432 -t 120
 rc=$?
 if [ $rc -ne 0 ]; then
     echo -e "\n--------------------------------------------"
@@ -8,6 +8,24 @@ if [ $rc -ne 0 ]; then
     echo -e "--------------------------------------------"
     exit $rc
 fi
+
+wait-for-it.sh $MYSQL_HOSTNAME:3306 -t 120
+rc=$?
+if [ $rc -ne 0 ]; then
+    echo -e "\n--------------------------------------------"
+    echo -e "      MySql not ready! Exiting..."
+    echo -e "--------------------------------------------"
+    exit $rc
+fi
+
+#wait-for-it.sh $ORACLE_HOSTNAME:1521 -t 120
+#rc=$?
+#if [ $rc -ne 0 ]; then
+#    echo -e "\n--------------------------------------------"
+#    echo -e "      Oracle XE not ready! Exiting..."
+#    echo -e "--------------------------------------------"
+#    exit $rc
+#fi
 
 wait-for-it.sh $KAFKA_BROKER_HOSTNAME:9092 -t 120
 rc=$?
@@ -29,11 +47,11 @@ fi
 
 echo -e "\n##################################################################"
 echo -e "#                                                                #"
-echo -e "#                 STARTING INIT POSTGRES...                      #"
+echo -e "#                 STARTING INIT SOURCES ...                      #"
 echo -e "#                                                                #"
 echo -e "##################################################################\n"
 
-supervisorctl start init-postgres
+supervisorctl start init-sources
 
 if [[ $DEBUG = "true" ]]; then
 	supervisorctl start jboss-debug
@@ -56,4 +74,4 @@ sleep 15
 
 supervisorctl start init-jboss
 
-supervisorctl start init-debezium
+#supervisorctl start init-debezium

@@ -1,0 +1,136 @@
+{
+	"schema": {
+		"type": "struct",
+		"optional": false,
+		"name": "PostgreSQL_server.public.customers.Envelope",
+		"version": 1,
+		"fields": [
+			{
+				"field": "op",
+				"type": "string",
+				"optional": false
+			},
+			{
+				"field": "before",
+				"type": "struct",
+				"optional": true,
+				"name": "PostgreSQL_server.public.customers.Value",
+				"fields": [
+					{
+						"type": "int32",
+						"optional": false,
+						"field": "id"
+					}
+				]
+			},
+			{
+				"field": "after",
+				"type": "struct",
+				"name": "PostgreSQL_server.public.customers.Value",
+				"optional": true,
+				"fields": [
+					{
+						"type": "int32",
+						"optional": false,
+						"field": "id"
+					},
+					{
+						"type": "string",
+						"optional": false,
+						"field": "first_name"
+					},
+					{
+						"type": "string",
+						"optional": false,
+						"field": "last_name"
+					},
+					{
+						"type": "string",
+						"optional": false,
+						"field": "email"
+					}
+				]
+			},
+			{
+				"field": "source",
+				"type": "struct",
+				"name": "io.debezium.connector.postgresql.Source",
+				"optional": false,
+				"fields": [
+					{
+						"name": "name",
+						"index": "0",
+						"schema": {
+							"type": "STRING",
+							"optional": "false"
+						}
+					},
+					{
+						"name": "ts_usec",
+						"index": "1",
+						"schema": {
+							"type": "INT64",
+							"optional": "true"
+						}
+					},
+					{
+						"name": "txId",
+						"index": "2",
+						"schema": {
+							"type": "INT32",
+							"optional": "true"
+						}
+					},
+					{
+						"name": "lsn",
+						"index": "3",
+						"schema": {
+							"type": "INT64",
+							"optional": "true"
+						}
+					},
+					{
+						"name": "snapshot",
+						"index": "4",
+						"schema": {
+							"type": "BOOLEAN",
+							"optional": "true"
+						}
+					},
+					{
+						"name": "last_snapshot_record",
+						"index": "5",
+						"schema": {
+							"type": "BOOLEAN",
+							"optional": "true"
+						}
+					}
+				]
+			},
+			{
+				"field": "ts_ms",
+				"type": "int64",
+				"optional": true
+			}
+		]
+	},
+	"payload": {
+		"op": "c",
+		"ts_ms": 1465491411815,
+		"before": null,
+		"after": {
+			"id": 1,
+			"first_name": "Anne",
+			"last_name": "Kretchmar",
+			"email": "annek@noanswer.org"
+		},
+		"source": {
+			"name": "PostgreSQL_server",
+			"ts_usec": "1482918357011699",
+			"txId": "555",
+			"lsn": "24023128",
+			"snapshot": null,
+			"last_snapshot_record": null
+		}
+	}
+}

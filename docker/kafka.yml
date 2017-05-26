@@ -8,7 +8,8 @@ services:
             service: zookeeper
            
     kafka:
-        image: mcapitanio/kafka:0.10.2.0
+       # image: mcapitanio/kafka:0.10.2.0
+        image: gitlab.cdp.it:5001/cdp/kafka:0.10.2
         networks:
             - parrot
         links:
@@ -16,13 +17,11 @@ services:
         volumes:
             - kafka_conf:/opt/kafka/config
             - kafka_logs:/opt/kafka/logs
-            - kafka_manager_conf:/opt/kafka-manager/conf
-            - kafka_manager_logs:/opt/kafka-manager/logs
         ports:
             - "9092:9092"
-            - "9000:9000"
             - "8081:8081"
             - "8082:8082"
+            - "8084:8083"
             - "8000:8000"
         environment:
             - KAFKA_REST_PROXY_URL=http://localhost:8082
@@ -32,8 +31,6 @@ services:
 volumes:
     kafka_conf:
     kafka_logs:
-    kafka_manager_conf:
-    kafka_manager_logs:
     zookeeper_data:
     zookeeper_logs:
     zookeeper_conf:

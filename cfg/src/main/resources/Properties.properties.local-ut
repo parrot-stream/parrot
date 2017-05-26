@@ -1,14 +1,6 @@
-# Questo file di Properties contiene i parametri di
-# configurazione del Servizio
-
 # Endpoint Servizi
+debezium.api.url=http://localhost:8083/
+parrot.api.url=http://localhost:8080/parrot/
 
-galileo.galeve.api=http://localhost:8080/galileo/galeve/
-
-# Sezione dedicata alla configurazione degli eventi
-# 
-# parrot.source.databases					PostgreSQL source databases list
-# parrot.source.schemas						PostgreSQL source schema list
-
-parrot.source.databases=galeve,galfid
-parrot.source.schemas=galeve,galfid
+zookeeper.hosts=zookeeper:2181
+kafka.brokers=kafka:9092

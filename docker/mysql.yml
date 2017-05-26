@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+
+    mysql:
+        image: library/mysql:8
+        networks:
+            - parrot
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql_parrot_conf:/etc/mysql/conf.d
+            - mysql_parrot_data:/var/lib/mysql
+            - ./sources/mysql:/docker-entrypoint-initdb.d
+        environment:
+            MYSQL_ROOT_PASSWORD: parrot
+            MYSQL_DATABASE: parrot
+        privileged: true
+
+volumes:
+    mysql_parrot_conf:
+    mysql_parrot_data:
+    
+networks:
+    default:
+      external:
+        name: parrot
+    parrot:
+        driver: bridge

@@ -1,0 +1,9 @@
+{
+  "name": "MongoDb_Connector",
+  "config": {
+    "connector.class": "io.debezium.connector.mongodb.MongoDbConnector",
+    "mongodb.hosts": "rs0/192.168.99.100:27017",
+    "mongodb.name": "fullfillment",
+    "collection.whitelist": "inventory[.]*"
+  }
+}

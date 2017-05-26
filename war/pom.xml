@@ -1,26 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.parrot</groupId>
+	<parent>
+		<groupId>io.parrot</groupId>
+		<artifactId>parrot</artifactId>
+		<version>0.1.0</version>
+	</parent>
 	<artifactId>parrot-war</artifactId>
-	<version>${version.prefix}${version}${version.suffix}</version>
 	<packaging>war</packaging>
 	<name>parrot-war</name>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.wildfly.bom</groupId>
-				<artifactId>wildfly-javaee7</artifactId>
-				<version>${version.wildfly.bom}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<build>
-		<finalName>${artifact.name}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -30,14 +20,6 @@
 		<defaultGoal>package</defaultGoal>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${version.maven.compiler.plugin}</version>
-					<configuration>
-						<source>${java.compiler.source}</source>
-						<target>${java.compiler.target}</target>
-					</configuration>
-				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
@@ -49,6 +31,14 @@
 	</build>
 
 	<dependencies>
+
+		<!-- PARROT -->
+		<dependency>
+			<groupId>io.parrot</groupId>
+			<artifactId>parrot-core</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.jboss.spec.javax.servlet</groupId>
@@ -73,34 +63,16 @@
 		<version.maven.compiler.plugin>3.5.1</version.maven.compiler.plugin>
 		<version.maven.war.plugin>3.0.0</version.maven.war.plugin>
 
-		<artifact.name>${project.artifactId}-${project.version}</artifact.name>
-
-		<version>0.0.0</version>
-		<version.prefix></version.prefix>
-		<version.suffix>-SNAPSHOT</version.suffix>
-
 		<version.wildfly.bom>10.1.0.Final</version.wildfly.bom>
 
-		<java.compiler.source>1.8</java.compiler.source>
-		<java.compiler.target>1.8</java.compiler.target>
 
 	</properties>
 
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>cdp</id>
-			<name>CDP Maven Mirror</name>
-			<url>http://repo.maven.cdp.it:8080/repository/cdp</url>
-		</pluginRepository>
-	</pluginRepositories>
-
-	<repositories>
-		<repository>
-			<id>cdp</id>
-			<name>CDP Maven Repository</name>
-			<url>http://repo.maven.cdp.it:8080/repository/cdp</url>
-		</repository>
-	</repositories>
+	<!-- pluginRepositories> <pluginRepository> <id>cdp</id> <name>CDP Maven 
+		Mirror</name> <url>http://repo.maven.cdp.it:8080/repository/cdp</url> </pluginRepository> 
+		</pluginRepositories> <repositories> <repository> <id>cdp</id> <name>CDP 
+		Maven Repository</name> <url>http://repo.maven.cdp.it:8080/repository/cdp</url> 
+		</repository> </repositories -->
 
 </project>

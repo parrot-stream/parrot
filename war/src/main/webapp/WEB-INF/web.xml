@@ -3,6 +3,7 @@
 	xmlns:j2ee="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
+
 	<filter>
 		<filter-name>ParrotApiOriginFilter</filter-name>
 		<filter-class>io.parrot.servlet.ParrotApiOriginFilter</filter-class>
@@ -11,5 +12,10 @@
 		<filter-name>ParrotApiOriginFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<context-param>
+		<param-name>resteasy.providers</param-name>
+		<param-value>io.parrot.exception.mapper.JaxrsExceptionMapper</param-value>
+	</context-param>
 
 </web-app>

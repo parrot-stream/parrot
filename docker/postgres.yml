@@ -7,16 +7,19 @@ services:
         networks:
             - parrot
         ports:
-            - "54${ID}:5432"
+            - "5432:5432"
         volumes:
-            - postgres_data:/var/lib/postgresql/data
+            - postgres_parrot_data:/var/lib/postgresql/data
         environment:
             POSTGRES_PASSWORD: postgres
         privileged: true
 
 volumes:
-    postgres_data:
-
+    postgres_parrot_data:
+    
 networks:
+    default:
+      external:
+        name: parrot
     parrot:
         driver: bridge
