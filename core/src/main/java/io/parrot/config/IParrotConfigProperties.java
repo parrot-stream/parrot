@@ -20,6 +20,8 @@ package io.parrot.config;
 
 public interface IParrotConfigProperties {
 
+	public String P_PARROT_NODE = "parrot.node";
+	
 	public String P_DEBEZIUM_API_URL = "debezium.api.url";
 	public String P_PARROT_API_URL = "parrot.api.url";
 

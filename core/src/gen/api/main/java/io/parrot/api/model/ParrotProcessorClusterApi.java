@@ -2,7 +2,7 @@ package io.parrot.api.model;
 
 import java.util.Objects;
 import java.util.ArrayList;
-import io.parrot.api.model.ParrotProcessorApi;
+import io.parrot.api.model.ParrotProcessorNodeApi;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.*;
@@ -10,7 +10,7 @@ import io.swagger.annotations.*;
 
 
 
-public class ParrotProcessorsApi extends ArrayList<ParrotProcessorApi>  {
+public class ParrotProcessorClusterApi extends ArrayList<ParrotProcessorNodeApi>  {
   
 
 
@@ -22,7 +22,7 @@ public class ParrotProcessorsApi extends ArrayList<ParrotProcessorApi>  {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ParrotProcessorsApi parrotProcessors = (ParrotProcessorsApi) o;
+    ParrotProcessorClusterApi parrotProcessorCluster = (ParrotProcessorClusterApi) o;
     return true;
   }
 
@@ -34,7 +34,7 @@ public class ParrotProcessorsApi extends ArrayList<ParrotProcessorApi>  {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ParrotProcessorsApi {\n");
+    sb.append("class ParrotProcessorClusterApi {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();

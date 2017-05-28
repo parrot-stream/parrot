@@ -48,7 +48,7 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	Logger LOG;
 
 	@Inject
-	DebeziumClient dbxClient;
+	DebeziumApiClient dbxClient;
 
 	/*****************************************************************************************************
 	 * PostgreSql Connector

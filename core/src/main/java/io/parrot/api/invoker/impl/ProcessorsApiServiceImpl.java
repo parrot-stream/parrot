@@ -27,6 +27,9 @@ import io.parrot.api.ProcessorsApi;
 import io.parrot.api.model.ParrotProcessorApi;
 import io.parrot.service.ProcessorServices;
 
+/**
+ * This is the Swagger generated class
+ */
 public class ProcessorsApiServiceImpl implements ProcessorsApi {
 
 	@Inject
@@ -42,7 +45,7 @@ public class ProcessorsApiServiceImpl implements ProcessorsApi {
 	}
 
 	@Override
-	public Response createProcessor(ParrotProcessorApi pProcessor, SecurityContext pSecurityContext) {		;
+	public Response addProcessor(ParrotProcessorApi pProcessor, SecurityContext pSecurityContext) {
 		return Response.ok().entity(processorServices.addProcessor(pProcessor)).build();
 	}
 
@@ -61,4 +64,35 @@ public class ProcessorsApiServiceImpl implements ProcessorsApi {
 	public Response getProcessor(String pId, SecurityContext pSecurityContext) {
 		return Response.ok().entity(processorServices.getProcessor(pId)).build();
 	}
+
+	@Override
+	public Response getProcessorCluster(String pId, SecurityContext securityContext) {
+		return Response.ok().entity(processorServices.getProcessorCluster(pId)).build();
+	}
+
+	@Override
+	public Response restartProcessor(String pId, SecurityContext securityContext) {
+		return Response.ok().entity(processorServices.restartProcessor(pId)).build();
+	}
+
+	@Override
+	public Response startProcessor(String pId, SecurityContext securityContext) {
+		return Response.ok().entity(processorServices.startProcessor(pId)).build();
+	}
+
+	@Override
+	public Response stopProcessor(String pId, SecurityContext securityContext) {
+		return Response.ok().entity(processorServices.stopProcessor(pId)).build();
+	}
+
+	@Override
+	public Response startProcessorNode(String pId, String pNode, SecurityContext securityContext) {
+		return Response.ok().entity(processorServices.startProcessorNode(pId, pNode)).build();
+	}
+
+	@Override
+	public Response stopProcessorNode(String pId, String pNode, SecurityContext securityContext) {
+		return Response.ok().entity(processorServices.stopProcessorNode(pId, pNode)).build();
+	}
+
 }

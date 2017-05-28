@@ -16,21 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.parrot.exception;
+package io.parrot.client;
 
-import javax.ws.rs.core.Response;
+import org.apache.deltaspike.core.api.message.MessageBundle;
+import org.apache.deltaspike.core.api.message.MessageTemplate;
 
-public class BadRequestException extends ParrotApiException {
+@MessageBundle
+public interface ApplicationMessages {
 
-	private static final long serialVersionUID = 1L;
-
-	public BadRequestException(String message) {
-		super(message);
-	}
-
-	@Override
-	public int getStatusCodeResponse() {
-		return Response.Status.BAD_REQUEST.getStatusCode();
-	}
-
+	@MessageTemplate("{parrot.api.client.add.processor.error}")
+	String parrotApiAddProcessorError(String processorId, String errorMessage);
 }

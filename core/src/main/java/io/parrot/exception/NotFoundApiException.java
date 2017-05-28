@@ -16,8 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.parrot.client;
+package io.parrot.exception;
 
-public class ParrotClient {
+import javax.ws.rs.core.Response;
+
+public class NotFoundApiException extends ParrotApiException {
+
+	private static final long serialVersionUID = 1L;
+
+	public NotFoundApiException(String message) {
+		super(message);
+	}
+
+	@Override
+	public int getStatusCodeResponse() {
+		return Response.Status.NOT_FOUND.getStatusCode();
+	}
 
 }

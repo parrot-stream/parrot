@@ -33,16 +33,18 @@ import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
 import org.apache.zookeeper.CreateMode;
 
-import io.parrot.api.model.ParrotNodeApi;
 import io.parrot.api.model.ParrotProcessorApi;
-import io.parrot.api.model.ParrotProcessorStatusApi;
+import io.parrot.api.model.ParrotProcessorNodeApi;
 import io.parrot.config.IParrotConfigProperties;
+import io.parrot.exception.BadRequestApiException;
+import io.parrot.exception.NotFoundApiException;
+import io.parrot.exception.ParrotApiException;
 import io.parrot.exception.ParrotException;
 import io.parrot.exception.ParrotZkException;
 import io.parrot.utils.JsonUtils;
 import io.parrot.zookeeper.path.AboutPath;
-import io.parrot.zookeeper.path.ParrotProcessorClusterPath;
 import io.parrot.zookeeper.path.ParrotProcessorConfigPath;
+import io.parrot.zookeeper.path.ParrotProcessorNodePath;
 
 @Default
 @ApplicationScoped
@@ -50,6 +52,9 @@ public class ParrotZkClientImpl implements ParrotZkClient {
 
 	@Inject
 	ParrotZkEventListener parrotZkEventListener;
+
+	@Inject
+	ApplicationMessages message;
 
 	CuratorFramework curatorFramework;
 	PathChildrenCache pathChildrenCache;
@@ -71,12 +76,18 @@ public class ParrotZkClientImpl implements ParrotZkClient {
 	}
 
 	@Override
-	public ParrotProcessorConfigPath addProcessor(ParrotProcessorApi pProcessor) throws ParrotZkException {
+	public ParrotProcessorConfigPath addProcessor(ParrotProcessorApi pProcessor)
+			throws BadRequestApiException, ParrotZkException {
 		ParrotProcessorConfigPath processorConfigPath = new ParrotProcessorConfigPath(
 				ParrotProcessorConfigPath.ZK_PATH + "/" + pProcessor.getId(), pProcessor);
 		try {
+			if (exists(processorConfigPath.getPath())) {
+				throw new BadRequestApiException(message.parrotProcessorAlreadyExists(pProcessor.getId()));
+			}
 			getFramework().create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT).inBackground()
 					.forPath(processorConfigPath.getPath(), JsonUtils.objectToJson(pProcessor).getBytes());
+		} catch (ParrotApiException pe) {
+			throw pe;
 		} catch (Throwable t) {
 			throw new ParrotZkException(t);
 		}
@@ -93,18 +104,93 @@ public class ParrotZkClientImpl implements ParrotZkClient {
 	}
 
 	@Override
-	public ParrotProcessorClusterPath addProcessorStatusInCluster(ParrotNodeApi pParrotNodeApi,
-			ParrotProcessorStatusApi pProcessorStatus) throws ParrotZkException {
-		ParrotProcessorClusterPath processorClusterPath = new ParrotProcessorClusterPath(
-				ParrotProcessorClusterPath.ZK_PATH + "/" + pProcessorStatus.getId() + "/" + pParrotNodeApi.getId(),
-				pProcessorStatus);
+	public ParrotProcessorNodePath addProcessorNode(ParrotProcessorNodeApi pProcessorNode)
+			throws ParrotZkException {
+		ParrotProcessorNodePath processorNodePath = new ParrotProcessorNodePath(
+				ParrotProcessorNodePath.ZK_PATH + "/" + pProcessorNode.getId() + "/" + pProcessorNode.getNode(),
+				pProcessorNode);
 		try {
-			getFramework().create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL)
-					.forPath(processorClusterPath.getPath(), JsonUtils.objectToJson(pProcessorStatus).getBytes());
+			if (exists(processorNodePath.getPath())) {
+				updateProcessorNode(pProcessorNode);
+			} else {
+				getFramework().create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).inBackground()
+						.forPath(processorNodePath.getPath(), JsonUtils.objectToJson(pProcessorNode).getBytes());
+			}
 		} catch (Throwable t) {
 			throw new ParrotZkException(t);
 		}
-		return processorClusterPath;
+		return processorNodePath;
+	}
+
+	@Override
+	public ParrotProcessorNodePath updateProcessorNode(ParrotProcessorNodeApi pProcessorNode)
+			throws ParrotZkException {
+		ParrotProcessorNodePath processorNodePath = new ParrotProcessorNodePath(
+				ParrotProcessorNodePath.ZK_PATH + "/" + pProcessorNode.getId() + "/" + pProcessorNode.getNode(),
+				pProcessorNode);
+		try {
+			if (!exists(processorNodePath.getPath())) {
+				addProcessorNode(pProcessorNode);
+			} else {
+				getFramework().setData().inBackground().forPath(processorNodePath.getPath(),
+						JsonUtils.objectToJson(pProcessorNode).getBytes());
+			}
+		} catch (Throwable t) {
+			throw new ParrotZkException(t);
+		}
+		return processorNodePath;
+	}
+
+	@Override
+	public void deleteProcessorNode(String pId, String pNode) throws ParrotZkException {
+		ParrotProcessorNodePath processorClusterPath = new ParrotProcessorNodePath(
+				ParrotProcessorNodePath.ZK_PATH + "/" + pId + "/" + pNode);
+		try {
+			getFramework().delete().forPath(processorClusterPath.getPath());
+		} catch (Throwable t) {
+			throw new ParrotZkException(t);
+		}
+	}
+
+	@Override
+	public List<ParrotProcessorNodePath> getProcessorCluster(String pId) throws ParrotZkException {
+		List<ParrotProcessorNodePath> processorCluster = new ArrayList<ParrotProcessorNodePath>();
+		try {
+			if (exists(ParrotProcessorConfigPath.ZK_PATH + "/" + pId)) {
+				List<String> nodes = getFramework().getChildren()
+						.forPath(ParrotProcessorNodePath.ZK_PATH + "/" + pId);
+				if (nodes != null) {
+					for (String node : nodes) {
+						processorCluster.add(getProcessorNode(pId, node));
+					}
+				}
+			}
+		} catch (Throwable t) {
+			throw new ParrotZkException(t);
+		}
+		return processorCluster;
+	}
+
+	@Override
+	public ParrotProcessorNodePath getProcessorNode(String pId, String pNode)
+			throws NotFoundApiException, ParrotZkException {
+		ParrotProcessorNodePath processorNodePath = new ParrotProcessorNodePath(
+				ParrotProcessorNodePath.ZK_PATH + "/" + pId + "/" + pNode);
+		try {
+			if (exists(processorNodePath.getPath())) {
+				ParrotProcessorNodeApi processorStatus = JsonUtils.byteArrayToObject(
+						getFramework().getData().forPath(processorNodePath.getPath()),
+						ParrotProcessorNodeApi.class);
+				processorNodePath.setProcessorNodeApi(processorStatus);
+			} else {
+				throw new NotFoundApiException(message.parrotProcessorNodeNotExists(pId));
+			}
+		} catch (ParrotZkException pe) {
+			throw pe;
+		} catch (Throwable t) {
+			throw new ParrotZkException(t);
+		}
+		return processorNodePath;
 	}
 
 	@Override
@@ -151,9 +237,13 @@ public class ParrotZkClientImpl implements ParrotZkClient {
 	}
 
 	@Override
-	public ParrotProcessorConfigPath getProcessor(String id) throws ParrotZkException {
-		ParrotProcessorConfigPath processorConfigPath = new ParrotProcessorConfigPath(
-				ParrotProcessorConfigPath.ZK_PATH + "/" + id);
+	public ParrotProcessorConfigPath getProcessor(String pIdProcessor) throws ParrotZkException {
+		return getProcessorByPath(ParrotProcessorConfigPath.ZK_PATH + "/" + pIdProcessor);
+	}
+
+	@Override
+	public ParrotProcessorConfigPath getProcessorByPath(String pPath) throws ParrotZkException {
+		ParrotProcessorConfigPath processorConfigPath = new ParrotProcessorConfigPath(pPath);
 		try {
 			ParrotProcessorApi processor = JsonUtils.byteArrayToObject(
 					getFramework().getData().forPath(processorConfigPath.getPath()), ParrotProcessorApi.class);
@@ -162,6 +252,19 @@ public class ParrotZkClientImpl implements ParrotZkClient {
 			throw new ParrotZkException(t);
 		}
 		return processorConfigPath;
+	}
+
+	@Override
+	public ParrotProcessorNodePath getProcessorNodeByPath(String pPath) throws ParrotZkException {
+		ParrotProcessorNodePath processorClusterPath = new ParrotProcessorNodePath(pPath);
+		try {
+			ParrotProcessorNodeApi processorNode = JsonUtils.byteArrayToObject(
+					getFramework().getData().forPath(processorClusterPath.getPath()), ParrotProcessorNodeApi.class);
+			processorClusterPath.setProcessorNodeApi(processorNode);
+		} catch (Throwable t) {
+			throw new ParrotZkException(t);
+		}
+		return processorClusterPath;
 	}
 
 	@Override
@@ -198,8 +301,8 @@ public class ParrotZkClientImpl implements ParrotZkClient {
 	CuratorFramework getFramework() {
 		String zookeeperHosts = ConfigResolver.getPropertyValue(IParrotConfigProperties.P_ZOOKEEPER_HOSTS);
 		RetryPolicy retryPolicy = new ExponentialBackoffRetry(10000, 3);
-		CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder()
-				.namespace(ParrotZkClient.ZK_NAMESPACE).connectString(zookeeperHosts).retryPolicy(retryPolicy);
+		CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().namespace(ZK_NAMESPACE)
+				.connectString(zookeeperHosts).retryPolicy(retryPolicy);
 		try {
 			if (curatorFramework == null) {
 				curatorFramework = builder.build();

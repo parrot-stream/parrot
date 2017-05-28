@@ -16,30 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.parrot.processor;
+package io.parrot.zookeeper;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import org.apache.deltaspike.core.api.message.MessageBundle;
+import org.apache.deltaspike.core.api.message.MessageTemplate;
 
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.kafka.KafkaComponent;
-import org.slf4j.Logger;
+@MessageBundle
+public interface ApplicationMessages {
 
-import io.parrot.api.model.ParrotProcessorApi;
-
-@ApplicationScoped
-public class ParrotProcessorBuilder {
-
-	@Inject
-	Logger LOG;
-
-	@Inject
-	KafkaComponent kafkaComponent;
-
-	RouteBuilder routeBuilder;
-
-	public ParrotProcessor build(ParrotProcessorApi pProcessor) {
-		return new ParrotProcessor(pProcessor, kafkaComponent);
-	}
-
+	@MessageTemplate("{parrot.zookeeper.processor.already.exists}")
+	String parrotProcessorAlreadyExists(String pId);
+	
+	@MessageTemplate("{parrot.zookeeper.processor.node.not.exists}")
+	String parrotProcessorNodeNotExists(String pId);
 }

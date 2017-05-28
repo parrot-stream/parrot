@@ -27,14 +27,23 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import io.parrot.api.model.ParrotProcessorApi;
+import io.parrot.api.model.ParrotProcessorApi.StatusEnum;
+import io.parrot.api.model.ParrotProcessorNodeApi;
+import io.parrot.exception.BadRequestApiException;
 import io.parrot.exception.GenericApiException;
 import io.parrot.exception.ParrotApiException;
 import io.parrot.exception.ParrotZkException;
+import io.parrot.processor.ProcessorManager;
 import io.parrot.utils.JsonUtils;
 import io.parrot.utils.ParrotLogFormatter;
 import io.parrot.zookeeper.ParrotZkClient;
 import io.parrot.zookeeper.path.ParrotProcessorConfigPath;
+import io.parrot.zookeeper.path.ParrotProcessorNodePath;
 
+/**
+ * This is the Parrot API Services implementation. This class is used in the
+ * Swagger generated class ({@link io.parrot.api.ProcessorsApiServiceImpl}.
+ */
 @Stateless
 public class ProcessorServices {
 
@@ -44,27 +53,45 @@ public class ProcessorServices {
 	@Inject
 	ParrotZkClient zkClient;
 
-	/**
-	 * @param pId
-	 *            A Processor ID
-	 * @return The Processor
-	 * @throws ParrotApiException
-	 */
+	@Inject
+	ProcessorManager processorManager;
+
+	@Inject
+	ApplicationMessages message;
+
 	public ParrotProcessorApi getProcessor(String pId) throws ParrotApiException {
-		LOG.info("GETTING PROCESSOR: " + pId, "");
 		ParrotProcessorApi processor;
 		try {
 			processor = zkClient.getProcessor(pId).getProcessorApi();
 		} catch (ParrotZkException e) {
-			throw new GenericApiException("Unable to get the Processor '" + pId + "': " + e.getMessage());
+			throw new GenericApiException(message.parrotProcessorGetError(pId, e.getMessage()));
 		}
 		return processor;
 	}
 
-	/**
-	 * @return A Processor's list
-	 * @throws ParrotApiException
-	 */
+	public ParrotProcessorNodeApi getProcessorNode(String pId, String pNode) throws ParrotApiException {
+		ParrotProcessorNodeApi processorNode;
+		try {
+			processorNode = zkClient.getProcessorNode(pId, pNode).getProcessorNodeApi();
+		} catch (ParrotZkException e) {
+			throw new GenericApiException(message.parrotProcessorGetStatusError(pId, e.getMessage()));
+		}
+		return processorNode;
+	}
+
+	public List<ParrotProcessorNodeApi> getProcessorCluster(String pId) throws ParrotApiException {
+		try {
+			List<ParrotProcessorNodeApi> processorCluster = new ArrayList<ParrotProcessorNodeApi>();
+			List<ParrotProcessorNodePath> processorNodePaths = zkClient.getProcessorCluster(pId);
+			for (ParrotProcessorNodePath processorNodePath : processorNodePaths) {
+				processorCluster.add(processorNodePath.getProcessorNodeApi());
+			}
+			return processorCluster;
+		} catch (ParrotZkException e) {
+			throw new GenericApiException(message.parrotProcessorGetStatusError(pId, e.getMessage()));
+		}
+	}
+
 	public List<ParrotProcessorApi> getProcessors() throws ParrotApiException {
 		try {
 			List<ParrotProcessorApi> processors = new ArrayList<ParrotProcessorApi>();
@@ -74,55 +101,110 @@ public class ProcessorServices {
 			}
 			return processors;
 		} catch (ParrotZkException e) {
-			throw new GenericApiException("Unable to get the list of Parrot Processors: " + e.getMessage());
+			throw new GenericApiException(message.parrotProcessorGetListError(e.getMessage()));
 		}
 	}
 
-	/**
-	 * @param pProcessor
-	 *            A Processor to add
-	 * @return The created Processor
-	 * @throws ParrotApiException
-	 */
 	public ParrotProcessorApi addProcessor(ParrotProcessorApi pProcessor) throws ParrotApiException {
-		LOG.info(ParrotLogFormatter.formatLog("ADDING PROCESSOR: " + pProcessor.getId(),
+		LOG.info(ParrotLogFormatter.formatLog(message.parrotProcessorAddInfo(pProcessor.getId()),
 				JsonUtils.objectToJson(pProcessor, true)));
 		try {
 			zkClient.addProcessor(pProcessor);
 		} catch (ParrotZkException e) {
-			throw new GenericApiException(
-					"Unable to create the Parrot Processor '" + pProcessor.getId() + "': " + e.getMessage());
+			throw new GenericApiException(message.parrotProcessorCreationError(pProcessor.getId(), e.getMessage()));
 		}
 		return pProcessor;
 	}
 
-	/**
-	 * @param pId
-	 *            A Processor ID to delete
-	 * @throws ParrotApiException
-	 */
 	public void deleteProcessor(String pId) throws ParrotApiException {
-		LOG.info("DELETING PROCESSOR: " + pId, "");
+		LOG.info(message.parrotProcessorDeleteInfo(pId));
 		try {
 			zkClient.deleteProcessor(pId);
 		} catch (ParrotZkException e) {
-			throw new GenericApiException("Unable to delete the Parrot Processor '" + pId + "': " + e.getMessage());
+			throw new GenericApiException(message.parrotProcessorDeleteError(pId, e.getMessage()));
 		}
 	}
 
-	/**
-	 * @param pId
-	 *            A Processor ID to update
-	 * @return The updated Processor
-	 * @throws ParrotApiException
-	 */
 	public ParrotProcessorApi updateProcessor(ParrotProcessorApi pProcessor) throws ParrotApiException {
-		LOG.info("UPDATING PROCESSOR: " + pProcessor.getId(), "");
+		LOG.info(message.parrotProcessorUpdateInfo(pProcessor.getId()));
 		try {
 			return zkClient.updateProcessor(pProcessor).getProcessorApi();
 		} catch (ParrotZkException e) {
-			throw new GenericApiException(
-					"Unable to update the Parrot Processor '" + pProcessor.getId() + "': " + e.getMessage());
+			throw new GenericApiException(message.parrotProcessorUpdateError(pProcessor.getId(), e.getMessage()));
+		}
+	}
+
+	public ParrotProcessorApi startProcessor(String pId) throws ParrotApiException {
+		LOG.info(message.parrotProcessorStartInfo(pId));
+		try {
+			ParrotProcessorApi processor = zkClient.getProcessor(pId).getProcessorApi();
+			processor.setStatus(StatusEnum.STARTED);
+			zkClient.updateProcessor(processor);
+			return processor;
+		} catch (Exception e) {
+			throw new GenericApiException(message.parrotProcessorStartError(pId, e.getMessage()));
+		}
+	}
+
+	public ParrotProcessorApi stopProcessor(String pId) throws ParrotApiException {
+		LOG.info(message.parrotProcessorStopInfo(pId));
+		try {
+			ParrotProcessorApi processor = zkClient.getProcessor(pId).getProcessorApi();
+			processor.setStatus(StatusEnum.STOPPED);
+			zkClient.updateProcessor(processor);
+			return processor;
+		} catch (Exception e) {
+			throw new GenericApiException(message.parrotProcessorStopError(pId, e.getMessage()));
+		}
+	}
+
+	public ParrotProcessorApi restartProcessor(String pId) throws ParrotApiException {
+		LOG.info(message.parrotProcessorRestartInfo(pId));
+		try {
+			ParrotProcessorApi processor = stopProcessor(pId);
+			processor = startProcessor(pId);
+			return processor;
+		} catch (Exception e) {
+			throw new GenericApiException(message.parrotProcessorRestartError(pId, e.getMessage()));
+		}
+	}
+
+	public ParrotProcessorNodeApi startProcessorNode(String pId, String pNode) throws ParrotApiException {
+		try {
+			ParrotProcessorApi processor = zkClient.getProcessor(pId).getProcessorApi();
+			ParrotProcessorNodeApi processorNode = zkClient.getProcessorNode(pId, pNode).getProcessorNodeApi();
+			if (processor.getStatus() == StatusEnum.STARTED) {
+				LOG.info(message.parrotProcessorNodeStartInfo(pId, pNode));
+				processorNode.setStatus(ParrotProcessorNodeApi.StatusEnum.STARTED);
+				zkClient.updateProcessorNode(processorNode);
+			} else {
+				String errorMessage = message.parrotProcessorNodeStartError(pId, pNode,
+						"processor is in STOPPED status!");
+				LOG.warn(errorMessage);
+				throw new BadRequestApiException(errorMessage);
+			}
+			return processorNode;
+		} catch (Exception e) {
+			throw new GenericApiException(message.parrotProcessorNodeStartError(pId, pNode, e.getMessage()));
+		}
+	}
+
+	public ParrotProcessorNodeApi stopProcessorNode(String pId, String pNode) throws ParrotApiException {
+		try {
+			ParrotProcessorNodeApi processorNode = zkClient.getProcessorNode(pId, pNode).getProcessorNodeApi();
+			if (processorNode.getStatus() == ParrotProcessorNodeApi.StatusEnum.STARTED) {
+				LOG.info(message.parrotProcessorNodeStopInfo(pId, pNode));
+				processorNode.setStatus(ParrotProcessorNodeApi.StatusEnum.STOPPED);
+				zkClient.updateProcessorNode(processorNode);
+			} else {
+				String errorMessage = message.parrotProcessorNodeStartError(pId, pNode,
+						"processor node is already STOPPED!");
+				LOG.warn(errorMessage);
+				throw new BadRequestApiException(errorMessage);
+			}
+			return processorNode;
+		} catch (Exception e) {
+			throw new GenericApiException(message.parrotProcessorNodeStartError(pId, pNode, e.getMessage()));
 		}
 	}
 }

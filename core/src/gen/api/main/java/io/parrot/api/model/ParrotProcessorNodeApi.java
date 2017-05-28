@@ -5,18 +5,15 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.parrot.api.model.ParrotSinkApi;
-import io.parrot.api.model.ParrotSourceApi;
 import javax.validation.constraints.*;
 import io.swagger.annotations.*;
 
 
 
-public class ParrotProcessorApi   {
+public class ParrotProcessorNodeApi   {
   
   private String id = null;
-  private ParrotSourceApi source = null;
-  private ParrotSinkApi sink = null;
+  private String node = null;
 
   /**
    * Gets or Sets status
@@ -55,29 +52,17 @@ public class ParrotProcessorApi   {
   }
 
   /**
+   * Processor Node's ID
    **/
   
-  @ApiModelProperty(example = "null", required = true, value = "")
-  @JsonProperty("source")
+  @ApiModelProperty(example = "null", required = true, value = "Processor Node's ID")
+  @JsonProperty("node")
   @NotNull
-  public ParrotSourceApi getSource() {
-    return source;
+  public String getNode() {
+    return node;
   }
-  public void setSource(ParrotSourceApi source) {
-    this.source = source;
-  }
-
-  /**
-   **/
-  
-  @ApiModelProperty(example = "null", required = true, value = "")
-  @JsonProperty("sink")
-  @NotNull
-  public ParrotSinkApi getSink() {
-    return sink;
-  }
-  public void setSink(ParrotSinkApi sink) {
-    this.sink = sink;
+  public void setNode(String node) {
+    this.node = node;
   }
 
   /**
@@ -101,26 +86,24 @@ public class ParrotProcessorApi   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ParrotProcessorApi parrotProcessor = (ParrotProcessorApi) o;
-    return Objects.equals(id, parrotProcessor.id) &&
-        Objects.equals(source, parrotProcessor.source) &&
-        Objects.equals(sink, parrotProcessor.sink) &&
-        Objects.equals(status, parrotProcessor.status);
+    ParrotProcessorNodeApi parrotProcessorNode = (ParrotProcessorNodeApi) o;
+    return Objects.equals(id, parrotProcessorNode.id) &&
+        Objects.equals(node, parrotProcessorNode.node) &&
+        Objects.equals(status, parrotProcessorNode.status);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, source, sink, status);
+    return Objects.hash(id, node, status);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ParrotProcessorApi {\n");
+    sb.append("class ParrotProcessorNodeApi {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    source: ").append(toIndentedString(source)).append("\n");
-    sb.append("    sink: ").append(toIndentedString(sink)).append("\n");
+    sb.append("    node: ").append(toIndentedString(node)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("}");
     return sb.toString();

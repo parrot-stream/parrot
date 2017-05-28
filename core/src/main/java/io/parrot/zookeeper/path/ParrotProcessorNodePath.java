@@ -18,28 +18,36 @@
  */
 package io.parrot.zookeeper.path;
 
-import io.parrot.api.model.ParrotProcessorStatusApi;
+import io.parrot.api.model.ParrotProcessorNodeApi;
 
-public class ParrotProcessorClusterPath extends ParrotPath {
+public class ParrotProcessorNodePath extends ParrotPath {
 
 	public static final String ZK_PATH = "/processor/cluster";
 
-	ParrotProcessorStatusApi processorStatusApi;
+	ParrotProcessorNodeApi processorNodeApi;
 
-	public ParrotProcessorClusterPath() {
+	public ParrotProcessorNodePath() {
 	}
 
-	public ParrotProcessorClusterPath(String pPath, ParrotProcessorStatusApi pProcessorStatusApi) {
+	public ParrotProcessorNodePath(String pPath) {
 		path = pPath;
-		processorStatusApi = pProcessorStatusApi;
 	}
 
-	public ParrotProcessorClusterPath(ParrotProcessorStatusApi pProcessorStatusApi) {
-		processorStatusApi = pProcessorStatusApi;
+	public ParrotProcessorNodePath(String pPath, ParrotProcessorNodeApi pProcessorNodeApi) {
+		path = pPath;
+		processorNodeApi = pProcessorNodeApi;
 	}
 
-	public ParrotProcessorStatusApi getProcessorStatusApi() {
-		return processorStatusApi;
+	public ParrotProcessorNodePath(ParrotProcessorNodeApi pProcessorNodeApi) {
+		processorNodeApi = pProcessorNodeApi;
+	}
+
+	public ParrotProcessorNodeApi getProcessorNodeApi() {
+		return processorNodeApi;
+	}
+
+	public void setProcessorNodeApi(ParrotProcessorNodeApi pProcessorNodeApi) {
+		processorNodeApi = pProcessorNodeApi;
 	}
 
 }

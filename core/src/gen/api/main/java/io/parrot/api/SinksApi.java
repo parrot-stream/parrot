@@ -30,12 +30,12 @@ public interface SinksApi  {
     
     
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "Parrot Sink creation", notes = "Creates a new Parrot Sink", response = ParrotSinkApi.class, tags={  })
+    @io.swagger.annotations.ApiOperation(value = "Parrot Sink creation", notes = "Adds a new Parrot Sink", response = ParrotSinkApi.class, tags={  })
     @io.swagger.annotations.ApiResponses(value = { 
         @io.swagger.annotations.ApiResponse(code = 200, message = "The created Sink", response = ParrotSinkApi.class),
         
         @io.swagger.annotations.ApiResponse(code = 200, message = "Unexpected error", response = ParrotSinkApi.class) })
-    public Response createSink(@ApiParam(value = "Sink definition" ,required=true) ParrotSinkApi sink,@Context SecurityContext securityContext);
+    public Response addSink(@ApiParam(value = "Sink definition" ,required=true) ParrotSinkApi sink,@Context SecurityContext securityContext);
     @GET
     @Path("/{id}")
     

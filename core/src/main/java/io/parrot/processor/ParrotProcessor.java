@@ -35,7 +35,6 @@ public class ParrotProcessor {
 	public ParrotProcessor(ParrotProcessorApi pProcessor, KafkaComponent kafkaComponent) {
 		processor = pProcessor;
 		routeBuilder = new ParrotRouteBuilder(pProcessor);
-
 	}
 
 	public ParrotRouteBuilder getParrotRouteBuilder() {

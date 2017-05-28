@@ -27,6 +27,9 @@ import io.parrot.api.SinksApi;
 import io.parrot.api.model.ParrotSinkApi;
 import io.parrot.service.ProcessorServices;
 
+/**
+ * This is the Swagger generated class
+ */
 public class SinksApiServiceImpl implements SinksApi {
 
 	@Inject
@@ -43,7 +46,7 @@ public class SinksApiServiceImpl implements SinksApi {
 	}
 
 	@Override
-	public Response createSink(ParrotSinkApi sink, SecurityContext securityContext) {
+	public Response addSink(ParrotSinkApi sink, SecurityContext securityContext) {
 		// do some magic!
 		return Response.ok().build();
 	}

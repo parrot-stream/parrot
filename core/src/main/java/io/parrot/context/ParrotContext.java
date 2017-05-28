@@ -43,7 +43,7 @@ import io.parrot.config.IParrotConfigProperties;
 import io.parrot.exception.ParrotException;
 import io.parrot.processor.ParrotProcessor;
 import io.parrot.processor.ParrotRouteBuilder;
-import io.parrot.processor.ProcessorsManager;
+import io.parrot.processor.ProcessorManager;
 import io.parrot.utils.ParrotLogFormatter;
 
 @ApplicationScoped
@@ -56,7 +56,7 @@ public class ParrotContext extends CdiCamelContext {
 	Logger LOG;
 
 	@Inject
-	ProcessorsManager routeManager;
+	ProcessorManager processorManager;
 
 	@Inject
 	@ConfigProperty(name = IParrotConfigProperties.P_ZOOKEEPER_HOSTS, defaultValue = "localhost:2181")
@@ -74,30 +74,30 @@ public class ParrotContext extends CdiCamelContext {
 	@ConfigProperty(name = IParrotConfigProperties.P_PARROT_API_URL)
 	String parrotApiUrl;
 
+	@Inject
+	@ConfigProperty(name = IParrotConfigProperties.P_PARROT_NODE)
+	String parrotIdNode;
 	@PostConstruct
 	void init() {
-		LOG.info(ParrotLogFormatter.formatLog("Parrot Configuration", "Camel Context Name", getName(),
-				"Debezium Api URL", debeziumApiUrl, "Parrot Api URL", parrotApiUrl, "ZooKeeper Hosts", zooKeeperHosts,
-				"Kafka Brokers", kafkaBrokers));
+		LOG.info(ParrotLogFormatter.formatLog("Parrot Configuration", "Context Name", getName(), "Parrot ID Node",
+				parrotIdNode, "Debezium Api URL", debeziumApiUrl, "Parrot Api URL", parrotApiUrl, "ZooKeeper Hosts",
+				zooKeeperHosts, "Kafka Brokers", kafkaBrokers));
 		try {
-			setAutoStartup(false);
+			setAutoStartup(true);
 
-			List<ParrotProcessor> processors = routeManager.createProcessors();
+			List<ParrotProcessor> processors = processorManager.startUpProcessors();
 			for (ParrotProcessor p : processors) {
 				LOG.info("Adding processor " + p.getProcessor().getId() + "...");
 				ParrotRouteBuilder processorRoute = p.getParrotRouteBuilder();
-				if (processorRoute.isConfigured()) {
-					try {
-						addRoutes(processorRoute);
-					} catch (Exception e) {
-						LOG.error("Unable to add Processor '" + p.getProcessor().getId() + "'");
-					}
+				try {
+					addRoutes(processorRoute);
+					LOG.info("Processor " + p.getProcessor().getId() + " added to context '" + getName() + "'.");
+				} catch (Exception e) {
+					LOG.error("Unable to add Processor '" + p.getProcessor().getId() + "': " + e.getMessage());
 				}
 			}
 
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			throw new ParrotException(e.getMessage());
 		}
 	}

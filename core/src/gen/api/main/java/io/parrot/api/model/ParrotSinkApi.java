@@ -15,10 +15,10 @@ public class ParrotSinkApi   {
   private String sinkClass = null;
 
   /**
-   * Sink ID.
+   * Sink's ID.
    **/
   
-  @ApiModelProperty(example = "null", required = true, value = "Sink ID.")
+  @ApiModelProperty(example = "null", required = true, value = "Sink's ID.")
   @JsonProperty("id")
   @NotNull
   public String getId() {

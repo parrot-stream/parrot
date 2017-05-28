@@ -33,6 +33,8 @@ import io.parrot.debezium.connectors.Error;
 import io.parrot.debezium.connectors.mongodb.MongoDbConnector;
 import io.parrot.debezium.connectors.mysql.MySqlConnector;
 import io.parrot.debezium.connectors.postgresql.PostgreSqlConnector;
+import io.parrot.exception.GenericApiException;
+import io.parrot.exception.ParrotApiException;
 import io.parrot.exception.ParrotException;
 import io.parrot.utils.JsonUtils;
 import okhttp3.OkHttpClient;
@@ -44,7 +46,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 @ApplicationScoped
-public class DebeziumClient {
+public class DebeziumApiClient {
 
 	@Inject
 	ApplicationMessages message;
@@ -56,17 +58,17 @@ public class DebeziumClient {
 	@ConfigProperty(name = IParrotConfigProperties.P_DEBEZIUM_API_URL)
 	String debeziumApiUrl;
 
-	DebeziumService dbzService;
+	DebeziumApiService dbzService;
 
-	public List<String> listConnectors() {
+	public List<String> listConnectors() throws ParrotApiException {
 		try {
 			return getDebeziumService().listConnectors().execute().body();
 		} catch (IOException e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public ResponseBody deleteConnector(String connectorName) {
+	public ResponseBody deleteConnector(String connectorName) throws ParrotApiException {
 		try {
 			Response<ResponseBody> response = getDebeziumService().deleteConnector(connectorName).execute();
 			if (response.isSuccessful()) {
@@ -76,11 +78,11 @@ public class DebeziumClient {
 				throw new ParrotException(message.debeziumConnectorCreationError(connectorName, error.message));
 			}
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public ResponseBody restartConnector(String connectorName) {
+	public ResponseBody restartConnector(String connectorName) throws ParrotApiException {
 		try {
 			Response<ResponseBody> response = getDebeziumService().restartConnector(connectorName).execute();
 			if (response.isSuccessful()) {
@@ -90,11 +92,11 @@ public class DebeziumClient {
 				throw new ParrotException(message.debeziumConnectorRestartError(connectorName, error.message));
 			}
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public ResponseBody pauseConnector(String connectorName) {
+	public ResponseBody pauseConnector(String connectorName) throws ParrotApiException {
 		try {
 			Response<ResponseBody> response = getDebeziumService().pauseConnector(connectorName).execute();
 			if (response.isSuccessful()) {
@@ -104,79 +106,79 @@ public class DebeziumClient {
 				throw new ParrotException(message.debeziumConnectorPauseError(connectorName, error.message));
 			}
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public ResponseBody resumeConnector(String connectorName) {
+	public ResponseBody resumeConnector(String connectorName) throws ParrotApiException {
 		try {
 			Response<ResponseBody> response = getDebeziumService().resumeConnector(connectorName).execute();
 			if (response.isSuccessful()) {
 				return response.body();
 			} else {
 				Error error = JsonUtils.byteArrayToObject(response.errorBody().bytes(), Error.class);
-				throw new ParrotException(message.debeziumConnectorResumeError(connectorName, error.message));
+				throw new GenericApiException(message.debeziumConnectorResumeError(connectorName, error.message));
 			}
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public MySqlConnector addConnector(MySqlConnector connector) {
+	public MySqlConnector addConnector(MySqlConnector connector) throws ParrotApiException {
 		try {
 			Response<MySqlConnector> response = getDebeziumService().addConnector(connector).execute();
 			return (MySqlConnector) addConnector(response, connector);
 		} catch (IOException e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public MongoDbConnector addConnector(MongoDbConnector connector) {
+	public MongoDbConnector addConnector(MongoDbConnector connector) throws ParrotApiException {
 		try {
 			Response<MongoDbConnector> response = getDebeziumService().addConnector(connector).execute();
 			return (MongoDbConnector) addConnector(response, connector);
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public PostgreSqlConnector addConnector(PostgreSqlConnector connector) {
+	public PostgreSqlConnector addConnector(PostgreSqlConnector connector) throws ParrotApiException {
 		try {
 			Response<PostgreSqlConnector> response = getDebeziumService().addConnector(connector).execute();
 			return (PostgreSqlConnector) addConnector(response, connector);
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	public Connector getConnectorStatus(String connectorName) {
+	public Connector getConnectorStatus(String connectorName) throws ParrotApiException {
 		try {
 			Response<Connector> response = getDebeziumService().getConnectorStatus(connectorName).execute();
 			if (response.isSuccessful()) {
 				return response.body();
 			} else {
 				Error error = JsonUtils.byteArrayToObject(response.errorBody().bytes(), Error.class);
-				throw new ParrotException(message.debeziumConnectorCreationError(connectorName, error.message));
+				throw new GenericApiException(message.debeziumConnectorCreationError(connectorName, error.message));
 			}
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	Connector addConnector(Response response, Connector connector) {
+	Connector addConnector(Response response, Connector connector) throws ParrotApiException {
 		try {
 			if (response.isSuccessful()) {
 				return (Connector) response.body();
 			} else {
 				Error error = JsonUtils.byteArrayToObject(response.errorBody().bytes(), Error.class);
-				throw new ParrotException(message.debeziumConnectorCreationError(connector.name, error.message));
+				throw new GenericApiException(message.debeziumConnectorCreationError(connector.name, error.message));
 			}
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 	}
 
-	DebeziumService getDebeziumService() {
+	DebeziumApiService getDebeziumService() {
 		try {
 			if (dbzService == null) {
 				HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -185,10 +187,10 @@ public class DebeziumClient {
 				httpClient.addInterceptor(logging);
 				Retrofit retrofit = new Retrofit.Builder().baseUrl(debeziumApiUrl).client(httpClient.build())
 						.addConverterFactory(JacksonConverterFactory.create()).build();
-				dbzService = retrofit.create(DebeziumService.class);
+				dbzService = retrofit.create(DebeziumApiService.class);
 			}
 		} catch (Exception e) {
-			throw new ParrotException(e.getMessage(), e);
+			throw new GenericApiException(e.getMessage());
 		}
 		return dbzService;
 	}

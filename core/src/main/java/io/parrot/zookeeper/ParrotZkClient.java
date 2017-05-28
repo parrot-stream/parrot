@@ -20,39 +20,51 @@ package io.parrot.zookeeper;
 
 import java.util.List;
 
-import io.parrot.api.model.ParrotNodeApi;
 import io.parrot.api.model.ParrotProcessorApi;
-import io.parrot.api.model.ParrotProcessorStatusApi;
+import io.parrot.api.model.ParrotProcessorNodeApi;
 import io.parrot.exception.ParrotZkException;
 import io.parrot.zookeeper.path.AboutPath;
-import io.parrot.zookeeper.path.ParrotProcessorClusterPath;
 import io.parrot.zookeeper.path.ParrotProcessorConfigPath;
+import io.parrot.zookeeper.path.ParrotProcessorNodePath;
 
 public interface ParrotZkClient {
 
 	public String ZK_NAMESPACE = "parrot";
 
-	public AboutPath createAbout(AboutPath about) throws ParrotZkException;
+	public AboutPath createAbout(AboutPath pAbout) throws ParrotZkException;
 
 	public void deleteAbout() throws ParrotZkException;
 
-	public ParrotProcessorConfigPath addProcessor(ParrotProcessorApi processor) throws ParrotZkException;
+	public ParrotProcessorConfigPath addProcessor(ParrotProcessorApi pProcessor) throws ParrotZkException;
 
-	public ParrotProcessorConfigPath updateProcessor(ParrotProcessorApi processor) throws ParrotZkException;
+	public ParrotProcessorConfigPath updateProcessor(ParrotProcessorApi pProcessor) throws ParrotZkException;
 
-	public ParrotProcessorConfigPath getProcessor(String id) throws ParrotZkException;
+	public ParrotProcessorConfigPath getProcessor(String pId) throws ParrotZkException;
 
-	public void deleteProcessor(String id) throws ParrotZkException;
+	public ParrotProcessorConfigPath getProcessorByPath(String pPath) throws ParrotZkException;
 
-	public ParrotProcessorClusterPath addProcessorStatusInCluster(ParrotNodeApi parrotNodeApi,
-			ParrotProcessorStatusApi processorStatus) throws ParrotZkException;
+	public void deleteProcessor(String pId) throws ParrotZkException;
+
+	public ParrotProcessorNodePath addProcessorNode(ParrotProcessorNodeApi pProcessorNodeM)
+			throws ParrotZkException;
+
+	public ParrotProcessorNodePath updateProcessorNode(ParrotProcessorNodeApi pProcessorNode)
+			throws ParrotZkException;
+
+	public ParrotProcessorNodePath getProcessorNodeByPath(String pPath) throws ParrotZkException;
+
+	public void deleteProcessorNode(String pId, String pNode) throws ParrotZkException;
+
+	public ParrotProcessorNodePath getProcessorNode(String pId, String pNode) throws ParrotZkException;
+
+	public List<ParrotProcessorNodePath> getProcessorCluster(String pId) throws ParrotZkException;
 
 	public List<ParrotProcessorConfigPath> getProcessors() throws ParrotZkException;
 
 	public AboutPath getAbout() throws ParrotZkException;
 
-	public AboutPath updateAbout(AboutPath about) throws ParrotZkException;
+	public AboutPath updateAbout(AboutPath pAbout) throws ParrotZkException;
 
-	public boolean exists(String path) throws ParrotZkException;
+	public boolean exists(String pPath) throws ParrotZkException;
 
 }

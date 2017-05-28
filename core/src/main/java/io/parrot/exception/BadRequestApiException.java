@@ -16,8 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.parrot.client;
+package io.parrot.exception;
 
-public class ParrotService {
+import javax.ws.rs.core.Response;
+
+public class BadRequestApiException extends ParrotApiException {
+
+	private static final long serialVersionUID = 1L;
+
+	public BadRequestApiException(String message) {
+		super(message);
+	}
+
+	@Override
+	public int getStatusCodeResponse() {
+		return Response.Status.BAD_REQUEST.getStatusCode();
+	}
 
 }

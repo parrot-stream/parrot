@@ -381,13 +381,13 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-									<inputSpec>api/src/main/resources/swagger/${api.input.spec.file}</inputSpec>
+									<inputSpec>core/src/main/resources/swagger/${parrot.api.input.spec.file}</inputSpec>
 									<language>jaxrs-resteasy-eap</language>
-									<modelPackage>${api.model.package.name}</modelPackage>
-									<apiPackage>${api.api.package.name}</apiPackage>
-									<invokerPackage>${api.invoker.package.name}</invokerPackage>
+									<modelPackage>${parrot.model.package.name}</modelPackage>
+									<apiPackage>${parrot.api.package.name}</apiPackage>
+									<invokerPackage>${parrot.invoker.package.name}</invokerPackage>
 									<output>src/gen/api</output>
-									<modelNameSuffix>${api-model.suffix}</modelNameSuffix>
+									<modelNameSuffix>${parrot.model.suffix}</modelNameSuffix>
 									<configOptions>
 										<sourceFolder>main/java</sourceFolder>
 										<dateLibrary>java8</dateLibrary>
@@ -429,13 +429,13 @@
 	<properties>
 
 		<!-- SWAGGER API -->
-		<api.model.package.name>io.parrot.api.model</api.model.package.name>
-		<api.api.package.name>io.parrot.api</api.api.package.name>
-		<api.invoker.package.name>io.parrot.api.invoker</api.invoker.package.name>
-		<api.factories.dir>io/parrot/api/factories</api.factories.dir>
+		<parrot.model.package.name>io.parrot.api.model</parrot.model.package.name>
+		<parrot.api.package.name>io.parrot.api</parrot.api.package.name>
+		<parrot.invoker.package.name>io.parrot.api.invoker</parrot.invoker.package.name>
+		<parrot.api.factories.dir>io/parrot/api/factories</parrot.api.factories.dir>
 
-		<api-model.suffix>Api</api-model.suffix>
-		<api.input.spec.file>api.yaml</api.input.spec.file>
+		<parrot.model.suffix>Api</parrot.model.suffix>
+		<parrot.api.input.spec.file>api.yaml</parrot.api.input.spec.file>
 
 		<!-- MAVEN PLUGINS -->
 		<version.maven.ejb.plugin>2.5.1</version.maven.ejb.plugin>

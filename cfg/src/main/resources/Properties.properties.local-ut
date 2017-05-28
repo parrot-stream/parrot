@@ -1,4 +1,9 @@
-# Endpoint Servizi
+#************************************************************
+#	PARROT NODE ID
+#************************************************************
+parrot.node=parrot
+
+# Service Endpoints
 debezium.api.url=http://localhost:8083/
 parrot.api.url=http://localhost:8080/parrot/
 

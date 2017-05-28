@@ -25,15 +25,36 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorEvent;
 import org.apache.curator.framework.api.CuratorEventType;
 import org.apache.curator.framework.api.CuratorListener;
+import org.apache.deltaspike.core.api.config.ConfigProperty;
 import org.slf4j.Logger;
 
+import io.parrot.api.model.ParrotProcessorApi;
+import io.parrot.api.model.ParrotProcessorNodeApi;
+import io.parrot.config.IParrotConfigProperties;
+import io.parrot.context.ParrotContext;
+import io.parrot.processor.ProcessorManager;
 import io.parrot.utils.ParrotLogFormatter;
+import io.parrot.zookeeper.path.ParrotProcessorConfigPath;
+import io.parrot.zookeeper.path.ParrotProcessorNodePath;
 
 @Dependent
 public class ParrotZkEventListener implements CuratorListener {
 
 	@Inject
 	Logger LOG;
+
+	@Inject
+	ParrotZkClient zkClient;
+
+	@Inject
+	ParrotContext ctx;
+
+	@Inject
+	ProcessorManager processorManager;
+
+	@Inject
+	@ConfigProperty(name = IParrotConfigProperties.P_PARROT_NODE)
+	String parrotNode;
 
 	/**
 	 * Manages the following ZooKeeper events:
@@ -53,17 +74,67 @@ public class ParrotZkEventListener implements CuratorListener {
 	@Override
 	public void eventReceived(CuratorFramework pFramework, CuratorEvent pEvent) throws Exception {
 
-		/**
-		 * TODO: GESTIRE EVENTI
-		 */
-		if (pEvent != null) {
-			CuratorEventType type = pEvent.getType();
-			String path = pEvent.getPath();
-			LOG.info(ParrotLogFormatter.formatLog(
-					"Zookeper Event Type: " + type + "\nZookeeper Path: " + (path != null ? path : "ND"), "Name",
-					pEvent.getName(), "Data", pEvent.getData() != null ? new String(pEvent.getData(), "UTF-8") : null));
+		String path = pEvent.getPath();
+		CuratorEventType type = pEvent.getType();
+		LOG.info(ParrotLogFormatter.formatLog(
+				"ZooKeeper Event Type: " + type + "\nZooKeeper Path: " + (path != null ? path : "ND"), "Name",
+				pEvent.getName(), "Data", pEvent.getData() != null ? new String(pEvent.getData(), "UTF-8") : null));
+		ParrotProcessorApi processorApi = null;
+		switch (type) {
+		case DELETE:
+			String[] tokens = path.split("/");
+			if (path.startsWith(ParrotProcessorConfigPath.ZK_PATH)) {
+				String id = tokens[tokens.length - 1];
+				ParrotProcessorNodeApi processorNode = zkClient.getProcessorNode(id, parrotNode)
+						.getProcessorNodeApi();
 
-			// LOG.info("\n\n" + event.getPath() + "\n\n");
+				processorManager.deleteZkProcessorNode(processorNode);
+			} else if (path.startsWith(ParrotProcessorNodePath.ZK_PATH)) {
+				ParrotProcessorNodeApi processorNode = zkClient.getProcessorNodeByPath(path)
+						.getProcessorNodeApi();
+				processorManager.stopProcessorNode(processorNode);
+				processorManager.deleteProcessorNode(processorNode);
+			}
+			break;
+		case CREATE:
+			/**
+			 * If the CREATE event is on the path of the Parrot Processor's
+			 * Configuration
+			 */
+			if (path.startsWith(ParrotProcessorConfigPath.ZK_PATH)) {
+				processorApi = zkClient.getProcessorByPath(pEvent.getPath()).getProcessorApi();
+				processorManager.addProcessorNode(processorApi, parrotNode);
+			}
+			/**
+			 * else if the CREATE event is on the path of a Parrot Processor's
+			 * Node
+			 */
+			break;
+		case SET_DATA:
+			/**
+			 * If the SET_DATA event is on the path of the Parrot Processor's
+			 * Configuration
+			 */
+			if (path.startsWith(ParrotProcessorConfigPath.ZK_PATH)) {
+				processorApi = zkClient.getProcessorByPath(pEvent.getPath()).getProcessorApi();
+				ParrotProcessorNodeApi processorNode = zkClient.getProcessorNode(processorApi.getId(), parrotNode)
+						.getProcessorNodeApi();
+				processorManager.stopProcessorNode(processorNode);
+				processorManager.deleteProcessorNode(processorNode);
+				processorManager.addProcessorNode(processorApi, parrotNode);
+			}
+			/**
+			 * else if the SET_DATA event is on the path of a Parrot Processor's
+			 * Node
+			 */
+			else if (path.startsWith(ParrotProcessorNodePath.ZK_PATH)) {
+				ParrotProcessorNodeApi processorNode = zkClient.getProcessorNodeByPath(pEvent.getPath())
+						.getProcessorNodeApi();
+				processorManager.startProcessorNode(processorNode);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
