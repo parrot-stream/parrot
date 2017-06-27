@@ -1,25 +1,17 @@
-version: "2"
-
+version: '3'
 services:
-
-    postgres:
-        image: mcapitanio/postgres:9.6
-        networks:
-            - parrot
-        ports:
-            - "5432:5432"
-        volumes:
-            - postgres_parrot_data:/var/lib/postgresql/data
-        environment:
-            POSTGRES_PASSWORD: postgres
-        privileged: true
-
-volumes:
-    postgres_parrot_data:
-    
+  postgres:
+    image: mcapitanio/postgres:9.6
+    networks:
+    - parrot
+    ports:
+    - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    privileged: true
 networks:
-    default:
-      external:
-        name: parrot
-    parrot:
-        driver: bridge
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

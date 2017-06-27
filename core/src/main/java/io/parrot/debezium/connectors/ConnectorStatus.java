@@ -23,9 +23,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ConnectorStatus {
 
 	@JsonProperty(value = "state")
-	public String state;
+	ConnectorStateType state;
 
 	@JsonProperty(value = "worker_id")
-	public String workerId;
+	String workerId;
+
+	public ConnectorStateType getState() {
+		return state;
+	}
+
+	public String getWorkerId() {
+		return workerId;
+	}
 
 }

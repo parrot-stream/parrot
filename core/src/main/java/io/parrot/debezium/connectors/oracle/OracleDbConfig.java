@@ -28,54 +28,114 @@ import io.parrot.debezium.connectors.Config;
 class OracleDbConfig extends Config {
 
 	@JsonProperty(value = "connector.class", defaultValue = "io.debezium.connector.oracle.OracleDbConnector")
-	public String connectorClass;
+	String connectorClass;
 
 	/**
 	 * BASE PROPERTIES
 	 */
 	@JsonProperty(value = "mongodb.hosts")
-	public String mongoDbHosts;
+	String mongoDbHosts;
 
 	@JsonProperty(value = "mongodb.name")
-	public String mongoDbName;
+	String mongoDbName;
 
 	@JsonProperty(value = "mongodb.user")
-	public String mongoDbUser;
+	String mongoDbUser;
 
 	@JsonProperty(value = "mongodb.password")
-	public String mongoDbPassword;
+	String mongoDbPassword;
 
 	@JsonProperty(value = "collection.whitelist")
-	public String collectionWhitelist;
+	String collectionWhitelist;
 
 	@JsonProperty(value = "collection.blacklist")
-	public String collectionBlacklist;
+	String collectionBlacklist;
 
 	@JsonProperty(value = "initial.sync.max.threads", defaultValue = "1")
-	public String initialSyncMaxThreads;
+	String initialSyncMaxThreads;
 
 	/**
 	 * ADVANCED PROPERTIES
 	 */
 	@JsonProperty(value = "connect.backoff.initial.delay.ms", defaultValue = "1000")
-	public String connectBackoffInitialDelayMs;
+	String connectBackoffInitialDelayMs;
 
 	@JsonProperty(value = "connect.backoff.max.delay.ms", defaultValue = "1000")
-	public String connectBackoffMaxDelayMs;
+	String connectBackoffMaxDelayMs;
 
 	@JsonProperty(value = "connect.max.attempts", defaultValue = "10")
-	public String connectMaxAttempts;
+	String connectMaxAttempts;
 
 	@JsonProperty(value = "mongodb.members.auto.discover", defaultValue = "true")
-	public String mongoDbMembersAutoDiscover;
+	String mongoDbMembersAutoDiscover;
 
 	@JsonProperty(value = "max.queue.size", defaultValue = "1024")
-	public String maxQueueSize;
+	String maxQueueSize;
 
 	@JsonProperty(value = "max.batch.size", defaultValue = "2048")
-	public String maxBatchSize;
+	String maxBatchSize;
 
 	@JsonProperty(value = "poll.interval.ms", defaultValue = "1000")
-	public String pollIntervalMs;
+	String pollIntervalMs;
+
+	public String getConnectorClass() {
+		return connectorClass;
+	}
+
+	public String getMongoDbHosts() {
+		return mongoDbHosts;
+	}
+
+	public String getMongoDbName() {
+		return mongoDbName;
+	}
+
+	public String getMongoDbUser() {
+		return mongoDbUser;
+	}
+
+	public String getMongoDbPassword() {
+		return mongoDbPassword;
+	}
+
+	public String getCollectionWhitelist() {
+		return collectionWhitelist;
+	}
+
+	public String getCollectionBlacklist() {
+		return collectionBlacklist;
+	}
+
+	public String getInitialSyncMaxThreads() {
+		return initialSyncMaxThreads;
+	}
+
+	public String getConnectBackoffInitialDelayMs() {
+		return connectBackoffInitialDelayMs;
+	}
+
+	public String getConnectBackoffMaxDelayMs() {
+		return connectBackoffMaxDelayMs;
+	}
+
+	public String getConnectMaxAttempts() {
+		return connectMaxAttempts;
+	}
+
+	public String getMongoDbMembersAutoDiscover() {
+		return mongoDbMembersAutoDiscover;
+	}
+
+	public String getMaxQueueSize() {
+		return maxQueueSize;
+	}
+
+	public String getMaxBatchSize() {
+		return maxBatchSize;
+	}
+
+	public String getPollIntervalMs() {
+		return pollIntervalMs;
+	}
 
 }

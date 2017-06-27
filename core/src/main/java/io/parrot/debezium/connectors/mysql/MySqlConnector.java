@@ -28,6 +28,10 @@ import io.parrot.debezium.connectors.Connector;
 public class MySqlConnector extends Connector {
 
 	@JsonProperty(value = "config")
-	public MySqlConfig config;
+	MySqlConfig config;
+
+	public MySqlConfig getConfig() {
+		return config;
+	}
 
 }

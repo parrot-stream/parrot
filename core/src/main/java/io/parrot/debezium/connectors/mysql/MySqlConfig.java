@@ -28,87 +28,191 @@ import io.parrot.debezium.connectors.Config;
 class MySqlConfig extends Config {
 
 	@JsonProperty(value = "connector.class", defaultValue = "io.debezium.connector.mysql.MySqlConnector")
-	public String connectorClass;
+	String connectorClass;
 
 	/**
 	 * BASE PROPERTIES
 	 */
 	@JsonProperty(value = "database.hostname")
-	public String databaseHostname;
+	String databaseHostname;
 
 	@JsonProperty(value = "database.port", defaultValue = "3306")
-	public String databasePort;
+	String databasePort;
 
 	@JsonProperty(value = "database.user")
-	public String databaseUser;
+	String databaseUser;
 
 	@JsonProperty(value = "database.password")
-	public String databasePassword;
+	String databasePassword;
 
 	@JsonProperty(value = "database.server.id")
-	public String databaseServerId;
+	String databaseServerId;
 
 	@JsonProperty(value = "database.server.name")
-	public String databaseServerName;
+	String databaseServerName;
 
 	@JsonProperty(value = "database.history.kafka.topic")
-	public String databaseHistoryKafkaTopic;
+	String databaseHistoryKafkaTopic;
 
 	@JsonProperty(value = "database.history.kafka.bootstrap.servers")
-	public String databaseHistoryKafkaBootstrapServers;
+	String databaseHistoryKafkaBootstrapServers;
 
 	@JsonProperty(value = "database.whitelist")
-	public String databaseWhitelist;
+	String databaseWhitelist;
 
 	@JsonProperty(value = "database.blacklist")
-	public String databaseBlacklist;
+	String databaseBlacklist;
 
 	@JsonProperty(value = "table.whitelist")
-	public String tableWhitelist;
+	String tableWhitelist;
 
 	@JsonProperty(value = "table.blacklist")
-	public String tableBlacklist;
+	String tableBlacklist;
 
 	@JsonProperty(value = "column.blacklist")
-	public String columnBlacklist;
+	String columnBlacklist;
 
 	@JsonProperty(value = "column.truncate.to.length.chars")
-	public String columnTruncateToLengthChars;
+	String columnTruncateToLengthChars;
 
 	@JsonProperty(value = "column.mask.with.length.chars")
-	public String columnMaskWithLenghtChars;
+	String columnMaskWithLenghtChars;
 
 	@JsonProperty(value = "time.precision.mode", defaultValue = "adaptive")
-	public String timePrecisionMode;
+	String timePrecisionMode;
 
 	@JsonProperty(value = "decimal.handling.mode", defaultValue = "precise")
-	public String decimalHandlingMode;
+	String decimalHandlingMode;
 
 	@JsonProperty(value = "include.schema.changes", defaultValue = "true")
-	public String includeSchemaChanges;
+	String includeSchemaChanges;
 
 	/**
 	 * ADVANCED PROPERTIES
 	 */
 	@JsonProperty(value = "connect.timeout.ms", defaultValue = "30000")
-	public String connectTimeoutMs;
+	String connectTimeoutMs;
 
 	@JsonProperty(value = "gtid.source.includes")
-	public String gtidSourceIncludes;
+	String gtidSourceIncludes;
 
 	@JsonProperty(value = "gtid.source.excludes")
-	public String gtidSourceExcludes;
+	String gtidSourceExcludes;
 
 	@JsonProperty(value = "rows.fetch.size", defaultValue = "10240")
-	public String rowsFetchSize;
+	String rowsFetchSize;
 
 	@JsonProperty(value = "max.queue.size", defaultValue = "1024")
-	public String maxQueueSize;
+	String maxQueueSize;
 
 	@JsonProperty(value = "max.batch.size", defaultValue = "2048")
-	public String maxBatchSize;
+	String maxBatchSize;
 
 	@JsonProperty(value = "poll.interval.ms", defaultValue = "1000")
-	public String pollIntervalMs;
+	String pollIntervalMs;
+
+	public String getConnectorClass() {
+		return connectorClass;
+	}
+
+	public String getDatabaseHostname() {
+		return databaseHostname;
+	}
+
+	public String getDatabasePort() {
+		return databasePort;
+	}
+
+	public String getDatabaseUser() {
+		return databaseUser;
+	}
+
+	public String getDatabasePassword() {
+		return databasePassword;
+	}
+
+	public String getDatabaseServerId() {
+		return databaseServerId;
+	}
+
+	public String getDatabaseServerName() {
+		return databaseServerName;
+	}
+
+	public String getDatabaseHistoryKafkaTopic() {
+		return databaseHistoryKafkaTopic;
+	}
+
+	public String getDatabaseHistoryKafkaBootstrapServers() {
+		return databaseHistoryKafkaBootstrapServers;
+	}
+
+	public String getDatabaseWhitelist() {
+		return databaseWhitelist;
+	}
+
+	public String getDatabaseBlacklist() {
+		return databaseBlacklist;
+	}
+
+	public String getTableWhitelist() {
+		return tableWhitelist;
+	}
+
+	public String getTableBlacklist() {
+		return tableBlacklist;
+	}
+
+	public String getColumnBlacklist() {
+		return columnBlacklist;
+	}
+
+	public String getColumnTruncateToLengthChars() {
+		return columnTruncateToLengthChars;
+	}
+
+	public String getColumnMaskWithLenghtChars() {
+		return columnMaskWithLenghtChars;
+	}
+
+	public String getTimePrecisionMode() {
+		return timePrecisionMode;
+	}
+
+	public String getDecimalHandlingMode() {
+		return decimalHandlingMode;
+	}
+
+	public String getIncludeSchemaChanges() {
+		return includeSchemaChanges;
+	}
+
+	public String getConnectTimeoutMs() {
+		return connectTimeoutMs;
+	}
+
+	public String getGtidSourceIncludes() {
+		return gtidSourceIncludes;
+	}
+
+	public String getGtidSourceExcludes() {
+		return gtidSourceExcludes;
+	}
+
+	public String getRowsFetchSize() {
+		return rowsFetchSize;
+	}
+
+	public String getMaxQueueSize() {
+		return maxQueueSize;
+	}
+
+	public String getMaxBatchSize() {
+		return maxBatchSize;
+	}
+
+	public String getPollIntervalMs() {
+		return pollIntervalMs;
+	}
 
 }

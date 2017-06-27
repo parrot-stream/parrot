@@ -1,16 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.parrot</groupId>
 		<artifactId>parrot</artifactId>
 		<version>0.1.0</version>
 	</parent>
+<modelVersion>4.0.0</modelVersion>
 	<artifactId>parrot-war</artifactId>
 	<packaging>war</packaging>
 	<name>parrot-war</name>
 
 	<build>
+		<finalName>parrot-rest</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -67,12 +68,5 @@
 
 
 	</properties>
-
-
-	<!-- pluginRepositories> <pluginRepository> <id>cdp</id> <name>CDP Maven 
-		Mirror</name> <url>http://repo.maven.cdp.it:8080/repository/cdp</url> </pluginRepository> 
-		</pluginRepositories> <repositories> <repository> <id>cdp</id> <name>CDP 
-		Maven Repository</name> <url>http://repo.maven.cdp.it:8080/repository/cdp</url> 
-		</repository> </repositories -->
 
 </project>

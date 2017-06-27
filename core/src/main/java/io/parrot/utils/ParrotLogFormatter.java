@@ -21,27 +21,31 @@ package io.parrot.utils;
 public class ParrotLogFormatter {
 
 	public static String formatLog(String headerText, String bodyText) {
-		String header = "\n\n-----------------------------------------------------------------\n";
-		String sep = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
-		String footer = "\n-----------------------------------------------------------------\n\n";
+		String header = "\n\n---------------------------------------------------------------------------------------------------\n";
+		String sep = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+		String footer = "\n---------------------------------------------------------------------------------------------------\n\n";
 		return header + headerText + sep + bodyText + footer;
 	}
 
-	public static String formatLog(String headerText, String bodyText, String footerText) {
-		String header = "\n\n-----------------------------------------------------------------\n";
-		String sep = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
-		String footer = "\n-----------------------------------------------------------------\n\n";
+	/*public static String formatLog(String headerText, String bodyText, String footerText) {
+		String header = "\n\n---------------------------------------------------------------------------------------------------\n";
+		String sep = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+		String footer = "\n---------------------------------------------------------------------------------------------------\n\n";
 		return header + headerText + sep + bodyText + sep + footerText + footer;
-	}
+	}*/
 
 	public static String formatLog(String headerText, Object... keyValues) {
-		String header = "\n\n-----------------------------------------------------------------\n";
-		String sep = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
-		String footer = "\n-----------------------------------------------------------------\n\n";
+		String header = "\n\n---------------------------------------------------------------------------------------------------\n";
+		String sep = "\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n";
+		String footer = "\n---------------------------------------------------------------------------------------------------\n\n";
 		String bodyText = pad(keyValues);
 		return header + headerText + sep + bodyText + footer;
 	}
 
+	public static String formatLogNoHeader(Object... keyValues) {
+		return pad(keyValues);
+	}
+	
 	public static String pad(Object... keyValues) {
 		int i = 1;
 		int maxLength = 0;

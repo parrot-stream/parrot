@@ -28,6 +28,10 @@ import io.parrot.debezium.connectors.Connector;
 public class PostgreSqlConnector extends Connector {
 
 	@JsonProperty(value = "config", required = true)
-	public PostgreSqlConfig config;
+	PostgreSqlConfig config;
+
+	public PostgreSqlConfig getConfig() {
+		return config;
+	}
 
 }

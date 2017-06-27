@@ -1,62 +1,42 @@
-version: "2"
-
+version: '3'
 services:
-          
- #   oracle:
- #       extends:
- #           file: oracle.yml
- #           service: oracle
-
-    postgres:
-        extends:
-            file: postgres.yml
-            service: postgres
-
-    mysql:
-        extends:
-            file: mysql.yml
-            service: mysql
-               
-    parrot:
-        build:
-            context: ..
-            dockerfile: Dockerfile
-        image: ${DOCKER_IMAGE}:${DOCKER_TAG}
-        image: test:test
-        networks:
-            - parrot
-        links:
-            - postgres
-            - mysql
- #           - oracle
-        ports:
-            - "80${ID}:8080"
-            - "99${ID}:9990"
-            - "87${ID}:8787"
-        privileged: true
-        environment:
-            DB_NAME: parrot
-            POSTGRESQL_HOSTNAME: postgres
-            MYSQL_HOSTNAME: mysql
-            MONGODB_HOSTNAME: mongodb
-            ORACLE_HOSTNAME: oracle
-            KAFKA_BROKER_HOSTNAME: kafka
-            DEBEZIUM_HOSTNAME: debezium
-            LOCAL_UNIT: ${LOCAL_UNIT}
-            PIPELINE_UNIT: ${PIPELINE_UNIT}
-            DEBUG: ${DEBUG}
-
-volumes:
-    postgres_parrot_data:
-    oracle_parrot_data:
-    mysql_parrot_data:
-    mysql_parrot_conf:
-    mysql_conf:
-    mysql_data:
-
+  parrot:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: ${DOCKER_IMAGE}:${DOCKER_TAG}
+    networks:
+    - parrot
+    external_links:
+    - zookeeper
+    - hbase
+    - hive
+    - kudu
+    ports:
+    - 80${ID}:8080
+    - 99${ID}:9990
+    - 87${ID}:8787
+    privileged: true
+    environment:
+      DB_NAME: parrot
+      POSTGRESQL_HOSTNAME: postgres
+      MYSQL_HOSTNAME: mysql
+      MONGODB_HOSTNAME: mongodb
+      ORACLE_HOSTNAME: oracle
+      KAFKA_BROKER_HOSTNAME: kafka
+      DEBEZIUM_HOSTNAME: debezium
+      LOCAL_UNIT: ${LOCAL_UNIT}
+      PIPELINE_UNIT: ${PIPELINE_UNIT}
+      DEBUG: ${DEBUG}
+    extra_hosts:
+    - cdpco02.cdpsede.cassaddpp.it:10.254.1.124
+    - cdpco03.cdpsede.cassaddpp.it:10.254.1.125
+    - cdpco04.cdpsede.cassaddpp.it:10.254.1.126
+    - cdpco05.cdpsede.cassaddpp.it:10.254.1.127
+    
 networks:
-    default:
-      external:
-        name: parrot
-    parrot:
-        driver: bridge
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

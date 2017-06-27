@@ -78,6 +78,7 @@ public class JsonUtils {
 		mapper.registerModule(new JSR310Module());
 		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
+		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		mapper.setSerializationInclusion(Include.NON_NULL);
 		return mapper;
 	}
@@ -209,8 +210,8 @@ public class JsonUtils {
 
 	public static String prettyPrint(String json) {
 		try {
-			return prettyPrintedMapper.writerWithDefaultPrettyPrinter()
-					.writeValueAsString(prettyPrintedMapper.readValue(json, Object.class));
+			return getPrettyPrintedMapper().writerWithDefaultPrettyPrinter()
+					.writeValueAsString(getPrettyPrintedMapper().readValue(json, Object.class));
 		} catch (Exception e) {
 			throw new ParrotJsonException(e.getMessage(), e);
 		}

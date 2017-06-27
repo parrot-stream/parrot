@@ -1,0 +1,57 @@
+version: '3'
+services:
+  impala-kudu-master:
+    image: mcapitanio/impala-kudu:2.7.0-cdh5.9.0
+    privileged: true
+    external_links:
+    - hive
+    networks:
+      parrot:
+        aliases:
+        - kudu
+        - impala
+    ports:
+    - 7051:7051
+    - 8051:8051
+    - 25000:25000
+    - 25010:25010
+    - 25020:25020
+    environment:
+      IMPALA_STATE_STORE: "true"
+      KUDU_MASTER: "true"
+  impala-kudu-tserver2:
+    image: mcapitanio/impala-kudu:2.7.0-cdh5.9.0
+    privileged: true
+    external_links:
+    - hive
+    - kudu
+    networks:
+    - parrot
+    ports:
+    - 8052:8050
+    - 25001:25000
+    environment:
+      IMPALA_STATE_STORE: "false"
+      KUDU_MASTER: "false"
+      IMPALA_STATE_STORE_HOST: "impala"
+  impala-kudu-tserver3:
+    image: mcapitanio/impala-kudu:2.7.0-cdh5.9.0
+    privileged: true
+    external_links:
+    - hive
+    - kudu
+    networks:
+    - parrot
+    ports:
+    - 8053:8050
+    - 25002:25000
+    environment:
+      IMPALA_STATE_STORE: "false"
+      KUDU_MASTER: "false"
+      IMPALA_STATE_STORE_HOST: "impala"
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

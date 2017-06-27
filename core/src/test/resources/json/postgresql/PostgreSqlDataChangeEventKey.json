@@ -5,12 +5,9 @@
 		"optional": false,
 		"fields": [
 			{
-				"name": "id",
-				"index": "0",
-				"schema": {
-					"type": "INT32",
-					"optional": "false"
-				}
+				"field": "id",
+				"type": "int32",
+				"optional": "false"
 			}
 		]
 	},

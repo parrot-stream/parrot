@@ -1,0 +1,28 @@
+version: '3'
+services:
+  hue:
+    image: mcapitanio/hue:latest
+    networks:
+    - parrot
+    external_links:
+    - hive
+    - hbase
+    - impala
+    - hadoop
+    - zookeeper
+    - postgres
+    - kudu
+    environment:
+      PGPASSWORD: postgres
+    ports:
+    - 8000:8000
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge
+volumes:
+  hadoop_conf: null
+  hbase_conf: null
+  hive_conf: null

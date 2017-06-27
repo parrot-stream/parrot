@@ -21,7 +21,9 @@ public class ParrotProcessorNodeApi   {
   public enum StatusEnum {
     STARTED("STARTED"),
 
-        STOPPED("STOPPED");
+        STOPPED("STOPPED"),
+
+        FAILED("FAILED");
     private String value;
 
     StatusEnum(String value) {
@@ -36,6 +38,7 @@ public class ParrotProcessorNodeApi   {
   }
 
   private StatusEnum status = null;
+  private String error = null;
 
   /**
    * Processor's ID.
@@ -77,6 +80,19 @@ public class ParrotProcessorNodeApi   {
     this.status = status;
   }
 
+  /**
+   * Error in case of a FAILED status
+   **/
+  
+  @ApiModelProperty(example = "null", value = "Error in case of a FAILED status")
+  @JsonProperty("error")
+  public String getError() {
+    return error;
+  }
+  public void setError(String error) {
+    this.error = error;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -89,12 +105,13 @@ public class ParrotProcessorNodeApi   {
     ParrotProcessorNodeApi parrotProcessorNode = (ParrotProcessorNodeApi) o;
     return Objects.equals(id, parrotProcessorNode.id) &&
         Objects.equals(node, parrotProcessorNode.node) &&
-        Objects.equals(status, parrotProcessorNode.status);
+        Objects.equals(status, parrotProcessorNode.status) &&
+        Objects.equals(error, parrotProcessorNode.error);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, node, status);
+    return Objects.hash(id, node, status, error);
   }
 
   @Override
@@ -105,6 +122,7 @@ public class ParrotProcessorNodeApi   {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    node: ").append(toIndentedString(node)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("}");
     return sb.toString();
   }

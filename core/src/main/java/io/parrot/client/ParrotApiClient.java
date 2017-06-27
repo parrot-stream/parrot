@@ -18,7 +18,6 @@
  */
 package io.parrot.client;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,23 +27,18 @@ import org.apache.deltaspike.core.api.config.ConfigProperty;
 import io.parrot.api.model.ParrotProcessorApi;
 import io.parrot.api.model.ParrotProcessorNodeApi;
 import io.parrot.config.IParrotConfigProperties;
-import io.parrot.debezium.connectors.Error;
-import io.parrot.exception.GenericApiException;
 import io.parrot.exception.ParrotApiException;
 import io.parrot.exception.ParrotException;
 import io.parrot.utils.JsonUtils;
+import io.parrot.utils.ParrotHelper;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class ParrotApiClient {
-
-	@Inject
-	ApplicationMessages message;
 
 	@Inject
 	@ConfigProperty(name = IParrotConfigProperties.P_PARROT_API_URL)
@@ -58,11 +52,7 @@ public class ParrotApiClient {
 	 * @return The list of Processors
 	 */
 	public List<String> getProcessors() throws ParrotApiException {
-		try {
-			return getParrotService().getProcessors().execute().body();
-		} catch (IOException e) {
-			throw new GenericApiException(e.getMessage());
-		}
+		return ParrotHelper.execute(getParrotService().getProcessors());
 	}
 
 	/**
@@ -72,11 +62,7 @@ public class ParrotApiClient {
 	 * @throws ParrotApiException
 	 */
 	public ParrotProcessorApi getProcessor(String pId) throws ParrotApiException {
-		try {
-			return getParrotService().getProcessor(pId).execute().body();
-		} catch (IOException e) {
-			throw new GenericApiException(e.getMessage());
-		}
+		return ParrotHelper.execute(getParrotService().getProcessor(pId));
 	}
 
 	/**
@@ -85,18 +71,8 @@ public class ParrotApiClient {
 	 * @return The added Processor
 	 * @throws ParrotApiException
 	 */
-	public ParrotProcessorApi addProcessor(ParrotProcessorApi pProcessor) throws ParrotApiException {
-		try {
-			Response<ParrotProcessorApi> response = getParrotService().addProcessor(pProcessor).execute();
-			if (response.isSuccessful()) {
-				return response.body();
-			} else {
-				Error error = JsonUtils.byteArrayToObject(response.errorBody().bytes(), Error.class);
-				throw new ParrotException(message.parrotApiAddProcessorError(pProcessor.getId(), error.message));
-			}
-		} catch (Exception e) {
-			throw new GenericApiException(e.getMessage());
-		}
+	public ParrotProcessorApi addProcessor(ParrotProcessorApi pProcessor) {
+		return ParrotHelper.execute(getParrotService().addProcessor(pProcessor));
 	}
 
 	/**
@@ -105,12 +81,8 @@ public class ParrotApiClient {
 	 * @return The Processor cluster
 	 * @throws ParrotApiException
 	 */
-	public List<ParrotProcessorNodeApi> getProcessorCluster(String pId) throws ParrotApiException {
-		try {
-			return getParrotService().getProcessorCluster(pId).execute().body();
-		} catch (IOException e) {
-			throw new GenericApiException(e.getMessage());
-		}
+	public List<ParrotProcessorNodeApi> getProcessorCluster(String pId)  {
+		return ParrotHelper.execute(getParrotService().getProcessorCluster(pId));
 	}
 
 	/**
@@ -120,11 +92,7 @@ public class ParrotApiClient {
 	 * @throws ParrotApiException
 	 */
 	public ParrotProcessorApi startProcessor(String pId) throws ParrotApiException {
-		try {
-			return getParrotService().startProcessor(pId).execute().body();
-		} catch (IOException e) {
-			throw new GenericApiException(e.getMessage());
-		}
+		return ParrotHelper.execute(getParrotService().startProcessor(pId));
 	}
 
 	/**
@@ -134,11 +102,7 @@ public class ParrotApiClient {
 	 * @throws ParrotApiException
 	 */
 	public ParrotProcessorApi stopProcessor(String pId) throws ParrotApiException {
-		try {
-			return getParrotService().stopProcessor(pId).execute().body();
-		} catch (IOException e) {
-			throw new GenericApiException(e.getMessage());
-		}
+		return ParrotHelper.execute(getParrotService().stopProcessor(pId));
 	}
 
 	/**
@@ -148,11 +112,7 @@ public class ParrotApiClient {
 	 * @throws ParrotApiException
 	 */
 	public ParrotProcessorApi restartProcessor(String pId) throws ParrotApiException {
-		try {
-			return getParrotService().restartProcessor(pId).execute().body();
-		} catch (IOException e) {
-			throw new GenericApiException(e.getMessage());
-		}
+		return ParrotHelper.execute(getParrotService().restartProcessor(pId));
 	}
 
 	/**
@@ -162,11 +122,7 @@ public class ParrotApiClient {
 	 * @throws ParrotApiException
 	 */
 	public ResponseBody deleteProcessor(String pId) throws ParrotApiException {
-		try {
-			return getParrotService().deleteProcessor(pId).execute().body();
-		} catch (IOException e) {
-			throw new GenericApiException(e.getMessage());
-		}
+		return ParrotHelper.execute(getParrotService().deleteProcessor(pId));
 	}
 
 	/**
@@ -178,11 +134,11 @@ public class ParrotApiClient {
 		try {
 			if (parrotService == null) {
 				HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-				logging.setLevel(Level.BODY);
+				logging.setLevel(Level.HEADERS);
 				OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 				httpClient.addInterceptor(logging);
 				Retrofit retrofit = new Retrofit.Builder().baseUrl(parrotApiUrl).client(httpClient.build())
-						.addConverterFactory(JacksonConverterFactory.create()).build();
+						.addConverterFactory(JacksonConverterFactory.create(JsonUtils.getDefaultMapper())).build();
 				parrotService = retrofit.create(ParrotApiService.class);
 			}
 		} catch (Exception e) {

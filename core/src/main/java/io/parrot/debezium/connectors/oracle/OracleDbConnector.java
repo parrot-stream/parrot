@@ -28,6 +28,10 @@ import io.parrot.debezium.connectors.Connector;
 public class OracleDbConnector extends Connector {
 
 	@JsonProperty(value = "config")
-	public OracleDbConfig config;
+	OracleDbConfig config;
+
+	public OracleDbConfig getConfig() {
+		return config;
+	}
 
 }

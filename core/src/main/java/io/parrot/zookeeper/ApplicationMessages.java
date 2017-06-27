@@ -25,8 +25,11 @@ import org.apache.deltaspike.core.api.message.MessageTemplate;
 public interface ApplicationMessages {
 
 	@MessageTemplate("{parrot.zookeeper.processor.already.exists}")
-	String parrotProcessorAlreadyExists(String pId);
+	String parrotZooKeeperProcessorAlreadyExists(String pId);
 	
 	@MessageTemplate("{parrot.zookeeper.processor.node.not.exists}")
-	String parrotProcessorNodeNotExists(String pId);
+	String parrotZooKeeperProcessorNodeNotExists(String pId, String pNode);
+	
+	@MessageTemplate("{parrot.zookeeper.processor.not.exists}")
+	String parrotZooKeeperProcessorNotExists(String pId);
 }

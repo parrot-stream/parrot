@@ -1,24 +1,5 @@
 #!/bin/bash
 
-wait-for-it.sh $POSTGRESQL_HOSTNAME:5432 -t 120
-rc=$?
-if [ $rc -ne 0 ]; then
-    echo -e "\n--------------------------------------------"
-    echo -e "      Postgres not ready! Exiting..."
-    echo -e "--------------------------------------------"
-    exit $rc
-fi
-
-wait-for-it.sh $MYSQL_HOSTNAME:3306 -t 120
-rc=$?
-if [ $rc -ne 0 ]; then
-    echo -e "\n--------------------------------------------"
-    echo -e "      MySql not ready! Exiting..."
-    echo -e "--------------------------------------------"
-    exit $rc
-fi
-
-#wait-for-it.sh $ORACLE_HOSTNAME:1521 -t 120
 #rc=$?
 #if [ $rc -ne 0 ]; then
 #    echo -e "\n--------------------------------------------"

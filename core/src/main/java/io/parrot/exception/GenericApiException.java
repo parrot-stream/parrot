@@ -19,18 +19,19 @@
 package io.parrot.exception;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 public class GenericApiException extends ParrotApiException {
 
 	private static final long serialVersionUID = 1L;
 
-	public GenericApiException(String message) {
-		super(message);
+	public GenericApiException(String pMessage) {
+		super(pMessage);
 	}
 
 	@Override
-	public int getStatusCodeResponse() {
-		return Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
+	public Status getStatusCodeResponse() {
+		return Response.Status.INTERNAL_SERVER_ERROR;
 	}
 
 }

@@ -1,25 +1,17 @@
-version: "2"
-
+version: '3'
 services:
-
-    mongodb:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        image: mcapitanio/mongodb:latest
-        networks:
-            - parrot
-        volumes:
-            - mongodb_parrot_data:/data/db
-        ports:
-            - "27017:27017"
-
-volumes:
-    mongodb_parrot_data:
-
+  mongodb:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mcapitanio/mongodb:latest
+    networks:
+    - parrot
+    ports:
+    - 27017:27017
 networks:
-    default:
-      external:
-        name: parrot
-    parrot:
-        driver: bridge
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

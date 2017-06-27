@@ -28,93 +28,205 @@ import io.parrot.debezium.connectors.Config;
 public class PostgreSqlConfig extends Config {
 
 	@JsonProperty(value = "connector.class", defaultValue = "io.debezium.connector.postgresql.PostgresConnector", required = true)
-	public String connectorClass;
+	String connectorClass;
 
 	/**
 	 * BASE PROPERTIES
 	 */
 	@JsonProperty(value = "plugin.name", defaultValue = "decoderbufs")
-	public String pluginName;
+	String pluginName;
 
 	@JsonProperty(value = "slot.name", defaultValue = "debezium")
-	public String slotName;
+	String slotName;
 
 	@JsonProperty(value = "slot.drop_on_stop", defaultValue = "false")
-	public String slotDropOnStop;
+	String slotDropOnStop;
 
 	@JsonProperty(value = "database.hostname", required=true)
-	public String databaseHostname;
+	String databaseHostname;
 
 	@JsonProperty(value = "database.port", defaultValue = "5432", required=true)
-	public String databasePort;
+	String databasePort;
 
 	@JsonProperty(value = "database.user", required=true)
-	public String databaseUser;
+	String databaseUser;
 
 	@JsonProperty(value = "database.password", required=true)
-	public String databasePassword;
+	String databasePassword;
 
 	@JsonProperty(value = "database.dbname", required=true)
-	public String databaseDbName;
+	String databaseDbName;
 
 	@JsonProperty(value = "database.server.name")
-	public String databaseServerName;
+	String databaseServerName;
 
 	@JsonProperty(value = "database.sslmode", defaultValue = "disabled")
-	public String databaseSslMode;
+	String databaseSslMode;
 
 	@JsonProperty(value = "database.sslcert")
-	public String databaseSslCert;
+	String databaseSslCert;
 
 	@JsonProperty(value = "database.sslkey")
-	public String databaseSslKey;
+	String databaseSslKey;
 
 	@JsonProperty(value = "database.sslpassword")
-	public String databaseSslPassword;
+	String databaseSslPassword;
 
 	@JsonProperty(value = "database.sslrootcert")
-	public String databaseSslRootCert;
+	String databaseSslRootCert;
 
 	@JsonProperty(value = "schema.whitelist")
-	public String schemaWhitelist;
+	String schemaWhitelist;
 
 	@JsonProperty(value = "schema.blacklist")
-	public String schemaBlacklist;
+	String schemaBlacklist;
 
 	@JsonProperty(value = "table.whitelist")
-	public String tableWhitelist;
+	String tableWhitelist;
 
 	@JsonProperty(value = "table.blacklist")
-	public String tableBlacklist;
+	String tableBlacklist;
 
 	@JsonProperty(value = "column.whitelist")
-	public String columnWhitelist;
+	String columnWhitelist;
 
 	@JsonProperty(value = "column.blacklist")
-	public String columnBlacklist;
+	String columnBlacklist;
 
 	@JsonProperty(value = "time.precision.mode", defaultValue = "adaptive")
-	public String timePrecisionMode;
+	String timePrecisionMode;
 
 	/**
 	 * ADVANCED PROPERTIES
 	 */
 	@JsonProperty(value = "snapshot.mode", defaultValue = "initial")
-	public String snapshotMode;
+	String snapshotMode;
 
 	@JsonProperty(value = "snapshot.lock.timeout.ms", defaultValue = "10000")
-	public String snapshotLockTimeoutMs;
+	String snapshotLockTimeoutMs;
 
 	@JsonProperty(value = "rows.fetch.size", defaultValue = "10240")
-	public String rowsFetchSize;
+	String rowsFetchSize;
 
 	@JsonProperty(value = "max.queue.size", defaultValue = "20240")
-	public String maxQueueSize;
+	String maxQueueSize;
 
 	@JsonProperty(value = "max.batch.size", defaultValue = "10240")
-	public String maxBatchSize;
+	String maxBatchSize;
 
 	@JsonProperty(value = "poll.interval.ms", defaultValue = "1000")
-	public String pollIntervalMs;
+	String pollIntervalMs;
+
+	public String getConnectorClass() {
+		return connectorClass;
+	}
+
+	public String getPluginName() {
+		return pluginName;
+	}
+
+	public String getSlotName() {
+		return slotName;
+	}
+
+	public String getSlotDropOnStop() {
+		return slotDropOnStop;
+	}
+
+	public String getDatabaseHostname() {
+		return databaseHostname;
+	}
+
+	public String getDatabasePort() {
+		return databasePort;
+	}
+
+	public String getDatabaseUser() {
+		return databaseUser;
+	}
+
+	public String getDatabasePassword() {
+		return databasePassword;
+	}
+
+	public String getDatabaseDbName() {
+		return databaseDbName;
+	}
+
+	public String getDatabaseServerName() {
+		return databaseServerName;
+	}
+
+	public String getDatabaseSslMode() {
+		return databaseSslMode;
+	}
+
+	public String getDatabaseSslCert() {
+		return databaseSslCert;
+	}
+
+	public String getDatabaseSslKey() {
+		return databaseSslKey;
+	}
+
+	public String getDatabaseSslPassword() {
+		return databaseSslPassword;
+	}
+
+	public String getDatabaseSslRootCert() {
+		return databaseSslRootCert;
+	}
+
+	public String getSchemaWhitelist() {
+		return schemaWhitelist;
+	}
+
+	public String getSchemaBlacklist() {
+		return schemaBlacklist;
+	}
+
+	public String getTableWhitelist() {
+		return tableWhitelist;
+	}
+
+	public String getTableBlacklist() {
+		return tableBlacklist;
+	}
+
+	public String getColumnWhitelist() {
+		return columnWhitelist;
+	}
+
+	public String getColumnBlacklist() {
+		return columnBlacklist;
+	}
+
+	public String getTimePrecisionMode() {
+		return timePrecisionMode;
+	}
+
+	public String getSnapshotMode() {
+		return snapshotMode;
+	}
+
+	public String getSnapshotLockTimeoutMs() {
+		return snapshotLockTimeoutMs;
+	}
+
+	public String getRowsFetchSize() {
+		return rowsFetchSize;
+	}
+
+	public String getMaxQueueSize() {
+		return maxQueueSize;
+	}
+
+	public String getMaxBatchSize() {
+		return maxBatchSize;
+	}
+
+	public String getPollIntervalMs() {
+		return pollIntervalMs;
+	}
 
 }

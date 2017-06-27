@@ -60,7 +60,7 @@ public interface SinksApi  {
     @Path("/{id}")
     
     @Produces({ "application/json" })
-    @io.swagger.annotations.ApiOperation(value = "Parrot Sink update", notes = "Updates an existing Sink", response = ParrotSinkApi.class, tags={ "galeve", })
+    @io.swagger.annotations.ApiOperation(value = "Parrot Sink update", notes = "Updates an existing Sink", response = ParrotSinkApi.class, tags={  })
     @io.swagger.annotations.ApiResponses(value = { 
         @io.swagger.annotations.ApiResponse(code = 200, message = "The updated Sink", response = ParrotSinkApi.class),
         

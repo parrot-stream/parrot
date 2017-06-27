@@ -98,11 +98,11 @@ public class ITParrotZkClientTest extends ParrotBaseTest {
 			processor = processorZkPath.getProcessorApi();
 
 			// Assertions
-			assertEquals(PROCESSOR_ID_1, processor.getId());
+			assertEquals(POSTGTRESQL2HBASE_PROCESSOR_NAME, processor.getId());
 			assertEquals(SOURCE_BOOTRSTRAP_SERVERS, processor.getSource().getBootstrapServers());
 			assertEquals(SOURCE_LOGICAL_NAME, processor.getSource().getLogicalName());
 			assertEquals(SOURCE_TABLE_WHITELIST, processor.getSource().getTableWhitelist());
-			assertEquals(SINK_ID_1, processor.getSink().getId());
+			assertEquals(SINK_HBASE_NAME, processor.getSink().getId());
 
 		} catch (Exception e) {
 			e.printStackTrace();

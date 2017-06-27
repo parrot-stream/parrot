@@ -18,7 +18,7 @@
  */
 package io.parrot.context;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -42,7 +42,6 @@ import org.slf4j.Logger;
 import io.parrot.config.IParrotConfigProperties;
 import io.parrot.exception.ParrotException;
 import io.parrot.processor.ParrotProcessor;
-import io.parrot.processor.ParrotRouteBuilder;
 import io.parrot.processor.ProcessorManager;
 import io.parrot.utils.ParrotLogFormatter;
 
@@ -59,12 +58,11 @@ public class ParrotContext extends CdiCamelContext {
 	ProcessorManager processorManager;
 
 	@Inject
-	@ConfigProperty(name = IParrotConfigProperties.P_ZOOKEEPER_HOSTS, defaultValue = "localhost:2181")
-	String zooKeeperHosts;
+	ApplicationMessages message;
 
 	@Inject
-	@ConfigProperty(name = IParrotConfigProperties.P_KAFKA_BROKERS, defaultValue = "localhost:9092")
-	String kafkaBrokers;
+	@ConfigProperty(name = IParrotConfigProperties.P_ZOOKEEPER_HOSTS, defaultValue = IDefaults.DEF_ZOOKEEPER_HOSTS)
+	String zooKeeperHosts;
 
 	@Inject
 	@ConfigProperty(name = IParrotConfigProperties.P_DEBEZIUM_API_URL)
@@ -75,30 +73,34 @@ public class ParrotContext extends CdiCamelContext {
 	String parrotApiUrl;
 
 	@Inject
-	@ConfigProperty(name = IParrotConfigProperties.P_PARROT_NODE)
-	String parrotIdNode;
+	@ConfigProperty(name = IParrotConfigProperties.P_PARROT_NODE, defaultValue = IDefaults.DEF_PARROT_NODE)
+	String parrotNode;
+
 	@PostConstruct
-	void init() {
-		LOG.info(ParrotLogFormatter.formatLog("Parrot Configuration", "Context Name", getName(), "Parrot ID Node",
-				parrotIdNode, "Debezium Api URL", debeziumApiUrl, "Parrot Api URL", parrotApiUrl, "ZooKeeper Hosts",
-				zooKeeperHosts, "Kafka Brokers", kafkaBrokers));
+	public void init() {
+		LOG.info(ParrotLogFormatter.formatLog("Parrot Configuration", "Context Name", getName(), "Parrot Node",
+				parrotNode, "Debezium Api URL", debeziumApiUrl, "Parrot Api URL", parrotApiUrl, "ZooKeeper Hosts",
+				zooKeeperHosts));
 		try {
 			setAutoStartup(true);
-
-			List<ParrotProcessor> processors = processorManager.startUpProcessors();
-			for (ParrotProcessor p : processors) {
-				LOG.info("Adding processor " + p.getProcessor().getId() + "...");
-				ParrotRouteBuilder processorRoute = p.getParrotRouteBuilder();
-				try {
-					addRoutes(processorRoute);
-					LOG.info("Processor " + p.getProcessor().getId() + " added to context '" + getName() + "'.");
-				} catch (Exception e) {
-					LOG.error("Unable to add Processor '" + p.getProcessor().getId() + "': " + e.getMessage());
-				}
-			}
-
 		} catch (Exception e) {
 			throw new ParrotException(e.getMessage());
+		}
+		Collection<ParrotProcessor> processors = processorManager.startUpProcessors();
+		for (ParrotProcessor p : processors) {
+			LOG.info(message.parrotContextProcessorAddingInfo(p.getProcessor().getId(), parrotNode));
+			String error = null;
+			try {
+				addRoutes(p);
+				addComponent(p.getSink().getComponentName(), p.getSink().getComponent());
+				LOG.info(message.parrotContextProcessorAddedInfo(p.getProcessor().getId(), parrotNode));
+
+			} catch (Exception e) {
+				LOG.error(error);
+			} finally {
+				processorManager.updateProcessorNode(p.getProcessor(), parrotNode, error);
+			}
+
 		}
 	}
 
@@ -136,10 +138,6 @@ public class ParrotContext extends CdiCamelContext {
 
 	public String getZookeeperHosts() {
 		return zooKeeperHosts;
-	}
-
-	public String getKafkaBrokers() {
-		return kafkaBrokers;
 	}
 
 	public String getDebeziumApiUrl() {

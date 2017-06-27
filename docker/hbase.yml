@@ -1,0 +1,29 @@
+version: '3'
+services:
+  hbase:
+    image: mcapitanio/hbase:1.2.0-cdh5.11.1
+    networks:
+    - parrot
+    external_links:
+    - hadoop
+    - hive
+    - zookeeper
+    volumes:
+    - hbase_conf:/opt/hbase/conf
+    ports:
+    - 8080:8080
+    - 8085:8085
+    - 9090:9090
+    - 9095:9095
+    - 60000:60000
+    - 60010:60010
+    - 60020:60020
+    - 60030:60030
+volumes:
+  hbase_conf: null
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

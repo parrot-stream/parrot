@@ -26,11 +26,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Connector {
 
 	@JsonProperty(value = "name", required = true)
-	public String name;
+	String name;
 
 	@JsonProperty(value = "connector")
-	public ConnectorStatus status;
+	ConnectorStatus status;
 
 	@JsonProperty(value = "tasks")
-	public Task[] tasks;
+	ActiveTask[] tasks;
+
+	public String getName() {
+		return name;
+	}
+
+	public ConnectorStatus getStatus() {
+		return status;
+	}
+
+	public ActiveTask[] getTasks() {
+		return tasks;
+	}
 }

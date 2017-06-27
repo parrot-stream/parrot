@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 
 @Provider
 public class JacksonConfig implements ContextResolver<ObjectMapper> {
@@ -33,7 +32,7 @@ public class JacksonConfig implements ContextResolver<ObjectMapper> {
 
 	public JacksonConfig() throws Exception {
 		mapper = new ObjectMapper();
-		mapper.registerModule(new JSR310Module());
+		//mapper.registerModule(new JSR310Module());
 		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		mapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
 		mapper.setSerializationInclusion(Include.NON_EMPTY);

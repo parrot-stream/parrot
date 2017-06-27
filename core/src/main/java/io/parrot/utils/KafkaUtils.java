@@ -18,15 +18,17 @@
  */
 package io.parrot.utils;
 
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.ZkConnection;
 import org.apache.deltaspike.core.api.config.ConfigResolver;
+import org.slf4j.LoggerFactory;
 
-import io.parrot.api.model.ParrotProcessorApi;
+import io.parrot.api.model.ParrotSourceApi;
 import io.parrot.config.IParrotConfigProperties;
 import kafka.admin.AdminUtils;
 import kafka.utils.ZKStringSerializer$;
@@ -39,49 +41,41 @@ public class KafkaUtils {
 	private static ZkClient zkClient;
 
 	/**
-	 * Get all Kafka CDC topics for all databases in the source DB list
+	 * Create a Kafka topic with the given properties
 	 * 
-	 * @param processors
-	 *            A list of Parrot Processors.
-	 * @return A list of Kafka topics.
+	 * @param source
+	 *            The Kafka topic to create..
 	 */
-	public static List<String> getAllTopics(ParrotProcessorApi[] processors) {
-		List<String> topics = new LinkedList<String>();
-		for (ParrotProcessorApi processor : processors) {
-			topics.addAll(getAllTopics(processor));
-		}
-		return topics;
-	}
-
 	public static void createTopic(String topicName, int numPartitions, int replicationFactor) {
 		AdminUtils.createTopic(getZkUtils(), topicName, numPartitions, replicationFactor,
 				AdminUtils.createTopic$default$5(), AdminUtils.createTopic$default$6());
 	}
 
 	/**
-	 * @param processor
-	 *            A Parrot Processor.
+	 * Gets all Kafka topics for the given Parrot Processor's Source
+	 * 
+	 * @param source
+	 *            A Parrot Processor's Source.
 	 * @return A list of Kafka topics.
 	 */
-	public static List<String> getAllTopics(ParrotProcessorApi processor) {
+	public static List<String> getAllTopics(ParrotSourceApi source) {
 		List<String> topics = new ArrayList<String>();
 		try {
 			scala.collection.immutable.List<String> allTopics = getZkUtils().getAllTopics().toList();
 			Iterator<String> i = allTopics.iterator();
 			while (i.hasNext()) {
 				String topic = (String) i.next();
-				if (topic.startsWith(processor.getSource().getLogicalName() + ".")) {
+				if (topic.startsWith(source.getLogicalName() + ".")) {
 					topics.add(topic);
 				}
 			}
 		} catch (Throwable t) {
-			t.printStackTrace();
+			LoggerFactory.getLogger(KafkaUtils.class).error(t.getMessage());
 		}
 		return topics;
 	}
 
-	private static ZkUtils getZkUtils() {
-
+	static ZkUtils getZkUtils() {
 		if (zkUtils == null || zkUtils.zkConnection() == null || zkUtils.zkConnection().getZookeeperState() == null
 				|| !zkUtils.zkConnection().getZookeeperState().isConnected()
 				|| !zkUtils.zkConnection().getZookeeperState().isAlive()) {
@@ -92,7 +86,7 @@ public class KafkaUtils {
 		return zkUtils;
 	}
 
-	private static ZkClient getZkClient() {
+	static ZkClient getZkClient() {
 		if (zkClient == null) {
 			String zookeeperHosts = ConfigResolver.getPropertyValue(IParrotConfigProperties.P_ZOOKEEPER_HOSTS);
 			int sessionTimeoutMs = 10 * 1000;
@@ -101,5 +95,7 @@ public class KafkaUtils {
 		}
 		return zkClient;
 	}
+
+
 
 }

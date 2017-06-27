@@ -1,29 +1,20 @@
-version: "2"
-
+version: '3'
 services:
-
-    oracle:
-        image: mcapitanio/oraclese2:12.2.0.1
-        networks:
-            - parrot
-        volumes:
-            - ./sources/oracle:/home/oracle/docker-entrypoint-initdb.d
-            - oracle_parrot_data:/opt/oracle/oradata
-        ports:
-            - "1521:1521"
-            - "5500:5500"
-        environment:
-            ORACLE_SID: parrot
-            ORACLE_PDB: parrotpdb
-            ORACLE_PWD: parrot
-        shm_size: 1g
-
-volumes:
-    oracle_parrot_data:
-    
+  oracle:
+    image: mcapitanio/oraclese2:12.2.0.1
+    networks:
+    - parrot
+    ports:
+    - 1521:1521
+    - 5500:5500
+    environment:
+      ORACLE_SID: parrot
+      ORACLE_PDB: parrotpdb
+      ORACLE_PWD: parrot
+    shm_size: 1g
 networks:
-    default:
-      external:
-        name: parrot
-    parrot:
-        driver: bridge
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

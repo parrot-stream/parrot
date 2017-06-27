@@ -1,0 +1,7 @@
+package io.parrot.processor.source;
+
+public enum ParrotMetaType {
+
+    PARROT_CHANGE_TYPE, PARROT_SOURCE_NAME, PARROT_SOURCE_TIMESTAMP, PARROT_DEBEZIUM_TIMESTAMP, PARROT_PROCESSOR_TIMESTAMP;
+
+}

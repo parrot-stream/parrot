@@ -1,0 +1,30 @@
+version: '3'
+services:
+  hive:
+    image: mcapitanio/hive:latest
+    networks:
+    - parrot
+    external_links:
+    - hadoop
+    - zookeeper
+    - postgres
+    - hbase
+    volumes:
+    - hive_conf:/opt/hive/conf
+    environment:
+      PGPASSWORD: postgres
+    ports:
+    - 10001:10001
+    - 10002:10002
+    - 10003:10003
+    - 9083:9083
+    - 50111:50111
+    - 9999:9999
+volumes:
+  hive_conf: null
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

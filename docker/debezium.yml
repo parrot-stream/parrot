@@ -1,40 +1,22 @@
-version: "2"
-
+version: '3'
 services:
-                
-    postgres:
-        extends:
-            file: postgres.yml
-            service: postgres
-              
-    debezium:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        image: mcapitanio/debezium:0.5
-        networks:
-            - parrot
-        volumes:
-            - debezium_logs:/kafka/logs
-            - debezium_conf:/kafka/conf
-        links:
-            - postgres
-        ports:
-            - "8083:8083"
-        environment:
-            - GROUP_ID=1
-            - CONFIG_STORAGE_TOPIC=parrot.debezium.configs
-            - OFFSET_STORAGE_TOPIC=parrot.debezium.offsets
-            - BOOTSTRAP_SERVERS=kafka:9092
-
-volumes:
-    debezium_logs:
-    debezium_conf:
-    postgres_parrot_data:
-
+  debezium:
+    image: mcapitanio/debezium:0.5.2-SNAPSHOT
+    networks:
+    - parrot
+    external_links:
+    - postgres
+    ports:
+    - 8083:8083
+    environment:
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: parrot.debezium.configs
+      OFFSET_STORAGE_TOPIC: parrot.debezium.offsets
+      BOOTSTRAP_SERVERS: kafka:9092
+      LOG_LEVEL: INFO
 networks:
-    default:
-      external:
-        name: parrot
-    parrot:
-        driver: bridge
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

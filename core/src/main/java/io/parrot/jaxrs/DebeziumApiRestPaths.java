@@ -20,8 +20,8 @@ package io.parrot.jaxrs;
 
 public interface DebeziumApiRestPaths {
 
-	public String PARROT_BASE_URI_PROP = "debezium.api.url";
+    public String PARROT_BASE_URI_PROP = "debezium.api.url";
 
-	public String PROCESSORS_PATH = "/connectors/";
+    public String PROCESSORS_PATH = "/connectors/";
 
 }

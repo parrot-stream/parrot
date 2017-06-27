@@ -21,6 +21,7 @@ package io.parrot.debezium;
 import java.util.List;
 
 import io.parrot.debezium.connectors.Connector;
+import io.parrot.debezium.connectors.Task;
 import io.parrot.debezium.connectors.mongodb.MongoDbConnector;
 import io.parrot.debezium.connectors.mysql.MySqlConnector;
 import io.parrot.debezium.connectors.oracle.OracleDbConnector;
@@ -45,6 +46,15 @@ interface DebeziumApiService {
 	@Headers("Content-Type: application/json")
 	@GET("connectors")
 	Call<List<String>> listConnectors();
+
+	/**
+	 * Get a Debezium connector
+	 * 
+	 * @return The Debezium connector
+	 */
+	@Headers("Content-Type: application/json")
+	@GET("connectors/{connector}")
+	Call<PostgreSqlConnector> getPostgreSqlConnector(@Path("connector") String connectorName);
 
 	/**
 	 * Creates a new PostgreSQL connector
@@ -144,4 +154,15 @@ interface DebeziumApiService {
 	@Headers("Content-Type: application/json")
 	@GET("connectors/{connector}/status")
 	Call<Connector> getConnectorStatus(@Path("connector") String connectorName);
+
+	/**
+	 * Get the status of an existing connector
+	 * 
+	 * @param connectorName
+	 *            The connector for which the status has to be retrieved
+	 * @return The connector status
+	 */
+	@Headers("Content-Type: application/json")
+	@GET("connectors/{connector}/tasks")
+	Call<List<Task>> getConnectorTasks(@Path("connector") String connectorName);
 }

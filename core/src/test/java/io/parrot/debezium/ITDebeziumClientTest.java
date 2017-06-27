@@ -18,7 +18,7 @@
  */
 package io.parrot.debezium;
 
-import static io.parrot.utils.JsonUtils.jsonToObject;
+//import static io.parrot.utils.JsonUtils.jsonToObject;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -34,10 +34,11 @@ import org.slf4j.Logger;
 
 import io.parrot.ParrotBaseTest;
 import io.parrot.debezium.connectors.Connector;
+import io.parrot.debezium.connectors.ConnectorStateType;
 import io.parrot.debezium.connectors.mongodb.MongoDbConnector;
 import io.parrot.debezium.connectors.mysql.MySqlConnector;
 import io.parrot.debezium.connectors.postgresql.PostgreSqlConnector;
-import io.parrot.exception.ParrotException;
+import io.parrot.exception.ParrotApiException;
 import io.parrot.utils.JsonUtils;
 import io.parrot.utils.ParrotLogFormatter;
 
@@ -48,7 +49,7 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	Logger LOG;
 
 	@Inject
-	DebeziumApiClient dbxClient;
+	DebeziumApiClient dbzClient;
 
 	/*****************************************************************************************************
 	 * PostgreSql Connector
@@ -59,10 +60,10 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	public void testAddNewPostgreSqlConnector() {
 		String json = JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL);
 
-		PostgreSqlConnector connector = (PostgreSqlConnector) dbxClient
-				.addConnector(jsonToObject(json, PostgreSqlConnector.class));
+		PostgreSqlConnector connector = (PostgreSqlConnector) dbzClient
+				.addConnector(JsonUtils.jsonToObject(json, PostgreSqlConnector.class));
 
-		List<String> connectors = dbxClient.listConnectors();
+		List<String> connectors = dbzClient.listConnectors();
 		assertEquals(1, connectors.size());
 
 		// LOG.info(ParrotLogFormatter.formatLog("PostgreSql Connector",
@@ -70,23 +71,23 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	}
 
 	// @Ignore
-	@Test(expected = ParrotException.class)
+	@Test(expected = ParrotApiException.class)
 	@Order(2)
 	public void testAddExistentPostgreSqlConnector() {
-		PostgreSqlConnector connector = (PostgreSqlConnector) dbxClient.addConnector(
-				jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL), PostgreSqlConnector.class));
+		PostgreSqlConnector connector = (PostgreSqlConnector) dbzClient.addConnector(
+				JsonUtils.jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL), PostgreSqlConnector.class));
 	}
 
 	// @Ignore
 	@Test
 	@Order(3)
 	public void testGetPostgreSqlConnectorStatus() {
-		String connectorName = jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
-				PostgreSqlConnector.class).name;
-		Connector connector = dbxClient.getConnectorStatus(connectorName);
-		List<String> connectors = dbxClient.listConnectors();
+		String connectorName = JsonUtils.jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
+				PostgreSqlConnector.class).getName();
+		Connector connector = dbzClient.getConnectorStatus(connectorName);
+		List<String> connectors = dbzClient.listConnectors();
 		assertEquals(1, connectors.size());
-		assertEquals("RUNNING", connector.status.state);
+		assertEquals("RUNNING", connector.getStatus().getState());
 	}
 
 	// @Ignore
@@ -108,52 +109,52 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	@Test
 	@Order(5)
 	public void testPausePostgreSqlConnectorStatus() throws InterruptedException {
-		String connectorName = jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
-				PostgreSqlConnector.class).name;
-		dbxClient.pauseConnector(connectorName);
-		Connector connector = dbxClient.getConnectorStatus(connectorName);
-		while (!"PAUSED".equalsIgnoreCase(connector.status.state)) {
+		String connectorName = JsonUtils.jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
+				PostgreSqlConnector.class).getName();
+		dbzClient.pauseConnector(connectorName);
+		Connector connector = dbzClient.getConnectorStatus(connectorName);
+		while (!ConnectorStateType.PAUSED.equals(connector.getStatus().getState())) {
 			Thread.sleep(1000);
-			connector = dbxClient.getConnectorStatus(connectorName);
+			connector = dbzClient.getConnectorStatus(connectorName);
 		}
-		assertEquals("PAUSED", connector.status.state);
+		assertEquals(ConnectorStateType.PAUSED, connector.getStatus().getState());
 	}
 
 	// @Ignore
 	@Test
 	@Order(6)
 	public void testResumePostgreSqlConnectorStatus() throws InterruptedException {
-		String connectorName = jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
-				PostgreSqlConnector.class).name;
-		dbxClient.resumeConnector(connectorName);
+		String connectorName = JsonUtils.jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
+				PostgreSqlConnector.class).getName();
+		dbzClient.resumeConnector(connectorName);
 
-		Connector connector = dbxClient.getConnectorStatus(connectorName);
-		while (!"RUNNING".equalsIgnoreCase(connector.status.state)) {
+		Connector connector = dbzClient.getConnectorStatus(connectorName);
+		while (!ConnectorStateType.PAUSED.equals(connector.getStatus().getState())) {
 			Thread.sleep(1000);
-			connector = dbxClient.getConnectorStatus(connectorName);
+			connector = dbzClient.getConnectorStatus(connectorName);
 		}
-		assertEquals("RUNNING", connector.status.state);
+		assertEquals(ConnectorStateType.RUNNING, connector.getStatus().getState());
 	}
 
 	// @Ignore
 	@Test
 	@Order(7)
 	public void testDeleteExistentPostgreSqlConnector() {
-		String connectorName = jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
-				PostgreSqlConnector.class).name;
-		dbxClient.deleteConnector(connectorName);
+		String connectorName = JsonUtils.jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
+				PostgreSqlConnector.class).getName();
+		dbzClient.deleteConnector(connectorName);
 
-		List<String> connectors = dbxClient.listConnectors();
+		List<String> connectors = dbzClient.listConnectors();
 		assertEquals(0, connectors.size());
 	}
 
 	// @Ignore
-	@Test(expected = ParrotException.class)
+	@Test(expected = ParrotApiException.class)
 	@Order(8)
 	public void testDeleteNotExistentPostgreSqlConnector() {
-		String connectorName = jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
-				PostgreSqlConnector.class).name;
-		dbxClient.deleteConnector(connectorName);
+		String connectorName = JsonUtils.jsonToObject(JsonUtils.readFromFile(JSON_PATH_CONNECTOR_POSTGTRESQL),
+				PostgreSqlConnector.class).getName();
+		dbzClient.deleteConnector(connectorName);
 	}
 
 	/*****************************************************************************************************
@@ -165,8 +166,8 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	public void testAddMongoDbConnector() {
 		String json = JsonUtils.readFromFile(JSON_PATH_CONNECTOR_MONGODB);
 		LOG.info(ParrotLogFormatter.formatLog("MongoDb Connector", json));
-		MongoDbConnector connector = (MongoDbConnector) dbxClient
-				.addConnector(jsonToObject(json, MongoDbConnector.class));
+		MongoDbConnector connector = (MongoDbConnector) dbzClient
+				.addConnector(JsonUtils.jsonToObject(json, MongoDbConnector.class));
 	}
 
 	/*****************************************************************************************************
@@ -178,7 +179,7 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	public void testAddMySqlConnector() {
 		String json = JsonUtils.readFromFile(JSON_PATH_CONNECTOR_MYSQL);
 		LOG.info(ParrotLogFormatter.formatLog("MySql Connector", json));
-		MySqlConnector connector = dbxClient.addConnector(jsonToObject(json, MySqlConnector.class));
+		MySqlConnector connector = dbzClient.addConnector(JsonUtils.jsonToObject(json, MySqlConnector.class));
 	}
 
 	/*****************************************************************************************************
@@ -190,6 +191,6 @@ public class ITDebeziumClientTest extends ParrotBaseTest {
 	public void testAddOracleConnector() {
 		String json = JsonUtils.readFromFile(JSON_PATH_CONNECTOR_ORACLE);
 		LOG.info(ParrotLogFormatter.formatLog("MySql Connector", json));
-		MySqlConnector connector = dbxClient.addConnector(jsonToObject(json, MySqlConnector.class));
+		MySqlConnector connector = dbzClient.addConnector(JsonUtils.jsonToObject(json, MySqlConnector.class));
 	}
 }

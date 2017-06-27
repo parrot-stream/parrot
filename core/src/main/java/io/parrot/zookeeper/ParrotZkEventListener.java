@@ -87,8 +87,8 @@ public class ParrotZkEventListener implements CuratorListener {
 				String id = tokens[tokens.length - 1];
 				ParrotProcessorNodeApi processorNode = zkClient.getProcessorNode(id, parrotNode)
 						.getProcessorNodeApi();
-
 				processorManager.deleteZkProcessorNode(processorNode);
+				processorManager.deleteProcessor(id);
 			} else if (path.startsWith(ParrotProcessorNodePath.ZK_PATH)) {
 				ParrotProcessorNodeApi processorNode = zkClient.getProcessorNodeByPath(path)
 						.getProcessorNodeApi();
@@ -121,6 +121,7 @@ public class ParrotZkEventListener implements CuratorListener {
 						.getProcessorNodeApi();
 				processorManager.stopProcessorNode(processorNode);
 				processorManager.deleteProcessorNode(processorNode);
+				processorManager.deleteProcessor(processorApi.getId());
 				processorManager.addProcessorNode(processorApi, parrotNode);
 			}
 			/**

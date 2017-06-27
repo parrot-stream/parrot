@@ -45,17 +45,16 @@ public interface ParrotZkClient {
 
 	public void deleteProcessor(String pId) throws ParrotZkException;
 
-	public ParrotProcessorNodePath addProcessorNode(ParrotProcessorNodeApi pProcessorNodeM)
-			throws ParrotZkException;
+	public ParrotProcessorNodePath addProcessorNode(ParrotProcessorNodeApi pProcessorNodeM) throws ParrotZkException;
 
-	public ParrotProcessorNodePath updateProcessorNode(ParrotProcessorNodeApi pProcessorNode)
-			throws ParrotZkException;
+	public ParrotProcessorNodePath updateProcessorNode(ParrotProcessorNodeApi pProcessorNode) throws ParrotZkException;
 
 	public ParrotProcessorNodePath getProcessorNodeByPath(String pPath) throws ParrotZkException;
 
 	public void deleteProcessorNode(String pId, String pNode) throws ParrotZkException;
 
-	public ParrotProcessorNodePath getProcessorNode(String pId, String pNode) throws ParrotZkException;
+	public ParrotProcessorNodePath getProcessorNode(String pId, String pNode)
+			throws ParrotZkException;
 
 	public List<ParrotProcessorNodePath> getProcessorCluster(String pId) throws ParrotZkException;
 

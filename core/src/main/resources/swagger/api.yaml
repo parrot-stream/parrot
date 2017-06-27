@@ -261,8 +261,6 @@ paths:
       parameters:
       - $ref: '#/parameters/id'
       - $ref: '#/parameters/sink'
-      tags:
-      - galeve
       responses:
         200:
           description: The updated Sink
@@ -289,9 +287,10 @@ definitions:
         $ref: '#/definitions/ParrotSink'
       status:
         type: string
+        default: DISABLED
         enum:
-        - STARTED
-        - STOPPED
+        - ENABLED
+        - DISABLED
   ParrotProcessorNode:
     type: object
     required:
@@ -309,6 +308,10 @@ definitions:
         enum:
         - STARTED
         - STOPPED
+        - FAILED
+      error:
+        type: string
+        description: Error in case of a FAILED status
   ParrotProcessorCluster:
     type: array
     items:
@@ -349,6 +352,7 @@ definitions:
     type: object
     required:
     - id
+    - sink.class
     properties:
       id:
         type: string
@@ -356,6 +360,16 @@ definitions:
       sink.class:
         type: string
         description: The class which implements the Parrot Processor's Sink
+      configurations:
+        $ref: '#/definitions/ParrotSinkConfiguration'
+  ParrotSinkConfiguration:
+    required:
+    - default
+    properties:
+      default:
+        type: string
+    additionalProperties:
+      type: string
   ParrotSinks:
     type: array
     items:
@@ -363,7 +377,7 @@ definitions:
   Error:
     type: object
     properties:
-      code:
+      error_code:
         type: integer
         format: int32
       message:

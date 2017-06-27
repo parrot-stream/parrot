@@ -48,7 +48,7 @@ public class ITKafkaUtilsTest extends ParrotBaseTest {
 			String json = readFromFile(JSON_PATH_PROCESSOR_CONFIG_POSTGRESQL_TO_HBASE);
 			ParrotProcessorApi processor = jsonToObject(json, ParrotProcessorApi.class);
 
-			List<String> topics = KafkaUtils.getAllTopics(processor);
+			List<String> topics = KafkaUtils.getAllTopics(processor.getSource());
 			assertEquals(1, topics.size());
 			assertTrue(topics.contains(TOPIC_NAME_1_1));
 

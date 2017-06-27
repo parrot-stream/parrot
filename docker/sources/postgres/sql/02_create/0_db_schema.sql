@@ -1,0 +1,2 @@
+CREATE SCHEMA parrot;
+GRANT USAGE ON SCHEMA parrot TO parrot;

@@ -19,18 +19,21 @@
 package io.parrot.exception;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import io.parrot.api.model.ErrorApi;
 
 public class BadRequestApiException extends ParrotApiException {
 
 	private static final long serialVersionUID = 1L;
 
-	public BadRequestApiException(String message) {
-		super(message);
+	public BadRequestApiException(ErrorApi pError) {
+		super(pError);
 	}
 
 	@Override
-	public int getStatusCodeResponse() {
-		return Response.Status.BAD_REQUEST.getStatusCode();
+	public Status getStatusCodeResponse() {
+		return Response.Status.BAD_REQUEST;
 	}
 
 }

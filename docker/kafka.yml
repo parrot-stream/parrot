@@ -1,43 +1,24 @@
-version: "2"
-
+version: '3'
 services:
-
-    zookeeper:
-        extends:
-            file: zookeeper.yml
-            service: zookeeper
-           
-    kafka:
-       # image: mcapitanio/kafka:0.10.2.0
-        image: gitlab.cdp.it:5001/cdp/kafka:0.10.2
-        networks:
-            - parrot
-        links:
-            - zookeeper
-        volumes:
-            - kafka_conf:/opt/kafka/config
-            - kafka_logs:/opt/kafka/logs
-        ports:
-            - "9092:9092"
-            - "8081:8081"
-            - "8082:8082"
-            - "8084:8083"
-            - "8000:8000"
-        environment:
-            - KAFKA_REST_PROXY_URL=http://localhost:8082
-            - PROXY=true
-            - PROXY_SKIP_VERIFY=true
-
-volumes:
-    kafka_conf:
-    kafka_logs:
-    zookeeper_data:
-    zookeeper_logs:
-    zookeeper_conf:
-
+  kafka:
+    image: mcapitanio/kafka:0.10.2.0
+    networks:
+    - parrot
+    external_links:
+    - zookeeper
+    ports:
+    - 9092:9092
+    - 8081:8081
+    - 8082:8082
+    - 8084:8083
+    - 8001:8000
+    environment:
+    - KAFKA_REST_PROXY_URL=http://localhost:8082
+    - PROXY=true
+    - PROXY_SKIP_VERIFY=true
 networks:
-    default:
-      external:
-        name: parrot
-    parrot:
-        driver: bridge
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

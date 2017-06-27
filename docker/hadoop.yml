@@ -1,0 +1,26 @@
+version: '3'
+services:
+  hadoop:
+    image: mcapitanio/hadoop:2.6.0-cdh5.11.1
+    networks:
+    - parrot
+    external_links:
+    - zookeeper
+    volumes:
+    - hadoop_conf:/etc/hadoop/conf
+    ports:
+    - 50070:50070
+    - 50075:50075
+    - 8020:8020
+    - 8042:8042
+    - 8088:8088
+    - 8188:8188
+    - 19888:19888
+volumes:
+  hadoop_conf: null
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

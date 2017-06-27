@@ -1,11 +1,47 @@
-#************************************************************
-#	PARROT NODE ID
-#************************************************************
+#*************************************************************************************
+# PARROT NODE ID
+#*************************************************************************************
+# You can run multiple instance of Parrot, to form a Cluster.
+# Each Parrot instance, the Parrot's Node, is identified by the following unique name.
+# When you start e new Parrot Node instance, you can do one of this, in order of
+# priority:
+#
+#   1. Setting the environment variable PARROT_NODE
+#   2. Updating the "parrot.node" configuration parameter
+#*************************************************************************************
 parrot.node=parrot
 
-# Service Endpoints
+#*************************************************************************************
+# DEBEZIUM API URL
+#*************************************************************************************
+# Parrot is able to communicate with Debezium to let you administer the Debezium
+# connectors, togheter with its own Parrot Processors. To do that you have to specify
+# the Debezium API url:
+#
+#   1. Setting the environment variable DEBEZIUM_API_URL
+#   2. Updating the "debezium.api.url" configuration parameter
+#*************************************************************************************
 debezium.api.url=http://localhost:8083/
+
+#*************************************************************************************
+# PARROT API URL
+#*************************************************************************************
+# You can communicate with Parrot through its REST API and using the command line
+# client provided with the Parrot Core distribution or using Parrot UI.
+# You can set the Parrot Rest URL:
+#
+#   1. Setting the environment variable PARROT_API_URL
+#   2. Updating the "parrot.api.url" configuration parameter
+#*************************************************************************************
 parrot.api.url=http://localhost:8080/parrot/
 
+#*************************************************************************************
+# ZOOKEEPER HOSTS
+#*************************************************************************************
+# Parrot needs to communicate to ZooKeeper to coordinate its nodes in the cluster.
+# You can set the ZooKeeper hosts in one of these ways:
+#
+#   1. Setting the environment variable ZOOKEEPER_HOSTS
+#   2. Updating the "zookeeper.hosts" configuration parameter
+#*************************************************************************************
 zookeeper.hosts=zookeeper:2181
-kafka.brokers=kafka:9092

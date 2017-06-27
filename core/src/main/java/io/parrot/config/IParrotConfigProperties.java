@@ -20,12 +20,20 @@ package io.parrot.config;
 
 public interface IParrotConfigProperties {
 
+	/********************************************************************
+	 * CONFIGURATION PROPERTIES
+	 ********************************************************************/
 	public String P_PARROT_NODE = "parrot.node";
 	
 	public String P_DEBEZIUM_API_URL = "debezium.api.url";
 	public String P_PARROT_API_URL = "parrot.api.url";
 
 	public String P_ZOOKEEPER_HOSTS = "zookeeper.hosts";
-	public String P_KAFKA_BROKERS = "kafka.brokers";
+	//public String P_KAFKA_BROKERS = "kafka.brokers";
 
+	/********************************************************************
+	 * ENVIRONMENT VARIABLE
+	 ********************************************************************/
+	public String E_PARROT_NODE = "PARROT_NODE";
+	
 }

@@ -15,7 +15,7 @@
 
 	<context-param>
 		<param-name>resteasy.providers</param-name>
-		<param-value>io.parrot.exception.mapper.JaxrsExceptionMapper</param-value>
+		<param-value>io.parrot.exception.JaxrsExceptionMapper</param-value>
 	</context-param>
 
 </web-app>

@@ -7,9 +7,9 @@
 	</Appenders>
 	<Loggers>
 		<!-- Logger name="io.parrot" level="debug">
-			<AppenderRef ref="Console" />
-		</Logger-->
-		<Root level="error">
+	      	<AppenderRef ref="Console"/>
+	    </Logger-->
+		<Root level="info">
 			<AppenderRef ref="Console" />
 		</Root>
 	</Loggers>

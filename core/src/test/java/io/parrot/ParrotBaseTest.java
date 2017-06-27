@@ -21,19 +21,26 @@ package io.parrot;
 public class ParrotBaseTest {
 
 	// Debezium Connectors
+	protected static final String POSTGTRESQL_CONNECTOR_NAME = "PostgreSql_Connector";
+	protected static final String MYSQL_CONNECTOR_NAME = "MySql_Connector";
+	protected static final String MONGODB_CONNECTOR_NAME = "MongoDb_Connector";
+	protected static final String CASSANDRA_CONNECTOR_NAME = "Cassandra_Connector";
+
 	protected static final String JSON_PATH_CONNECTOR_POSTGTRESQL = "json/connectors/postgresql.json";
 	protected static final String JSON_PATH_CONNECTOR_MONGODB = "json/connectors/mongodb.json";
 	protected static final String JSON_PATH_CONNECTOR_MYSQL = "json/connectors/mysql.json";
 	protected static final String JSON_PATH_CONNECTOR_ORACLE = "json/connectors/oracle.json";
 
 	// Processors
+	protected static final String POSTGTRESQL2HBASE_PROCESSOR_NAME = "Processor-PostgresqlToHBase";
+	protected static final String SINK_HBASE_NAME = "Sink-HBase";
+
 	protected static final String JSON_PATH_PROCESSOR_CONFIG_POSTGRESQL_TO_HBASE = "json/processors/PostgresqlToHBase.json";
 
-	protected static final String PROCESSOR_ID_1 = "Processor_1";
-	protected static final String SINK_ID_1 = "Sink_1";
 	protected static final String SOURCE_LOGICAL_NAME = "parrot_source";
 	protected static final String SOURCE_BOOTRSTRAP_SERVERS = "localhost:9092";
 	protected static final String SOURCE_TABLE_WHITELIST = "parrot.table_with_simple_pk";
 
 	protected static final String TOPIC_NAME_1_1 = SOURCE_LOGICAL_NAME + ".parrot.table_with_simple_pk";
+
 }

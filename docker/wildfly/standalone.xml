@@ -93,7 +93,7 @@
 	<profile>
 		<subsystem xmlns="urn:jboss:domain:logging:3.0">
 			<console-handler name="CONSOLE">
-				<level name="INFO" />
+				<level name="DEBUG" />
 				<formatter>
 					<named-formatter name="COLOR-PATTERN" />
 				</formatter>
@@ -115,6 +115,15 @@
 			</logger>
 			<logger category="sun.rmi">
 				<level name="WARN" />
+			</logger>
+			<logger category="io.parrot">
+				<level name="DEBUG" />
+			</logger>
+			<logger category="org.jboss">
+				<level name="INFO" />
+			</logger>
+			<logger category="org.apache.camel">
+				<level name="FINEST" />
 			</logger>
 			<root-logger>
 				<level name="INFO" />
@@ -178,7 +187,6 @@
 				</managed-scheduled-executor-services>
 			</concurrent>
 			<default-bindings context-service="java:jboss/ee/concurrency/context/default"
-				datasource="java:/jdbc/${env.DB_DATASOURCE}"
 				managed-executor-service="java:jboss/ee/concurrency/executor/default"
 				managed-scheduled-executor-service="java:jboss/ee/concurrency/scheduler/default"
 				managed-thread-factory="java:jboss/ee/concurrency/factory/default" />

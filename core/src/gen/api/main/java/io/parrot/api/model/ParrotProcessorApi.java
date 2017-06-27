@@ -22,9 +22,9 @@ public class ParrotProcessorApi   {
    * Gets or Sets status
    */
   public enum StatusEnum {
-    STARTED("STARTED"),
+    ENABLED("ENABLED"),
 
-        STOPPED("STOPPED");
+        DISABLED("DISABLED");
     private String value;
 
     StatusEnum(String value) {
@@ -38,7 +38,7 @@ public class ParrotProcessorApi   {
     }
   }
 
-  private StatusEnum status = null;
+  private StatusEnum status = StatusEnum.DISABLED;
 
   /**
    * Processor's ID.

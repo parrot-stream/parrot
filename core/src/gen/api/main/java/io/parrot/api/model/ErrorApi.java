@@ -11,19 +11,19 @@ import io.swagger.annotations.*;
 
 public class ErrorApi   {
   
-  private Integer code = null;
+  private Integer errorCode = null;
   private String message = null;
 
   /**
    **/
   
   @ApiModelProperty(example = "null", value = "")
-  @JsonProperty("code")
-  public Integer getCode() {
-    return code;
+  @JsonProperty("error_code")
+  public Integer getErrorCode() {
+    return errorCode;
   }
-  public void setCode(Integer code) {
-    this.code = code;
+  public void setErrorCode(Integer errorCode) {
+    this.errorCode = errorCode;
   }
 
   /**
@@ -48,13 +48,13 @@ public class ErrorApi   {
       return false;
     }
     ErrorApi error = (ErrorApi) o;
-    return Objects.equals(code, error.code) &&
+    return Objects.equals(errorCode, error.errorCode) &&
         Objects.equals(message, error.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, message);
+    return Objects.hash(errorCode, message);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class ErrorApi   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ErrorApi {\n");
     
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    errorCode: ").append(toIndentedString(errorCode)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();

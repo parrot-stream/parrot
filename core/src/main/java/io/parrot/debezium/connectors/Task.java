@@ -18,6 +18,8 @@
  */
 package io.parrot.debezium.connectors;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,22 +27,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(Include.NON_NULL)
 public class Task {
 
-	@JsonProperty(value = "connector")
-	public String connector;
-
 	@JsonProperty(value = "id")
-	public Integer id;
+	public TaskId idTask;
 
-	@JsonProperty(value = "state")
-	public String state;
-
-	@JsonProperty(value = "trace")
-	public String trace;
-
-	@JsonProperty(value = "task")
-	public Integer task;
-
-	@JsonProperty(value = "worker_id")
-	public String workerId;
-
+	@JsonProperty(value = "config")
+	public Map<String, String> config;
 }

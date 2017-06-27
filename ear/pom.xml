@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.parrot</groupId>
 		<artifactId>parrot</artifactId>
 		<version>0.1.0</version>
 	</parent>
+	<modelVersion>4.0.0</modelVersion>
 	<artifactId>parrot-ear</artifactId>
 	<version>0.1.0</version>
 	<packaging>ear</packaging>
@@ -41,7 +41,28 @@
 						</modules>
 					</configuration>
 				</plugin>
-
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>${version.wildfly.maven.plugin}</version>
+					<executions>
+						<execution>
+							<phase>install</phase>
+							<configuration>
+								<skip>${wildfly.skipDeploy}</skip>
+								<hostname>${wildfly.hostname}</hostname>
+								<port>${wildfly.port}</port>
+								<filename>parrot.ear</filename>
+								<username>${wildfly.username}</username>
+								<password>${wildfly.password}</password>
+								<targetDir>../ear/target</targetDir>
+							</configuration>
+							<goals>
+								<goal>${wildfly.goal}</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -49,6 +70,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ear-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -136,11 +161,20 @@
 
 	<properties>
 
-		<!-- PLUGINS -->
+		<!-- MAVEN PLUGINS -->
 		<version.maven.ear.plugin>2.10.1</version.maven.ear.plugin>
+		<version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
 
 		<postgresql.hostname>localhost</postgresql.hostname>
 		<postgresql.port>5490</postgresql.port>
+
+		<!-- WIDLFLY -->
+		<wildfly.hostname>127.0.0.1</wildfly.hostname>
+		<wildfly.port>9990</wildfly.port>
+		<wildfly.goal>deploy</wildfly.goal>
+		<wildfly.username>parrot</wildfly.username>
+		<wildfly.password>parrot</wildfly.password>
+		<wildfly.skipDeploy>false</wildfly.skipDeploy>
 
 	</properties>
 

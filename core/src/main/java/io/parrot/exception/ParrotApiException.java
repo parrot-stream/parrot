@@ -18,13 +18,52 @@
  */
 package io.parrot.exception;
 
-public abstract class ParrotApiException extends RuntimeException {
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 
-	private static final long serialVersionUID = 1L;
+import io.parrot.api.model.ErrorApi;
 
-	public ParrotApiException(String pMessage) {
-		super(pMessage);
-	}
+public class ParrotApiException extends RuntimeException {
 
-	public abstract int getStatusCodeResponse();
+    private static final long serialVersionUID = 1L;
+
+    private ResponseBuilder response;
+    private ErrorApi error;
+
+    public ParrotApiException(Status statusError, String pMessage) {
+        super(pMessage);
+        error = new ErrorApi();
+        error.setErrorCode(statusError.getStatusCode());
+        error.setMessage(pMessage);
+    }
+
+    public ParrotApiException(String pMessage) {
+        super(pMessage);
+        error = new ErrorApi();
+        error.setErrorCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+        error.setMessage(pMessage);
+    }
+
+    public ParrotApiException(ErrorApi pError) {
+        super(pError.getMessage());
+        error = pError;
+    }
+
+    public ParrotApiException(ErrorApi pError, Throwable pThrowable) {
+        super(pError.getMessage(), pThrowable);
+        error = pError;
+    }
+
+    public ResponseBuilder getErrorResponse() {
+        return response;
+    }
+
+    public ErrorApi getErrorApi() {
+        return error;
+    }
+
+    public Status getStatusCodeResponse() {
+        return Response.Status.fromStatusCode(error.getErrorCode());
+    }
 }

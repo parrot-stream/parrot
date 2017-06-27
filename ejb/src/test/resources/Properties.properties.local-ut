@@ -1,6 +1,0 @@
-# APIs URL
-debezium.api.url=http://localhost:8083/
-parrot.api.url=http://localhost:8080/parrot/
-
-zookeeper.hosts=localhost:2181
-kafka.brokers=localhost:9092

@@ -1,116 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>io.parrot</groupId>
 		<artifactId>parrot</artifactId>
 		<version>0.1.0</version>
 	</parent>
+	<modelVersion>4.0.0</modelVersion>
 	<artifactId>parrot-core</artifactId>
 	<packaging>ejb</packaging>
 	<name>parrot-core</name>
 
 	<dependencies>
-
-		<!-- SCALA -->
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>${version.scala}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- SWAGGER -->
-		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-annotations</artifactId>
-			<version>${version.swagger}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-jaxrs</artifactId>
-			<version>${version.swagger}</version>
-		</dependency>
-
-		<!-- JACKSON -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>${version.jackson}</version>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson2-provider</artifactId>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 
 		<!-- APACHE CURATOR -->
 		<dependency>
@@ -118,6 +18,20 @@
 			<artifactId>curator-framework</artifactId>
 			<version>${version.curator}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.dataformat</groupId>
+					<artifactId>jackson-dataformat-yaml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.curator</groupId>
@@ -142,6 +56,16 @@
 			<artifactId>curator-x-discovery</artifactId>
 			<version>${version.curator}</version>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.curator</groupId>
@@ -150,14 +74,375 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- DELTASPIKE -->
+		<!-- CAMEL -->
 		<dependency>
-			<groupId>org.apache.deltaspike.core</groupId>
-			<artifactId>deltaspike-core-api</artifactId>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cdi</artifactId>
+			<version>${version.camel}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.deltaspike.core</groupId>
-			<artifactId>deltaspike-core-impl</artifactId>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-kafka</artifactId>
+			<version>${version.camel}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.kafka</groupId>
+					<artifactId>kafka-clients</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-hbase</artifactId>
+			<version>${version.camel}</version>
+			<exclusions>			<exclusion>
+					<groupId>org.apache.avro</groupId>
+					<artifactId>avro</artifactId>
+				</exclusion>				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty</artifactId>
+				</exclusion><exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-util</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jettison</groupId>
+					<artifactId>jettison</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.java.dev.jets3t</groupId>
+					<artifactId>jets3t</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-json</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey.contribs</groupId>
+					<artifactId>jersey-guice</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-client</artifactId>
+				</exclusion></exclusions>
+
+			<!-- exclusions>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-protocol</artifactId>
+				</exclusion>
+				
+				
+				<exclusion>
+					<groupId>org.apache.kafka</groupId>
+					<artifactId>kafka-clients</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.activation</groupId>
+					<artifactId>activation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.tukaani</groupId>
+					<artifactId>xz</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>xmlenc</groupId>
+					<artifactId>xmlenc</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.stream</groupId>
+					<artifactId>stax-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.xerial.snappy</groupId>
+					<artifactId>snappy-java</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.thoughtworks.paranamer</groupId>
+					<artifactId>paranamer</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>com.google.code.findbugs</groupId>
+					<artifactId>jsr305</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.jcraft</groupId>
+					<artifactId>jsch</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jruby.joni</groupId>
+					<artifactId>joni</artifactId>
+				</exclusion>
+
+				<exclusion>
+					<groupId>org.jruby.jcodings</groupId>
+					<artifactId>jcodings</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.bind</groupId>
+					<artifactId>jaxb-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.inject</groupId>
+					<artifactId>javax.inject</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.jamesmurty.utils</groupId>
+					<artifactId>java-xmlbuilder</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-xc</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponent</groupId>
+					<artifactId>httpcomponents-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponent</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.htrace</groupId>
+					<artifactId>htrace</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-yarn-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-mapreduce-client-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.inject.extensions</groupId>
+					<artifactId>guice-servlet</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.inject</groupId>
+					<artifactId>guice</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.code.gson</groupId>
+					<artifactId>gson</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.github.stephenc.findbugs</groupId>
+					<artifactId>findbugs-annotations</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.yammer.metrics</groupId>
+					<artifactId>metrics-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.curator</groupId>
+					<artifactId>curator-recipes</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.curator</groupId>
+					<artifactId>curator-framework</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.curator</groupId>
+					<artifactId>curator-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-net</groupId>
+					<artifactId>commons-net</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-math3</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-httpclient</groupId>
+					<artifactId>commons-httpclient</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-compress</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-cli</groupId>
+					<artifactId>commons-cli</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>
+				</exclusion>
+			</exclusions-->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test-cdi</artifactId>
+			<version>${version.camel}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.jboss.weld.se</groupId>
+					<artifactId>weld-se-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.camel</groupId>
+					<artifactId>camel-cdi</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.hamcrest</groupId>
+					<artifactId>hamcrest-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-stream</artifactId>
+			<version>${version.camel}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-sql</artifactId>
+			<version>${version.camel}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-impl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.xml.bind</groupId>
+					<artifactId>jaxb-core</artifactId>
+				</exclusion>
+				<!-- exclusion> <groupId>org.springframework</groupId> <artifactId>spring-beans</artifactId> 
+					</exclusion> <exclusion> <groupId>org.springframework</groupId> <artifactId>spring-jdbc</artifactId> 
+					</exclusion > <exclusion> <groupId>org.springframework</groupId> <artifactId>spring-tx</artifactId> 
+					</exclusion -->
+			</exclusions>
+		</dependency>
+
+		<!-- HBASE -->
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-client</artifactId>
+			<version>${version.hbase}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.zookeeper</groupId>
+					<artifactId>zookeeper</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- DEBEZIUM -->
+		<dependency>
+			<groupId>io.debezium</groupId>
+			<artifactId>debezium-core</artifactId>
+			<version>${version.debezium}</version>
+			<scope>compile</scope>
 		</dependency>
 
 		<!-- KAFKA -->
@@ -176,70 +461,92 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
-		<!-- TESTING -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit4}</version>
-			<scope>test</scope>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>connect-runtime</artifactId>
+			<version>${version.kafka}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.wildfly</groupId>
-			<artifactId>wildfly-weld</artifactId>
-			<scope>provided</scope>
-			<version>${version.wildfly.bom}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<version>${version.hamcrest}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>${version.rest.assured}</version>
-			<scope>test</scope>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>connect-json</artifactId>
+			<version>${version.kafka}</version>
+			<scope>compile</scope>
 		</dependency>
 
-		<!-- LOG4J -->
+		<!-- HIVE JDBC -->
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${version.log4j}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${version.log4j}</version>
-			<scope>provided</scope>
+			<groupId>org.apache.hive</groupId>
+			<artifactId>hive-jdbc</artifactId>
+			<version>${version.hive}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.derby</groupId>
+					<artifactId>derby</artifactId>
+				</exclusion>
+				<!-- exclusion> <groupId>org.apache.hive</groupId> <artifactId>hive-service</artifactId> 
+					</exclusion -->
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hive-shims</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-servlet</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.jetty.aggregate</groupId>
+					<artifactId>jetty-all</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-mapper-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-core-asl</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>tomcat</groupId>
+					<artifactId>jasper-compiler</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>tomcat</groupId>
+					<artifactId>jasper-runtime</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jamon</groupId>
+					<artifactId>jamon-runtime</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
-		<!-- REST -->
+		<!-- IMPALA JDBC -->
+		<!-- dependency> <groupId>impala</groupId> <artifactId>ImpalaJDBC41</artifactId> 
+			<version>${version.impala}</version> <scope>system</scope> <systemPath>${project.basedir}/../drivers/impala/2.5.37/ImpalaJDBC41-2-5-37.jar</systemPath> 
+			</dependency -->
+		<!-- APACHE KUDU -->
 		<dependency>
-			<groupId>com.squareup.retrofit2</groupId>
-			<artifactId>retrofit</artifactId>
-			<version>${version.retrofit}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.retrofit2</groupId>
-			<artifactId>converter-jackson</artifactId>
-			<version>${version.retrofit}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>logging-interceptor</artifactId>
-			<version>${version.okhttp.logging.interceptor}</version>
+			<groupId>org.apache.kudu</groupId>
+			<artifactId>kudu-client</artifactId>
+			<version>${version.kudu}</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.kudu</groupId>
+					<artifactId>interface-annotations</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
-		<!-- COMMONS -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${version.commons-io}</version>
-		</dependency>
 
 	</dependencies>
 
@@ -260,41 +567,7 @@
 						</archive>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>${version.build.helper.maven.plugin}</version>
-					<executions>
-						<execution>
-							<id>add-source</id>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>add-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<!-- SWAGGER API -->
-									<source>src/gen/api/main/java</source>
-									<source>src/gen/api/src/main/java</source>
-									<source>src/gen/api/src/main/resources</source>
-								</sources>
-							</configuration>
-						</execution>
-						<execution>
-							<id>add-source-test</id>
-							<phase>generate-test-sources</phase>
-							<goals>
-								<goal>add-test-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<!-- SWAGGER -->
-									<source>src/gen/swagger/test/java</source>
-								</sources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
@@ -330,35 +603,30 @@
 						</execution>
 					</executions>
 				</plugin>
-				<plugin>
-					<groupId>org.wildfly.plugins</groupId>
-					<artifactId>wildfly-maven-plugin</artifactId>
-					<version>${version.wildfly.maven.plugin}</version>
-					<executions>
-						<execution>
-							<phase>pre-integration-test</phase>
-							<configuration>
-								<skip>${wildfly.skipDeploy}</skip>
-								<hostname>${wildfly.hostname}</hostname>
-								<port>${wildfly.port}</port>
-								<filename>../../ear/target/parrot.ear</filename>
-								<username>${wildfly.username}</username>
-								<password>${wildfly.password}</password>
-								<targetDir>../ear/target</targetDir>
-							</configuration>
-							<goals>
-								<goal>${wildfly.goal}</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+
 			</plugins>
 		</pluginManagement>
 
 		<plugins>
 			<plugin>
-				<groupId>org.wildfly.plugins</groupId>
-				<artifactId>wildfly-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ejb-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
 			</plugin>
 		</plugins>
 
@@ -424,6 +692,12 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>skipDeploy</id>
+			<properties>
+				<wildfly.skipDeploy>true</wildfly.skipDeploy>
+			</properties>
+		</profile>
 	</profiles>
 
 	<properties>
@@ -440,47 +714,28 @@
 		<!-- MAVEN PLUGINS -->
 		<version.maven.ejb.plugin>2.5.1</version.maven.ejb.plugin>
 		<version.maven.antrun.plugin>1.8</version.maven.antrun.plugin>
-		<version.build.helper.maven.plugin>1.7</version.build.helper.maven.plugin>
+
 		<version.swagger.codegen.maven.plugin>2.2.2</version.swagger.codegen.maven.plugin>
-		<version.wildfly.maven.plugin>1.1.0.Final</version.wildfly.maven.plugin>
-
-		<!-- WILDFLY BOM -->
-		<version.wildfly.bom>10.1.0.Final</version.wildfly.bom>
-
-		<!-- SCALA -->
-		<version.scala>2.11.11</version.scala>
+		
 
 		<!-- EXTERNAL LIBRARIES -->
-		<version.swagger>1.5.13</version.swagger>
-		<version.jackson>2.8.6</version.jackson>
+		<version.kafka>0.10.2.0</version.kafka>
 
 		<version.curator>3.3.0</version.curator>
-		<version.deltaspike>1.7.2</version.deltaspike>
-		<version.kafka>0.10.2.0</version.kafka>
-		<version.cdiunit>3.1.4</version.cdiunit>
-		<version.junit4>4.12</version.junit4>
-		<version.weld>2.4.3.Final</version.weld>
-		<version.hamcrest>1.3</version.hamcrest>
-		<version.rest.assured>3.0.2</version.rest.assured>
-		<version.log4j>2.7</version.log4j>
-		<version.retrofit>2.2.0</version.retrofit>
-		<version.okhttp.logging.interceptor>3.7.0</version.okhttp.logging.interceptor>
-		<version.commons-io>2.1</version.commons-io>
-		
-		<!-- JBOSS -->
-		<wildfly.hostname>127.0.0.1</wildfly.hostname>
-		<wildfly.port>9990</wildfly.port>
-		<wildfly.goal>deploy</wildfly.goal>
-		<wildfly.username>parrot</wildfly.username>
-		<wildfly.password>parrot</wildfly.password>
-		<wildfly.skipDeploy>false</wildfly.skipDeploy>
+		<version.hive>1.1.0-cdh5.8.5</version.hive>
+		<version.impala>2.5.37</version.impala>
+		<version.kudu>1.3.1</version.kudu>
+		<version.camel>2.19.0</version.camel>
+		<version.debezium>0.5.1</version.debezium>
+		<version.hbase>1.2.0-cdh5.8.5</version.hbase>
+
 
 	</properties>
 
-	<!-- repositories> <repository> <id>cdp</id> <name>CDP Maven Repository</name> 
-		<url>http://repo.maven.cdp.it:8080/repository/cdp</url> </repository> </repositories> 
-		<pluginRepositories> <pluginRepository> <id>cdp</id> <name>CDP Maven Mirror</name> 
-		<url>http://repo.maven.cdp.it:8080/repository/cdp</url> </pluginRepository> 
-		</pluginRepositories -->
-
+	<repositories>
+		<repository>
+			<id>cloudera</id>
+			<url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+		</repository>
+	</repositories>
 </project>

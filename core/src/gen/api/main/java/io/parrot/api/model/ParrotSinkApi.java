@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.parrot.api.model.ParrotSinkConfigurationApi;
 import javax.validation.constraints.*;
 import io.swagger.annotations.*;
 
@@ -13,6 +14,7 @@ public class ParrotSinkApi   {
   
   private String id = null;
   private String sinkClass = null;
+  private ParrotSinkConfigurationApi configurations = null;
 
   /**
    * Sink's ID.
@@ -32,13 +34,26 @@ public class ParrotSinkApi   {
    * The class which implements the Parrot Processor's Sink
    **/
   
-  @ApiModelProperty(example = "null", value = "The class which implements the Parrot Processor's Sink")
+  @ApiModelProperty(example = "null", required = true, value = "The class which implements the Parrot Processor's Sink")
   @JsonProperty("sink.class")
+  @NotNull
   public String getSinkClass() {
     return sinkClass;
   }
   public void setSinkClass(String sinkClass) {
     this.sinkClass = sinkClass;
+  }
+
+  /**
+   **/
+  
+  @ApiModelProperty(example = "null", value = "")
+  @JsonProperty("configurations")
+  public ParrotSinkConfigurationApi getConfigurations() {
+    return configurations;
+  }
+  public void setConfigurations(ParrotSinkConfigurationApi configurations) {
+    this.configurations = configurations;
   }
 
 
@@ -52,12 +67,13 @@ public class ParrotSinkApi   {
     }
     ParrotSinkApi parrotSink = (ParrotSinkApi) o;
     return Objects.equals(id, parrotSink.id) &&
-        Objects.equals(sinkClass, parrotSink.sinkClass);
+        Objects.equals(sinkClass, parrotSink.sinkClass) &&
+        Objects.equals(configurations, parrotSink.configurations);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, sinkClass);
+    return Objects.hash(id, sinkClass, configurations);
   }
 
   @Override
@@ -67,6 +83,7 @@ public class ParrotSinkApi   {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    sinkClass: ").append(toIndentedString(sinkClass)).append("\n");
+    sb.append("    configurations: ").append(toIndentedString(configurations)).append("\n");
     sb.append("}");
     return sb.toString();
   }
