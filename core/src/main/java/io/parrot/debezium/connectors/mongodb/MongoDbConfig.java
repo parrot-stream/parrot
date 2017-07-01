@@ -27,55 +27,55 @@ import io.parrot.debezium.connectors.Config;
 @JsonInclude(Include.NON_NULL)
 class MongoDbConfig extends Config {
 
-	@JsonProperty(value = "connector.class", defaultValue = "io.debezium.connector.mongodb.MongoDbConnector")
-	public String connectorClass;
+    @JsonProperty(value = "connector.class", defaultValue = "io.debezium.connector.mongodb.MongoDbConnector")
+    public String connectorClass;
 
-	/**
-	 * BASE PROPERTIES
-	 */
-	@JsonProperty(value = "mongodb.hosts")
-	public String mongoDbHosts;
+    /**
+     * BASE PROPERTIES
+     */
+    @JsonProperty(value = "mongodb.hosts")
+    public String mongoDbHosts;
 
-	@JsonProperty(value = "mongodb.name")
-	public String mongoDbName;
+    @JsonProperty(value = "mongodb.name")
+    public String mongoDbName;
 
-	@JsonProperty(value = "mongodb.user")
-	public String mongoDbUser;
+    @JsonProperty(value = "mongodb.user")
+    public String mongoDbUser;
 
-	@JsonProperty(value = "mongodb.password")
-	public String mongoDbPassword;
+    @JsonProperty(value = "mongodb.password")
+    public String mongoDbPassword;
 
-	@JsonProperty(value = "collection.whitelist")
-	public String collectionWhitelist;
+    @JsonProperty(value = "collection.whitelist")
+    public String collectionWhitelist;
 
-	@JsonProperty(value = "collection.blacklist")
-	public String collectionBlacklist;
+    @JsonProperty(value = "collection.blacklist")
+    public String collectionBlacklist;
 
-	@JsonProperty(value = "initial.sync.max.threads", defaultValue = "1")
-	public String initialSyncMaxThreads;
+    @JsonProperty(value = "initial.sync.max.threads", defaultValue = "1")
+    public String initialSyncMaxThreads;
 
-	/**
-	 * ADVANCED PROPERTIES
-	 */
-	@JsonProperty(value = "connect.backoff.initial.delay.ms", defaultValue = "1000")
-	public String connectBackoffInitialDelayMs;
+    /**
+     * ADVANCED PROPERTIES
+     */
+    @JsonProperty(value = "connect.backoff.initial.delay.ms", defaultValue = "1000")
+    public String connectBackoffInitialDelayMs;
 
-	@JsonProperty(value = "connect.backoff.max.delay.ms", defaultValue = "1000")
-	public String connectBackoffMaxDelayMs;
+    @JsonProperty(value = "connect.backoff.max.delay.ms", defaultValue = "1000")
+    public String connectBackoffMaxDelayMs;
 
-	@JsonProperty(value = "connect.max.attempts", defaultValue = "10")
-	public String connectMaxAttempts;
+    @JsonProperty(value = "connect.max.attempts", defaultValue = "10")
+    public String connectMaxAttempts;
 
-	@JsonProperty(value = "mongodb.members.auto.discover", defaultValue = "true")
-	public String mongoDbMembersAutoDiscover;
+    @JsonProperty(value = "mongodb.members.auto.discover", defaultValue = "true")
+    public String mongoDbMembersAutoDiscover;
 
-	@JsonProperty(value = "max.queue.size", defaultValue = "1024")
-	public String maxQueueSize;
+    @JsonProperty(value = "max.queue.size", defaultValue = "1024")
+    public String maxQueueSize;
 
-	@JsonProperty(value = "max.batch.size", defaultValue = "2048")
-	public String maxBatchSize;
+    @JsonProperty(value = "max.batch.size", defaultValue = "2048")
+    public String maxBatchSize;
 
-	@JsonProperty(value = "poll.interval.ms", defaultValue = "1000")
-	public String pollIntervalMs;
+    @JsonProperty(value = "poll.interval.ms", defaultValue = "1000")
+    public String pollIntervalMs;
 
 }

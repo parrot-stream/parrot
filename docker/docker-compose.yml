@@ -28,11 +28,6 @@ services:
       LOCAL_UNIT: ${LOCAL_UNIT}
       PIPELINE_UNIT: ${PIPELINE_UNIT}
       DEBUG: ${DEBUG}
-    extra_hosts:
-    - cdpco02.cdpsede.cassaddpp.it:10.254.1.124
-    - cdpco03.cdpsede.cassaddpp.it:10.254.1.125
-    - cdpco04.cdpsede.cassaddpp.it:10.254.1.126
-    - cdpco05.cdpsede.cassaddpp.it:10.254.1.127
     
 networks:
   default:

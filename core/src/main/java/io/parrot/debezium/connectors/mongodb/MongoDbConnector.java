@@ -27,6 +27,7 @@ import io.parrot.debezium.connectors.Connector;
 @JsonInclude(Include.NON_NULL)
 public class MongoDbConnector extends Connector {
 
-	@JsonProperty(value = "config")
-	public MongoDbConfig config;
+    @JsonProperty(value = "config")
+    public MongoDbConfig config;
+
 }

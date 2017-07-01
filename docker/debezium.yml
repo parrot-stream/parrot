@@ -1,7 +1,7 @@
 version: '3'
 services:
   debezium:
-    image: mcapitanio/debezium:0.5.2-SNAPSHOT
+    image: mcapitanio/debezium:0.5.1
     networks:
     - parrot
     external_links:
