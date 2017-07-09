@@ -89,7 +89,7 @@ function print_env {
 
 function start {
     echo "Starting service '$1'..."
-    docker-compose $DOCKER_COMPOSE_OPTIONS -f docker/$1.yml up $2
+    docker-compose $DOCKER_COMPOSE_OPTIONS -f docker/$1.yml up $DETACH
 }
 
 function stop {
@@ -104,22 +104,22 @@ function restart {
 }
 
 function start_all {
-    export DETACH="true"
+    export DETACH="-d"
 	docker rmi $(docker images | grep "^<none>" | awk "{print $3}") 2> /dev/null
 	docker-compose $DOCKER_COMPOSE_OPTIONS -f docker/$DOCKER_COMPOSE_FILE build
-	start zookeeper -d
-	start hadoop -d
-    start kafka -d
-    start postgres -d
-    start debezium -d
-    start kafka-connect-ui -d
-    start kafka-schema-registry-ui -d
-    start kafka-topics-ui -d
-    start hive -d
+	start zookeeper
+	start hadoop
+    start kafka
+    start postgres
+    start debezium
+    start kafka-connect-ui
+    start kafka-schema-registry-ui
+    start kafka-topics-ui
+    start hive
     if [[ ($USE_KUDU = "true") ]]; then
-      start impala-kudu -d
+      start impala-kudu
     else
-      start impala -d
+      start impala
     fi
     start hbase -d
     start hue -d
