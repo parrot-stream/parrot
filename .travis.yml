@@ -1,0 +1,6 @@
+language: java
+sudo: required
+services:
+- docker
+script:
+- ./parrot start-zookeeper
