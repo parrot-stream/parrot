@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>io.parrot</groupId>
+		<artifactId>parrot</artifactId>
+		<version>0.1.0</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>parrot-kafka-connect-kudu</artifactId>
+	<packaging>jar</packaging>
+	<name>parrot-kafka-connect-kudu</name>
+
+	<dependencies>
+	
+		<!-- PARROT -->
+		<dependency>
+			<groupId>io.parrot</groupId>
+			<artifactId>parrot-core</artifactId>
+			<version>${version.parrot}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<!-- KUDU -->
+		<dependency>
+			<groupId>org.apache.kudu</groupId>
+			<artifactId>kudu-client</artifactId>
+			<version>${version.kudu}</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.kudu</groupId>
+					<artifactId>interface-annotations</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<properties>
+	
+		<version.parrot>0.1.0</version.parrot>
+		<version.kudu>1.3.1</version.kudu>
+
+	</properties>
+
+</project>

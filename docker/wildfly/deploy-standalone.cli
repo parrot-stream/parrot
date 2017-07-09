@@ -1,3 +1,0 @@
-connect
-deploy /opt/docker/hawtio.war
-deploy /opt/parrot/ear/target/parrot.ear

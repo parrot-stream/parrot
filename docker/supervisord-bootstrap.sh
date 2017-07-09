@@ -34,25 +34,4 @@ echo -e "##################################################################\n"
 
 supervisorctl start init-sources
 
-if [[ $DEBUG = "true" ]]; then
-	supervisorctl start jboss-debug
-else
-	supervisorctl start jboss
-fi
-
-
-wait-for-it.sh localhost:9990 -t 120
-
-rc=$?
-if [ $rc -ne 0 ]; then
-    echo -e "\n--------------------------------------------"
-    echo -e "      JBoss not ready! Exiting..."
-    echo -e "--------------------------------------------"
-    exit $rc
-fi
-
-sleep 15
-
-supervisorctl start init-jboss
-
 #supervisorctl start init-debezium

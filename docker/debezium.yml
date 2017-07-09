@@ -3,7 +3,9 @@ services:
   debezium:
     image: mcapitanio/debezium:0.5.1
     networks:
-    - parrot
+      parrot:
+        aliases:
+          - kafka-connect
     external_links:
     - postgres
     ports:

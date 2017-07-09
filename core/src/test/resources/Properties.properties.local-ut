@@ -1,5 +1,0 @@
-# APIs URL
-debezium.api.url=http://parrot:8083/
-parrot.api.url=http://parrot:8090/parrot/
-
-zookeeper.hosts=localhost:2181

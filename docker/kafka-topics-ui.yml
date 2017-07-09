@@ -1,0 +1,18 @@
+version: '3'
+services:
+  kafka-connect-ui:
+    image: mcapitanio/kafka-topics-ui:0.9.2
+    networks:
+    - parrot
+    external_links:
+    - impala-kudu-master
+    ports:
+    - 9000:8000
+    environment:
+      KAFKA_REST_PROXY_URL: http://kafka:8082
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

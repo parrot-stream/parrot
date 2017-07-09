@@ -9,313 +9,22 @@
 	<name>parrot</name>
 
 	<modules>
-		<!-- module>conventions/checkstyle</module -->
+		<!--module>core</module> <module>ear</module> <module>war</module> <module>cfg</module -->
 		<module>core</module>
-		<module>ear</module>
-		<module>war</module>
-		<module>cfg</module>
+		<module>kafka-connect-kudu</module>
 	</modules>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.wildfly.bom</groupId>
-				<artifactId>wildfly-javaee7</artifactId>
-				<version>${version.wildfly}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.deltaspike.distribution</groupId>
-				<artifactId>distributions-bom</artifactId>
-				<version>${version.deltaspike}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+   <dependencies>
 
-	<dependencies>
-
-		<!-- JEE APIs -->
 		<dependency>
-			<groupId>org.jboss.spec.javax.ejb</groupId>
-			<artifactId>jboss-ejb-api_3.2_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.spec.javax.transaction</groupId>
-			<artifactId>jboss-transaction-api_1.2_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.spec.javax.servlet</groupId>
-			<artifactId>jboss-servlet-api_3.1_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson2-provider</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>${version.servlet.api}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- SCALA -->
-		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>${version.scala}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- COMMONS -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${version.commons-io}</version>
-		</dependency>
-
-		<!-- DELTASPIKE -->
-		<dependency>
-			<groupId>org.apache.deltaspike.core</groupId>
-			<artifactId>deltaspike-core-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.deltaspike.core</groupId>
-			<artifactId>deltaspike-core-impl</artifactId>
-		</dependency>
-
-		<!-- JSON -->
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.json</artifactId>
-			<version>${version.glassfish.json}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- SWAGGER -->
-		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-annotations</artifactId>
-			<version>${version.swagger}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-jaxrs</artifactId>
-			<version>${version.swagger}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.dataformat</groupId>
-					<artifactId>jackson-dataformat-yaml</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<!-- JACKSON -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-			<version>${version.jackson.codehaus}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>${version.jackson.codehaus}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>${version.jackson}</version>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>${version.jackson}</version>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-annotations</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-
-
-		<!-- LOG4J -->
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${version.log4j}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-slf4j-impl</artifactId>
-			<version>${version.log4j}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- REST -->
-		<dependency>
-			<groupId>com.squareup.retrofit2</groupId>
-			<artifactId>retrofit</artifactId>
-			<version>${version.retrofit}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.retrofit2</groupId>
-			<artifactId>converter-moshi</artifactId>
-			<version>${version.retrofit}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.retrofit2</groupId>
-			<artifactId>converter-jackson</artifactId>
-			<version>${version.retrofit}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.retrofit2</groupId>
-			<artifactId>converter-gson</artifactId>
-			<version>${version.retrofit}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.squareup.okhttp3</groupId>
-			<artifactId>logging-interceptor</artifactId>
-			<version>${version.okhttp.logging.interceptor}</version>
-		</dependency>
-		<!-- dependency> <groupId>com.mashape.unirest</groupId> <artifactId>unirest-java</artifactId> 
-			<version>${version.unirest}</version> </dependency> <dependency> <groupId>org.apache.httpcomponents</groupId> 
-			<artifactId>httpclient</artifactId> <version>${version.httpcomponents}</version> 
-			</dependency> <dependency> <groupId>org.apache.httpcomponents</groupId> <artifactId>httpmime</artifactId> 
-			<version>${version.httpcomponents}</version> </dependency> <dependency> <groupId>org.apache.httpcomponents</groupId> 
-			<artifactId>httpcore</artifactId> <version>${version.httpcomponents.httpcore}</version> 
-			</dependency> <dependency> <groupId>org.apache.httpcomponents</groupId> <artifactId>httpasyncclient</artifactId> 
-			<version>${version.httpcomponents.httpasyncclient}</version> </dependency -->
-
-		<!-- TESTING -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit4}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${version.postgresql}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.wildfly</groupId>
-			<artifactId>wildfly-weld</artifactId>
-			<scope>provided</scope>
-			<version>${version.wildfly}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.jboss.weld</groupId>
-					<artifactId>weld-core-impl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jboss.weld</groupId>
-					<artifactId>weld-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.jboss.weld</groupId>
-					<artifactId>weld-spi</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-all</artifactId>
-			<version>${version.hamcrest}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.rest-assured</groupId>
-			<artifactId>rest-assured</artifactId>
-			<version>${version.rest.assured}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se</artifactId>
-			<version>${version.weld}</version>
-			<scope>provided</scope>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>connect-api</artifactId>
+			<version>${version.kafka}</version>
 		</dependency>
 
 	</dependencies>
 
 	<build>
-		<defaultGoal>package</defaultGoal>
-		<finalName>parrot</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -333,41 +42,6 @@
 					<configuration>
 						<tag>${project.version}</tag>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>${version.maven.build.helper.plugin}</version>
-					<executions>
-						<execution>
-							<id>add-source</id>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>add-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<!-- SWAGGER API -->
-									<source>src/gen/api/main/java</source>
-									<source>src/gen/api/src/main/java</source>
-									<source>src/gen/api/src/main/resources</source>
-								</sources>
-							</configuration>
-						</execution>
-						<execution>
-							<id>add-source-test</id>
-							<phase>generate-test-sources</phase>
-							<goals>
-								<goal>add-test-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<!-- SWAGGER -->
-									<source>src/gen/swagger/test/java</source>
-								</sources>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -410,10 +84,6 @@
 
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
@@ -438,33 +108,12 @@
 		<version.maven.scm.plugin>1.9.5</version.maven.scm.plugin>
 		<version.maven.surefire.plugin>2.19.1</version.maven.surefire.plugin>
 		<version.maven.failsafe.plugin>2.19.1</version.maven.failsafe.plugin>
-		<version.maven.checkstyle.plugin>2.7</version.maven.checkstyle.plugin>
-		<version.maven.build.helper.plugin>1.7</version.maven.build.helper.plugin>
 
 
 		<!-- EXTERNAL LIBRARIES -->
-		<version.swagger>1.5.13</version.swagger>
-		<version.jackson>2.8.9</version.jackson>
-		<version.jackson.codehaus>1.9.13</version.jackson.codehaus>
-		<version.scala>2.11.11</version.scala>
-		<version.glassfish.json>1.0.4</version.glassfish.json>
-		<version.junit4>4.12</version.junit4>
-		<version.postgresql>42.0.0.jre7</version.postgresql>
-		<version.weld>2.3.3.Final</version.weld>
-		<version.hamcrest>1.3</version.hamcrest>
-		<version.rest.assured>3.0.2</version.rest.assured>
-		<version.log4j>2.7</version.log4j>
-		<version.retrofit>2.3.0</version.retrofit>
-		<version.okhttp.logging.interceptor>3.7.0</version.okhttp.logging.interceptor>
-		<version.commons-io>2.1</version.commons-io>
-
-
-		<!-- BOMs -->
-		<version.wildfly>10.1.0.Final</version.wildfly>
-		<version.deltaspike>1.7.2</version.deltaspike>
+		<version.kafka>0.10.2.1</version.kafka>
 
 		<java.compiler.source>1.8</java.compiler.source>
-		<version.servlet.api>2.5</version.servlet.api>
 
 	</properties>
 
