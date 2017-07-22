@@ -1,4 +1,4 @@
-FROM parrotcdc/kafka:0.10.2.0
+FROM parrotstream/kafka:0.10.2.0
 
 MAINTAINER Matteo Capitanio <matteo.capitanio@gmail.com>
 
