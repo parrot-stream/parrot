@@ -4,7 +4,6 @@ services:
 - docker
 script:
 - mvn package
-- ls -latr kafka-connect-kudu/target
 deploy:
   provider: releases
   api_key:

@@ -1,0 +1,22 @@
+version: '3'
+services:
+  kafka-schema-registry-ui:
+    image: parrotcdc/schema-registry-ui:0.9.1
+    networks:
+    - parrot
+    external_links:
+    - kafka
+    ports:
+    - $SCHEMA_REGISTRY_UI_PORT:$SCHEMA_REGISTRY_UI_PORT
+    environment:
+      SCHEMAREGISTRY_URL: http://parrot:8081
+      PROXY: "true"
+      ALLOW_GLOBAL: 1
+      ALLOW_TRANSITIVE: 1
+      SCHEMA_REGISTRY_UI_PORT: $SCHEMA_REGISTRY_UI_PORT
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

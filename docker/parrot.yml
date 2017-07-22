@@ -8,14 +8,13 @@ services:
     networks:
     - parrot
     external_links:
+    - kafka
     - zookeeper
-    - hbase
-    - hive
+    - impala
     - kudu
     ports:
-    - 80${ID}:8080
-    - 99${ID}:9990
-    - 87${ID}:8787
+    - $PARROT_PORT:$PARROT_PORT
+    - $SCHEMA_REGISTRY_PORT:$SCHEMA_REGISTRY_PORT
     privileged: true
     environment:
       DB_NAME: parrot
@@ -24,11 +23,11 @@ services:
       MONGODB_HOSTNAME: mongodb
       ORACLE_HOSTNAME: oracle
       KAFKA_BROKER_HOSTNAME: kafka
-      DEBEZIUM_HOSTNAME: debezium
-      LOCAL_UNIT: ${LOCAL_UNIT}
-      PIPELINE_UNIT: ${PIPELINE_UNIT}
-      DEBUG: ${DEBUG}
-    
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: parrot
+      SCHEMA_REGISTRY_PORT: $SCHEMA_REGISTRY_PORT
+      LISTENERS: http://0.0.0.0:$SCHEMA_REGISTRY_PORT
+      PARROT_PORT: $PARROT_PORT
 networks:
   default:
     external:

@@ -6,6 +6,8 @@ services:
     - parrot
     ports:
     - 5432:5432
+    volumes:
+    - ./sources/postgres:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_PASSWORD: postgres
     privileged: true

@@ -1,15 +1,17 @@
 version: '3'
 services:
-  kafka-connect-ui:
-    image: mcapitanio/kafka-topics-ui:0.9.2
+  kafka-topics-ui:
+    image: parrotcdc/kafka-topics-ui:0.9.2
     networks:
     - parrot
     external_links:
-    - impala-kudu-master
+    - kafka
     ports:
-    - 9000:8000
+    - $KAFKA_TOPICS_UI_PORT:$KAFKA_TOPICS_UI_PORT
     environment:
       KAFKA_REST_PROXY_URL: http://kafka:8082
+      PROXY: "true"
+      KAFKA_TOPICS_UI_PORT: $KAFKA_TOPICS_UI_PORT
 networks:
   default:
     external:

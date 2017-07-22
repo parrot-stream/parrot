@@ -4,22 +4,31 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.parrot</groupId>
 	<artifactId>parrot</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>parrot</name>
 
 	<modules>
-		<!--module>core</module> <module>ear</module> <module>war</module> <module>cfg</module -->
+		<module>assemblies</module>
 		<module>core</module>
+		<module>smt</module>
 		<module>kafka-connect-kudu</module>
 	</modules>
 
-   <dependencies>
+	<dependencies>
 
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>connect-api</artifactId>
 			<version>${version.kafka}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.datamountaineer</groupId>
+			<artifactId>kcql</artifactId>
+			<version>${version.kcql}</version>
+			<scope>compile</scope>
 		</dependency>
 
 	</dependencies>
@@ -32,7 +41,7 @@
 					<version>${version.maven.compiler.plugin}</version>
 					<configuration>
 						<source>${java.compiler.source}</source>
-						<target>${java.compiler.source}</target>
+						<target>${java.compiler.target}</target>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -77,12 +86,167 @@
 						</execution>
 					</executions>
 				</plugin>
-
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>${version.maven.enforcer.plugin}</version>
+					<executions>
+						<execution>
+							<id>enforce-versions</id>
+							<goals>
+								<goal>enforce</goal>
+							</goals>
+							<configuration>
+								<rules>
+									<bannedPlugins>
+										<level>WARN</level>
+										<excludes>
+											<exclude>org.apache.maven.plugins:maven-verifier-plugin</exclude>
+										</excludes>
+										<message>Please consider using the maven-invoker-plugin
+											(http://maven.apache.org/plugins/maven-invoker-plugin/)!</message>
+									</bannedPlugins>
+									<requireMavenVersion>
+										<version>2.0.6</version>
+									</requireMavenVersion>
+									<requireJavaVersion>
+										<version>1.5</version>
+									</requireJavaVersion>
+									<requireOS>
+										<family>unix</family>
+									</requireOS>
+								</rules>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>${version.maven.license.plugin}</version>
+					<configuration>
+						<verbose>false</verbose>
+						<includes>
+							<includes>**/*.java</includes>
+						</includes>
+						<projectName>Parrot</projectName>
+						<processStartTag>============================ LICENSE_START
+							============================</processStartTag>
+						<processEndTag>============================= LICENSE_END
+							=============================</processEndTag>
+						<sectionDelimiter>---------------------------------------------------------------------</sectionDelimiter>
+						<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+						<emptyLineAfterHeader>false</emptyLineAfterHeader>
+					</configuration>
+					<executions>
+						<execution>
+							<id>generate-license-headers</id>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-sources</phase>
+							<configuration>
+								<licenseName>apache_v2</licenseName>
+								<roots>
+									<root>src/main/java</root>
+									<root>src/test/java</root>
+								</roots>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>${version.maven.checkstyle.plugin}</version>
+					<executions>
+						<execution>
+							<id>validate</id>
+							<phase>compile</phase>
+							<configuration>
+								<configLocation>checkstyle/checkstyle.xml</configLocation>
+								<encoding>UTF-8</encoding>
+								<consoleOutput>true</consoleOutput>
+								<failsOnError>true</failsOnError>
+								<includeResources>false</includeResources>
+								<includeTestResources>false</includeTestResources>
+							</configuration>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>${version.maven.assembly.plugin}</version>
+					<executions>
+						<execution>
+							<id>assembly-single-package</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<configuration>
+								<appendAssemblyId>false</appendAssemblyId>
+								<descriptorRefs>
+									<descriptorRef>package</descriptorRef>
+								</descriptorRefs>
+								<formats>
+									<format>tar.gz</format>
+								</formats>
+								<tarLongFileMode>posix</tarLongFileMode>
+							</configuration>
+						</execution>
+						<execution>
+							<id>assembly-single-dir</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<configuration>
+								<attach>false</attach>
+								<finalName>kafka-connect-target</finalName>
+								<appendAssemblyId>false</appendAssemblyId>
+								<descriptorRefs>
+									<descriptorRef>package</descriptorRef>
+								</descriptorRefs>
+								<formats>
+									<format>dir</format>
+								</formats>
+							</configuration>
+						</execution>
+					</executions>
+					<dependencies>
+						<dependency>
+							<groupId>io.parrot.kafka.connect</groupId>
+							<artifactId>kafka-connect-assemblies</artifactId>
+							<version>1.0.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
 			</plugins>
 
 		</pluginManagement>
 
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -91,15 +255,41 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-scm-plugin</artifactId>
-			</plugin>
 		</plugins>
 
 
 	</build>
 
+	<licenses>
+		<license>
+			<name>Apache 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+	<inceptionYear>2017</inceptionYear>
+	<organization>
+		<name>Parrot</name>
+	</organization>
+	<developers>
+		<developer>
+			<id>mcapitanio</id>
+			<name>Matteo Capitanio</name>
+			<email>matteo.capitanio@gmail.com</email>
+			<organization>Parrot</organization>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Rome</timezone>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.com/parrotcdc/parrot</url>
+		<connection>scm:git:https://github.com/parrotcdc/parrot.git</connection>
+		<developerConnection>scm:git:git@github.com:parrotcdc/parrot.git</developerConnection>
+	</scm>
 
 	<properties>
 
@@ -108,12 +298,22 @@
 		<version.maven.scm.plugin>1.9.5</version.maven.scm.plugin>
 		<version.maven.surefire.plugin>2.19.1</version.maven.surefire.plugin>
 		<version.maven.failsafe.plugin>2.19.1</version.maven.failsafe.plugin>
+		<version.maven.enforcer.plugin>1.4.1</version.maven.enforcer.plugin>
+		<version.maven.checkstyle.plugin>2.17</version.maven.checkstyle.plugin>
+		<version.maven.license.plugin>1.13</version.maven.license.plugin>
+		<version.maven.assembly.plugin>2.6</version.maven.assembly.plugin>
 
+		<!-- DATA MOUNTAINEER KCQL -->
+		<version.kcql>2.0.7</version.kcql>
+		
+		<!-- KAFKA -->
+		<version.kafka>0.10.2.0</version.kafka>
 
-		<!-- EXTERNAL LIBRARIES -->
-		<version.kafka>0.10.2.1</version.kafka>
-
+		<!-- DEBEZIUM -->
+		<version.debezium>0.5.1</version.debezium>
+		
 		<java.compiler.source>1.8</java.compiler.source>
+		<java.compiler.target>1.8</java.compiler.target>
 
 	</properties>
 
