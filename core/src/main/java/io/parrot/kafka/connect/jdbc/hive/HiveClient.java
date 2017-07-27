@@ -41,44 +41,45 @@ public abstract class HiveClient extends AbstractJdbcClient {
     switch (field.schema().type()) {
       case INT8:
       case INT16:
-          return Type.SMALLINT_TYPE.getName();
+        return Type.SMALLINT_TYPE.getName();
       case INT32:
-          return Type.INT_TYPE.getName();
+        return Type.INT_TYPE.getName();
       case INT64:
-       /*   if (field.isTimestamp()) {
-              return Type.VARCHAR_TYPE.getName() + "(24)";
-          }*/
-          return Type.BIGINT_TYPE.getName();
+        /*
+         * if (field.isTimestamp()) { return Type.VARCHAR_TYPE.getName() +
+         * "(24)"; }
+         */
+        return Type.BIGINT_TYPE.getName();
       case FLOAT32:
-          return Type.FLOAT_TYPE.getName();
+        return Type.FLOAT_TYPE.getName();
       case FLOAT64:
-          return Type.DOUBLE_TYPE.getName();
+        return Type.DOUBLE_TYPE.getName();
       case BYTES:
-          return Type.DECIMAL_TYPE.getName() + "(38,"
-                  + field.schema().parameters().get(Parameters.SCALE.name().toLowerCase()) + ")";
+        return Type.DECIMAL_TYPE.getName() + "(38,"
+            + field.schema().parameters().get(Parameters.SCALE.name().toLowerCase()) + ")";
       default:
-          return Type.VARCHAR_TYPE.getName() + "(65355)";
-      }
+        return Type.VARCHAR_TYPE.getName() + "(65355)";
+    }
   }
 
   @Override
   public boolean existsDatabase() {
     ResultSet rs = executeSelect("SHOW DATABASES");
     try {
-        while (rs.next()) {
-            if (config.getHiveDatabase().equalsIgnoreCase(rs.getString(1))) {
-                return true;
-            }
+      while (rs.next()) {
+        if (config.getHiveDatabase().equalsIgnoreCase(rs.getString(1))) {
+          return true;
         }
+      }
     } catch (SQLException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     } finally {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
+      try {
+        if (rs != null) {
+          rs.close();
         }
+      } catch (SQLException e) {
+      }
     }
     return false;
   }

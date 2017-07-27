@@ -37,7 +37,6 @@ import org.apache.kudu.client.KuduSession;
 import org.apache.kudu.client.KuduTable;
 import org.apache.kudu.client.Upsert;
 
-import io.parrot.kafka.connect.jdbc.hive.HiveClient;
 import io.parrot.kafka.connect.jdbc.impala.ImpalaClient;
 import io.parrot.util.ParrotHelper;
 

@@ -1,7 +1,7 @@
 version: '3'
 services:
   hadoop:
-    image: mcapitanio/hadoop:2.6.0-cdh5.11.1
+    image: parrotstream/hadoop:latest
     networks:
     - parrot
     external_links:
@@ -17,7 +17,7 @@ services:
     - 8188:8188
     - 19888:19888
 volumes:
-  hadoop_conf: null
+  hadoop_conf:
 networks:
   default:
     external:

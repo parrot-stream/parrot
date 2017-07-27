@@ -33,7 +33,7 @@ import io.parrot.kafka.connect.validators.NotEmptyString;
 public class HiveConfig extends AbstractConfig {
 
   static final ConfigDef.Recommender IMPALA_INTEGRATION_DEPENDENTS_RECOMMENDER = new BooleanParentRecommender(
-      Keys.IMPALA_INTEGRATION);
+      Keys.HIVE_INTEGRATION);
   
   static final NotEmptyString NOT_EMPTY_STRING_VALIDATOR = new NotEmptyString();
 

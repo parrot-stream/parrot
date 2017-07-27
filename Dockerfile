@@ -83,7 +83,7 @@ RUN git clone https://github.com/santi81/kafka-connect-hana.git /tmp/kafka-conne
 # Jeremy Custenborder connectors (Confluent)
 
 # Install Spool Dir Source Kafka Connector
-ENV KAFKA_CONNECT_SPOOLDIR_VER 1.0.13
+ENV KAFKA_CONNECT_SPOOLDIR_VER 1.0.16
 RUN git clone -b $KAFKA_CONNECT_SPOOLDIR_VER https://github.com/jcustenborder/kafka-connect-spooldir.git /tmp/kafka-connect-spooldir; \
     cd /tmp/kafka-connect-spooldir; \
     mvn -DskipTests package; \
@@ -379,7 +379,11 @@ RUN git clone https://github.com/GoogleCloudPlatform/pubsub.git /tmp/kafka-conne
 ENV KAFKA_CONNECT_MONGODB 1.3.5
 RUN git clone -b $KAFKA_CONNECT_MONGODB https://github.com/teambition/kafka-connect-mongo.git /tmp/kafka-connect-mongo; \
     cd /tmp/kafka-connect-mongo; \
-    ./gradlew clean distTar
+    ./gradlew clean distTar; \
+    mkdir -p $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-mongodb; \
+    mkdir -p /etc/kafka-connect-mongodb; \
+    cp /tmp/kafka-connect-mongo/build/libs/*.jar $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-mongodb; \
+    cp /tmp/kafka-connect-mongo/etc/connect-mongo* /etc/kafka-connect-mongodb/
 
 # Install Radar MongoDB Sink Kafka Connector
 ENV KAFKA_CONNECT_MONGODB_VER 0.1
@@ -406,11 +410,13 @@ RUN mkdir -p $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-nats; \
                  https://github.com/oystparis/kafka-connect-nats/releases/download/$KAFKA_CONNECT_NATS_VER/kafka-connect-nats-$KAFKA_CONNECT_NATS_VER-jar-with-dependencies.jar
 
 # Install SQS Source Kafka Connector
-ENV KAFKA_CONNECT_SQS_VER 0.15-14b4523
+ENV KAFKA_CONNECT_SQS_VER 1.0
 RUN git clone -b $KAFKA_CONNECT_SQS_VER https://github.com/ConnectedHomes/sqs-kafka-connect.git /tmp/kafka-connect-sqs; \
     cd /tmp/kafka-connect-sqs; \
-    sbt assembly
-
+    sbt assembly; \
+    mkdir -p $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-sqs;\
+    cp /tmp/kafka-connect-sqs/target/scala-2.11/*.jar $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-sqs
+    
 # --------------------------------------------------------------------------------------------------------------------------------------------------
 
 ################################################################
@@ -432,8 +438,6 @@ ADD core ./core
 ADD kafka-connect-kudu ./kafka-connect-kudu
 ADD smt ./smt
 
-
-
 RUN cd /tmp/parrot; \
     mvn -DskipTests package; \
     mv /tmp/parrot/kafka-connect-kudu/target/kafka-connect-target/etc/kafka-connect-parrot-kudu /etc/; \
@@ -441,8 +445,8 @@ RUN cd /tmp/parrot; \
     rm -rf /tmp/parrot
 
 # Clean install artifacts of all previous connectors
-RUN rm -rf /tmp/kafka-connect-*; \
-    rm -rf /tmp/replicate-connector*
+#RUN rm -rf /tmp/kafka-connect-*; \
+#    rm -rf /tmp/replicate-connector*
 
 COPY docker/etc/ /etc/
 COPY docker/*.sh /

@@ -309,9 +309,6 @@
 		<!-- KAFKA -->
 		<version.kafka>0.10.2.0</version.kafka>
 
-		<!-- DEBEZIUM -->
-		<version.debezium>0.5.1</version.debezium>
-		
 		<java.compiler.source>1.8</java.compiler.source>
 		<java.compiler.target>1.8</java.compiler.target>
 

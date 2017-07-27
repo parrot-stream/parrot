@@ -1,7 +1,7 @@
 version: '3'
 services:
   postgres:
-    image: mcapitanio/postgres:9.6
+    image: parrotstream/postgres:latest
     networks:
     - parrot
     ports:

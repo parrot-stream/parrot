@@ -36,7 +36,7 @@ public abstract class ImpalaClient extends AbstractJdbcClient {
   }
 
   @Override
-  public String getImpalaDataType(Field field) {
+  public String getDataType(Field field) {
     switch (field.schema().type()) {
       case INT8:
       case INT16:

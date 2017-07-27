@@ -5,7 +5,7 @@ export DOCKER_IMAGE=parrotstream/parrot
 function usage {
   echo -e "#################################################################################################################################################"
   echo -e "  Usage:"
-  echo -e "             ./parrot-cli COMMAND [OPTIONS]"
+  echo -e "             ./parrot COMMAND [OPTIONS]"
   echo -e ""
   echo -e "  Commands:"
   echo -e "     start             	            Starts Parrot (without dependent services)"
@@ -117,10 +117,11 @@ function start_all {
   start kafka
   start postgres
   start kafka-connect-ui
-  start kafka-schema-registry-ui
+  start schema-registry-ui
   start kafka-topics-ui
   start hive
   if [[ ($USE_KUDU = "true") ]]; then
+    start kudu
     start impala-kudu
   else
     start impala
@@ -132,6 +133,7 @@ function start_all {
 
 function stop_all {
   stop hue
+  stop kudu
   stop impala-kudu
   stop impala
   stop hadoop
@@ -149,9 +151,12 @@ function stop_all {
 
 function build {
   mvn -N versions:update-child-modules
+  mvn clean package
+  if [ $? -ne 0 ]; then
+    exit 1
+  fi
   docker-compose -f docker/parrot.yml build
   if [ $? -ne 0 ]; then
-  
     exit 1
   fi
   if [[ ($DOCKER_TAG -ne "local") ]]; then

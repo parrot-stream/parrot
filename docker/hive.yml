@@ -1,7 +1,7 @@
 version: '3'
 services:
   hive:
-    image: mcapitanio/hive:latest
+    image: parrotstream/hive:latest
     networks:
     - parrot
     external_links:

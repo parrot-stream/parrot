@@ -1,7 +1,7 @@
 version: '3'
 services:
   zookeeper:
-    image: mcapitanio/zookeeper:3.5.3
+    image: parrotstream/zookeeper:latest
     ports:
     - 2181:2181
     - 2888:2888

@@ -1,7 +1,7 @@
 version: '3'
 services:
   hbase:
-    image: mcapitanio/hbase:1.2.0-cdh5.11.1
+    image: parrotstream/hbase:latest
     networks:
     - parrot
     external_links:
