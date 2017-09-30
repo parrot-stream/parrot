@@ -1,4 +1,4 @@
-# Welcome to **Parrot Streaming**!
+# Welcome to **Parrot Stream**!
 
 **Change Data Capture** (CDC) is an approach to data integration that is based on the identification, capture and delivery of changes made to enterprise data sources.
 There are several commercial and proprietary ways to do CDC, directly delivered by database vendor or by data integration software houses, but there is a general lack of solid **open source** solutions.
