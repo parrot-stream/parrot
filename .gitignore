@@ -3,4 +3,4 @@
 **/.settings/
 **/target
 /bin/
-**/deploy
+**/_build

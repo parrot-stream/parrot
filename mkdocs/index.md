@@ -17,7 +17,7 @@ So the main goals of **Parrot Stream** are:
 
 * give you a **distribution** of *existing open source tools* to be up & running in minutes with an end to end solution mainly focused with the needs of *Change Data Capture*
 * leverage the power of existing open source tools like *Debezium* and *Kafka Connect* to not reinvent the wheel in implementing the solution and, at the same time, to build upon them an enterprise and robust solution
-* implement some Kafka Connect Sink connectors to enable you to define advanced data streaming pipelines with features like schema evolution, autocreation, error management, streaming data quality.
+* implement some **Kafka Connect Sink** connectors to enable you to define advanced data streaming pipelines with features like *schema evolution*, *autocreation*, *error management*, *streaming data quality*.
 
 Actually the following `Kafka Connector Sinks` have been implemented and can be considered at an early development stage:
 
