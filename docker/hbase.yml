@@ -11,7 +11,7 @@ services:
     volumes:
     - hbase_conf:/opt/hbase/conf
     ports:
-    - 8080:8080
+    - 8084:8080
     - 8085:8085
     - 9090:9090
     - 9095:9095

@@ -6,7 +6,7 @@ services:
     - 2181:2181
     - 2888:2888
     - 3888:3888
-    - 8086:8080
+    - 8080:8080
     networks:
     - parrot
 networks:

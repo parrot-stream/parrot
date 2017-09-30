@@ -34,9 +34,7 @@ services:
     - parrot
     ports:
     - 8053:8050
-    - 25002:25000
     environment:
-      IMPALA_STATE_STORE: "false"
       KUDU_MASTER: "false"
       IMPALA_STATE_STORE_HOST: "impala"
 networks:

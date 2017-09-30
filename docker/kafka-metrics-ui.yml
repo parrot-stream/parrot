@@ -1,0 +1,20 @@
+version: '3'
+services:
+  kafka-metrics-ui:
+    image: parrotstream/kafka-metrics-ui:latest
+    networks:
+    - parrot
+    external_links:
+    - parrot
+    ports:
+    - $KAFKA_METRICS_UI_PORT:$KAFKA_METRICS_UI_PORT
+    environment:
+      KAFKA_LENSES_URL: http://kafka:8082
+      PROXY: "true"
+      KAFKA_METRICS_UI_PORT: $KAFKA_METRICS_UI_PORT
+networks:
+  default:
+    external:
+      name: parrot
+  parrot:
+    driver: bridge

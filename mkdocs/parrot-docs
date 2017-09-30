@@ -1,0 +1,96 @@
+#!/bin/bash
+
+function usage {
+  echo -e "###############################################################################"
+  echo -e "  Usage:"
+  echo -e ""
+  echo -e "     ./parrot-docs COMMAND [-u|--user=<username>]"
+  echo -e ""
+  echo -e "  Commands:"
+  echo -e ""
+  echo -e "     site           Builds a local site documentation"
+  echo -e "     deploy         Deploy online documentation"
+  echo -e ""
+  echo -e "###############################################################################"
+  print_env
+}
+
+function print_env {
+  echo -e "###############################################################################"
+  echo -e "  SCRIPT: parrot-docs"
+  echo -e "-------------------------------------------------------------------------------"
+  echo -e "  Executing with:"
+  echo -e ""
+  echo -e "           Command             -> $COMMAND"
+  echo -e "           Username            -> $USERNAME"
+  echo -e "###############################################################################"
+}
+
+function site {
+  mkdocs build -c
+}
+
+function deploy {
+  if [[ (-z "$USERNAME") ]]; then
+    echo "You must specify a username!"
+    usage
+    exit 0
+  fi
+  mkdocs gh-deploy
+#  mkdir deploy
+#  mv site deploy/docs
+  ssh $USERNAME@parrotstream.io rm -rf /volume1/web/parrotstream.io/docs
+  ssh $USERNAME@parrotstream.io mkdir /volume1/web/parrotstream.io/docs
+  scp -r deploy/docs $USERNAME@parrotstream.io:/volume1/web/parrotstream.io
+#  rm -rf deploy
+}
+
+function check_command {
+  for i in "$@"
+  do
+  case $i in
+    site*|deploy*)
+    COMMAND=$i
+    shift
+    ;;
+    -u*|--user*)
+    set -- "$i" 
+    IFS="="; declare -a Array=($*)
+    USERNAME=${Array[1]}
+    shift
+    ;;
+    -p*|--password*)
+    set -- "$i" 
+    IFS="="; declare -a Array=($*)
+    PASSWORD=${Array[1]}
+    shift
+    ;;
+  esac
+  done
+
+  if [[ (-z "$COMMAND") ]]; then
+    usage
+    exit 0
+  fi
+
+}
+
+function execute_command {
+
+  case $COMMAND in
+    site)
+      site
+      ;;
+    deploy)
+      deploy
+      ;;
+  esac
+
+}
+
+check_command "$@"
+print_env
+execute_command
+
+
+

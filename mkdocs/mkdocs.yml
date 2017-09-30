@@ -1,0 +1,19 @@
+site_name: Parrot Stream
+pages:
+    - Introduction: index.md
+    - Quickstart: quickstart.md
+    - Development: development.md
+    - Installation & Configuration:
+        - 'Overview': 'installation/overview.md'
+        - 'Cloudera CSDs': 'installation/cloudera-csds.md'
+        - 'Dockers': 'installation/dockers.md'
+    - Connectors:
+        - 'HBase Connector': 'connectors/hbase-connector.md'
+        - 'Kudu Connector': 'connectors/kudu-connector.md'
+    - FAQ: faq.md
+theme: readthedocs
+repo_url: https://github.com/parrot-stream/parrot.git
+site_url: https://parrotstream.io/docs/
+edit_uri: edit/master/mkdocs/docs
+site_author: Matteo Capitanio
+site_dir: deploy/docs

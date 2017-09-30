@@ -8,11 +8,11 @@ function usage {
   echo -e "             ./parrot COMMAND [OPTIONS]"
   echo -e ""
   echo -e "  Commands:"
-  echo -e "     start             	            Starts Parrot (without dependent services)"
-  echo -e "     stop              	            Stops Parrot (without dependent services)"
-  echo -e "     restart           	            Restarts Parrot (without dependent services)"
-  echo -e "     start-all         	            Starts Parrot (with all dependent services)"
-  echo -e "     stop-all          	            Stops Parrot (with all dependent services)"
+  echo -e "     start                           Starts Parrot (without dependent services)"
+  echo -e "     stop                            Stops Parrot (without dependent services)"
+  echo -e "     restart                         Restarts Parrot (without dependent services)"
+  echo -e "     start-all                       Starts Parrot (with all dependent services)"
+  echo -e "     stop-all                        Stops Parrot (with all dependent services)"
   echo -e "     restart-all                     Restarts Parrot (with all dependent services)"
   echo -e "     start -s|--services=SERVICES    Starts a comma-separated list of services"
   echo -e ""
@@ -28,9 +28,9 @@ function usage {
   echo -e ""
   echo -e "     logs -s|--services=SERVICE      View the logs of a service"
   echo -e ""
-  echo -e "     test              	            Runs Parrot Integration Tests"
-  echo -e "     build             	            Builds Parrot"
-  echo -e "     init-postgres     	            Init Postgres with Unit Test data structures"
+  echo -e "     test                            Runs Parrot Integration Tests"
+  echo -e "     build                           Builds Parrot"
+  echo -e "     init-postgres                   Init Postgres with Unit Test data structures"
   echo -e ""
   echo -e "  Options:"
   echo -e "     -s, --services  Comma-separated list of services to start|stop|restart"
@@ -40,6 +40,7 @@ function usage {
   echo -e "      zookeeper"
   echo -e "      kafka"
   echo -e "      kafka-topics-ui"
+  echo -e "      kafka-metrics-ui"
   echo -e "      kafka-connect-ui"
   echo -e "      schema-registry-ui"
   echo -e "      hadoop"
@@ -54,11 +55,11 @@ function usage {
   echo -e ""    
   echo -e " Exposed Ports:"
   echo -e ""
-  echo -e "                   5432  	->  PostgreSQL"
-  echo -e "                   3306  	->  MySQL"
-  echo -e "                   27017 	->  MongoDB"
-  echo -e "                   1521  	->  Oracle Database"
-  echo -e "                   5500  	->  Oracle Enterprise Manager"
+  echo -e "      5432  	->  PostgreSQL"
+  echo -e "      3306  	->  MySQL"
+  echo -e "      27017 	->  MongoDB"
+  echo -e "      1521  	->  Oracle Database"
+  echo -e "      5500  	->  Oracle Enterprise Manager"
   echo -e "#################################################################################################################################################"
 }
 
@@ -116,9 +117,6 @@ function start_all {
   start hadoop
   start kafka
   start postgres
-  start kafka-connect-ui
-  start schema-registry-ui
-  start kafka-topics-ui
   start hive
   if [[ ($USE_KUDU = "true") ]]; then
     start kudu
@@ -126,9 +124,13 @@ function start_all {
   else
     start impala
   fi
-  start hbase -d
-  start hue -d
+  start hbase
+  start hue
   start parrot
+  start kafka-connect-ui
+  start schema-registry-ui
+  start kafka-topics-ui
+  start kafka-metrics-ui
 }
 
 function stop_all {
@@ -143,6 +145,7 @@ function stop_all {
   stop kafka-connect-ui
   stop schema-registry-ui
   stop kafka-topics-ui
+  stop kafka-metrics-ui
   stop postgres
   stop kafka
   stop zookeeper
@@ -167,6 +170,7 @@ function build {
 export KAFKA_TOPICS_UI_PORT=9000
 export SCHEMA_REGISTRY_UI_PORT=9001
 export KAFKA_CONNECT_UI_PORT=9002
+export KAFKA_METRICS_UI_PORT=9003
 export SCHEMA_REGISTRY_PORT=8081
 export PARROT_PORT=8083
 
