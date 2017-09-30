@@ -12,7 +12,7 @@ pages:
         - 'Kudu Connector': 'connectors/kudu-connector.md'
     - FAQ: faq.md
 theme: readthedocs
-repo_url: https://github.com/parrot-stream/parrot.git
+repo_url: https://github.com/parrot-stream/parrot
 site_url: https://parrotstream.io/docs/
 edit_uri: edit/master/mkdocs/docs
 site_author: Matteo Capitanio
