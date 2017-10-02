@@ -3,7 +3,7 @@
 export DOCKER_IMAGE=parrotstream/parrot
 
 function usage {
-  echo -e "#################################################################################################################################################"
+  echo -e "##########################################################################################"
   echo -e "  Usage:"
   echo -e "             ./parrot COMMAND [OPTIONS]"
   echo -e ""
@@ -40,7 +40,6 @@ function usage {
   echo -e "      zookeeper"
   echo -e "      kafka"
   echo -e "      kafka-topics-ui"
-  echo -e "      kafka-metrics-ui"
   echo -e "      kafka-connect-ui"
   echo -e "      schema-registry-ui"
   echo -e "      hadoop"
@@ -60,18 +59,18 @@ function usage {
   echo -e "      27017 	->  MongoDB"
   echo -e "      1521  	->  Oracle Database"
   echo -e "      5500  	->  Oracle Enterprise Manager"
-  echo -e "#################################################################################################################################################"
+  echo -e "##########################################################################################"
 }
 
 function print_env {
-  echo -e "#################################################################################################################################################"
+  echo -e "##########################################################################################"
   echo -e "  SERVICE: parrot"
-  echo -e "-------------------------------------------------------------------------------------------------------------------------------------------------"
+  echo -e "------------------------------------------------------------------------------------------"
   echo -e "  Executing with:                                                                                                                                "
   echo -e "           Command             -> $COMMAND"
   echo -e "           Services            -> $SERVICES"
   echo -e "           Options             -> `echo $OPTIONS | sed -e 's/^[ \t]*//'`" 
-  echo -e "#################################################################################################################################################"
+  echo -e "##########################################################################################"
 }
 
 function start {
@@ -130,7 +129,6 @@ function start_all {
   start kafka-connect-ui
   start schema-registry-ui
   start kafka-topics-ui
-  start kafka-metrics-ui
 }
 
 function stop_all {
@@ -145,7 +143,6 @@ function stop_all {
   stop kafka-connect-ui
   stop schema-registry-ui
   stop kafka-topics-ui
-  stop kafka-metrics-ui
   stop postgres
   stop kafka
   stop zookeeper

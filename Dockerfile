@@ -10,6 +10,7 @@ ENV KAFKA_CONNECT_DEBEZIUM_VER 0.5.1
 ENV MAVEN_VER 3.5.0
 ENV KAFKA_CONNECT_PLUGINS_DIR=/usr/share/java
 
+RUN yum makecache fast
 RUN wget http://dl.bintray.com/sbt/rpm/sbt-0.13.5.rpm; \
     yum localinstall -y sbt-0.13.5.rpm
 RUN yum update -y
@@ -19,6 +20,7 @@ RUN yum install -y confluent-schema-registry
 
 # Install Confluent Source & Sink Connectors
 RUN yum install -y confluent-kafka-connect-jdbc confluent-kafka-connect-elasticsearch confluent-kafka-connect-hdfs confluent-kafka-connect-s3
+RUN yum clean all
 
 # Install Maven
 RUN curl -fSL -o /tmp/maven.tar.gz http://it.apache.contactlab.it/maven/maven-3/$MAVEN_VER/binaries/apache-maven-$MAVEN_VER-bin.tar.gz; \
@@ -55,10 +57,11 @@ RUN curl -fSL -o /tmp/kafka-connect-$DATAMOUNTAINEER_CONNECTOR_NAME.tar.gz \
     tar -xzf /tmp/kafka-connect-$DATAMOUNTAINEER_CONNECTOR_NAME.tar.gz -C $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-datamountaineer-$DATAMOUNTAINEER_CONNECTOR_NAME
 
 # Install DbVisit Oracle Source Kafka Connector
-ENV KAFKA_CONNECT_DBVISIT_ORACLE_VER 2.0.0
+ENV KAFKA_CONNECT_DBVISIT_ORACLE_VER 2.9.00
 RUN git clone https://github.com/dbvisitsoftware/replicate-connector-library.git /tmp/replicate-connector-library; \
     git clone https://github.com/dbvisitsoftware/replicate-connector-for-kafka.git /tmp/replicate-connector-for-kafka; \
     cd /tmp/replicate-connector-library; \
+    mvn versions:set -DnewVersion=$KAFKA_CONNECT_DBVISIT_ORACLE_VER; \
     mvn -DskipTests install; \
     cd /tmp/replicate-connector-for-kafka; \
     mvn -DskipTests package; \
@@ -409,14 +412,6 @@ RUN mkdir -p $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-nats; \
     curl -fSL -o $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-nats/kafka-connect-nats.jar \
                  https://github.com/oystparis/kafka-connect-nats/releases/download/$KAFKA_CONNECT_NATS_VER/kafka-connect-nats-$KAFKA_CONNECT_NATS_VER-jar-with-dependencies.jar
 
-# Install SQS Source Kafka Connector
-ENV KAFKA_CONNECT_SQS_VER 1.0
-RUN git clone -b $KAFKA_CONNECT_SQS_VER https://github.com/ConnectedHomes/sqs-kafka-connect.git /tmp/kafka-connect-sqs; \
-    cd /tmp/kafka-connect-sqs; \
-    sbt assembly; \
-    mkdir -p $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-sqs;\
-    cp /tmp/kafka-connect-sqs/target/scala-2.11/*.jar $KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-sqs
-    
 # --------------------------------------------------------------------------------------------------------------------------------------------------
 
 ################################################################

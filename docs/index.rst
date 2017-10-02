@@ -1,20 +1,23 @@
-.. Parrot Stream documentation master file, created by
-   sphinx-quickstart on Sat Sep 30 21:30:55 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Parrot Stream!
-=========================================
+#########################
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 4
+   :numbered:
 
-   introduction
-   quickstart
+   Introduction <introduction>
+   Quickstart <quickstart>
+   Cloudera Distribution <distributions/cloudera-csds>
+   Docker Distribution <distributions/dockers>
+   Development Distribution <distributions/development>
+   Debezium Connectors <connectors/debezium>
+   Parrot Connectors <connectors/parrot>
+   Confluent Connectors <connectors/confluent>
+   Datamountaineer Connectors <connectors/datamountaineer>
+   Community Connectors <connectors/community>
 
 Indices and tables
-==================
+##################
 
 * :ref:`genindex`
 * :ref:`modindex`
