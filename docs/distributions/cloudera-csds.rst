@@ -7,7 +7,8 @@ Installation
 Prerequisites
 =============
 
-The following prerequisites are necessary to correctly install and configure the **Parrot Stream Distribution** for Cloudera:
+The following prerequisites are necessary to correctly install and configure the **Parrot Stream Distribution** for
+Cloudera:
 
 1. Cloudera Manager 5.5.3 or higher 2. CDH 5.4.x or higher 3. Kafka_ 2.1.x or higher
 
@@ -16,9 +17,11 @@ CSDs download and install
 
 To install **Parrot Stream Distribution** CSDs you have to:
 
-1. download your release of CSDs jars from the `Parrot Stream CSD GitHub repository`_ 2. copy them in the CSDs directory on the Cloudera Manager server ``/opt/cloudera/csd`` (the default). For example, to install the ``v1.0.0-alpha.1`` release of the Parrot Stream CSDs do:
+1. download your release of CSDs jars from the `Parrot Stream CSD GitHub repository`_ 2. copy them in the CSDs directory
+on the Cloudera Manager server ``/opt/cloudera/csd`` (the default). For example, to install the ``v1.0.0-alpha.1``
+release of the Parrot Stream CSDs do:
 
-   .. highlight:: bash
+.. highlight:: bash
 
 ::
 
@@ -38,8 +41,7 @@ To install **Parrot Stream Distribution** CSDs you have to:
 
        sudo service cloudera-scm-server restart
 
-4. go to *Hosts -> Parcels* in Cloudera Manager and **Download**,
-   **Distribute** and **Activate** the following parcels:
+4. go to *Hosts -> Parcels* in Cloudera Manager and **Download**, **Distribute** and **Activate** the following parcels:
 
    * KAFKA\_REST
    * SCHEMA\_REGISTRY
@@ -48,7 +50,8 @@ To install **Parrot Stream Distribution** CSDs you have to:
 
 
 5. return to the Cloudera Manager Home and select **Add Service** in the
-   drop down menu just right the cluster name. Adding Parrot services remember that they depends on each other and on CDH and Kafka services, so you should install them in the following order:
+   drop down menu just right the cluster name. Adding Parrot services remember that they depends on each other and on
+   CDH and Kafka services, so you should install them in the following order:
 
    .. htmlonly::
 
@@ -60,17 +63,17 @@ To install **Parrot Stream Distribution** CSDs you have to:
    |       |                  | Kafka            |
    +-------+------------------+------------------+
    | 2     | Kafka REST Proxy | Schema Registry  |
-   +-------+------------------+------------------+
+   +-------+                  +------------------+
    |       |                  | Kafka            |
    +-------+------------------+------------------+
    | 3     | Parrot Stream    | Schema Registry  |
-   +-------+------------------+------------------+
+   +-------+                  +------------------+
    |       |                  | Kafka            |
    +-------+------------------+------------------+
    | 4     | Parrot Manager   | Schema Registry  |
-   +-------+------------------+------------------+
+   +-------+                  +------------------+
    |       |                  | Kafka REST Proxy |
-   +-------+------------------+------------------+
+   +-------+                  +------------------+
    |       |                  | Parrot Stream    |
    +-------+------------------+------------------+
 
@@ -83,9 +86,15 @@ Configuration
 Schema Registry
 ===============
 
-`**Confluent Schema Registry** <http://docs.confluent.io/current/schema-registry/docs/intro.html>`__ provides a serving layer for your metadata. It provides a RESTful interface for storing and retrieving Avro schemas. It stores a versioned history of all schemas, provides multiple compatibility settings and allows evolution of schemas according to the configured compatibility setting. It provides serializers that plug into Kafka clients that handle schema storage and retrieval for Kafka messages that are sent in the Avro format.
+`Confluent Schema Registry_` provides a serving layer for your metadata. It provides a RESTful interface for storing and
+retrieving Avro schemas. It stores a versioned history of all schemas, provides multiple compatibility settings and allows
+evolution of schemas according to the configured compatibility setting. It provides serializers that plug into Kafka clients
+that handle schema storage and retrieval for Kafka messages that are sent in the Avro format.
 
-To add a new Schema Registry role you have to set the correct **security protocol** used by Schema Registry to connect to a Kafka cluster.
+To add a new Schema Registry role you have to set the correct **security protocol** used by Schema Registry to connect to
+a Kafka cluster.
+
+.. htmlonly::
 
 +------------------------------+-----------+-------------------------------+
 | Parameter                    | Value     | Description                   |
@@ -103,13 +112,17 @@ To add a new Schema Registry role you have to set the correct **security protoco
 |                              |           | both Kerberos and SSL         |
 +------------------------------+-----------+-------------------------------+
 
+
 SSL configuration to communicate with Kafka brokers
 ---------------------------------------------------
 
-In case of SSL is enabled in Kafka an you want your Schema Registry communicate with Kafka broker in SSL, using SSL or SASL\_SSL security protocol, you have two cases:
+In case of SSL is enabled in Kafka an you want your Schema Registry communicate with Kafka broker in SSL, using SSL or
+SASL\_SSL security protocol, you have two cases:
 
-1. parameter ``ssl.client.auth`` is ``none`` or ``requested`` in Kafka
-   brokers: you need just to configure the **truststore** file location and password:
+1. parameter ``ssl.client.auth`` is ``none`` or ``requested`` in Kafka brokers: you need just to configure the **truststore**
+file location and password:
+
+.. htmlonly::
 
 +------------------------------------+----------------------------------------+
 | Parameter                          | Value                                  |
@@ -119,8 +132,10 @@ In case of SSL is enabled in Kafka an you want your Schema Registry communicate 
 | kafkastore.ssl.truststore.password | [trustore password]                    |
 +------------------------------------+----------------------------------------+
 
-2. parameter ``ssl.client.auth`` is ``required`` in Kafka brokers: you
-   need also to configure the **keystore** file location and password and the key password:
+2. parameter ``ssl.client.auth`` is ``required`` in Kafka brokers: you need also to configure the **keystore** file location
+and password and the key password:
+
+.. htmlonly::
 
 +----------------------------------+----------------------------------------+
 | Parameter                        | Value                                  |
@@ -135,7 +150,10 @@ In case of SSL is enabled in Kafka an you want your Schema Registry communicate 
 SSL configuration for Schema Registry in HTTPS
 ----------------------------------------------
 
-In case you want to expose Schema Registry using SSL you have to enable it setting true the property ``ssl.enabled`` and define the keystore file location and password and the SSL private key password:
+In case you want to expose Schema Registry using SSL you have to enable it setting true the property ``ssl.enabled`` and
+define the keystore file location and password and the SSL private key password:
+
+.. htmlonly::
 
 +-----------------------+----------------------------------------+
 | Parameter             | Value                                  |
@@ -150,15 +168,17 @@ In case you want to expose Schema Registry using SSL you have to enable it setti
 Kafka REST Proxy
 ================
 
-`**Confluent Kafka REST Proxy** <http://docs.confluent.io/current/kafka-rest/docs/intro.html>`__ provides a RESTful interface to a Kafka cluster. In the Parrot Distribution for Cloudera it is used by the Parrot Stream and Parrot Manager services.
+`Confluent Kafka REST Proxy`_ provides a RESTful interface to a Kafka cluster. In the Parrot Distribution for Cloudera it is used
+by the Parrot Stream and Parrot Manager services.
 
 SSL configuration to communicate with Kafka brokers
 ---------------------------------------------------
 
 As explained for the Schema Registry configuration, you should define **truststore** and **keystore** following these rules:
 
-1. if in Kafka brokers the parameter ``ssl.client.auth`` is ``none`` or
-   ``requested``:
+1. if in Kafka brokers the parameter ``ssl.client.auth`` is ``none`` or ``requested``:
+
+.. htmlonly::
 
 +--------------------------------+------------------------------------------+
 | Parameter                      | Value                                    |
@@ -170,6 +190,8 @@ As explained for the Schema Registry configuration, you should define **truststo
 
 2. if in Kafka broker the parameter ``ssl.client.auth`` is ``required``:
 
+.. htmlonly::
+
 +------------------------------+----------------------------------------+
 | Parameter                    | Value                                  |
 +==============================+========================================+
@@ -180,7 +202,10 @@ As explained for the Schema Registry configuration, you should define **truststo
 | client.ssl.key.password      | *[ssl private key password]*           |
 +------------------------------+----------------------------------------+
 
-You might also need to set the parameter ``bootstrap.servers`` which is a list of Kafka brokers to connect to, if different brokers use different security protocols. For example:
+You might also need to set the parameter ``bootstrap.servers`` which is a list of Kafka brokers to connect to, if different brokers
+use different security protocols. For example:
+
+.. htmlonly::
 
 +-------------------+-------------------------------+
 | Parameter         | Value                         |
@@ -192,12 +217,20 @@ You might also need to set the parameter ``bootstrap.servers`` which is a list o
 |                   | SASL\_SSL://[hostname-3]:9093 |
 +-------------------+-------------------------------+
 
-This configuration is particularly important when Kafka security is enabled, because Kafka may expose multiple endpoints that all will be stored in ZooKeeper, but Kafka REST may need to be configured with just one of those endpoints. The client will make use of all servers irrespective of which servers are specified here for bootstrapping: this list only impacts the initial hosts used to discover the full set of servers. Since these servers are just used for the initial connection to discover the full cluster membership (which may change dynamically), this list need not contain the full set of servers (you may want more than one, though, in case a server is down).
+This configuration is particularly important when Kafka security is enabled, because Kafka may expose multiple endpoints
+that all will be stored in ZooKeeper, but Kafka REST may need to be configured with just one of those endpoints. The
+client will make use of all servers irrespective of which servers are specified here for bootstrapping: this list only
+impacts the initial hosts used to discover the full set of servers. Since these servers are just used for the initial
+connection to discover the full cluster membership (which may change dynamically), this list need not contain the full
+set of servers (you may want more than one, though, in case a server is down).
 
 SSL configuration for Kafka REST Proxy in HTTPS
 -----------------------------------------------
 
-In case you want to expose Kafka REST Proxy using SSL you have to enable it setting true the property ``ssl.enabled`` and define the keystore file location and password and the SSL private key password:
+In case you want to expose Kafka REST Proxy using SSL you have to enable it setting true the property ``ssl.enabled``
+and define the keystore file location and password and the SSL private key password:
+
+.. htmlonly::
 
 +-----------------------+----------------------------------------+
 | Parameter             | Value                                  |
@@ -212,9 +245,13 @@ In case you want to expose Kafka REST Proxy using SSL you have to enable it sett
 Parrot Stream
 =============
 
-`**Parrot Stream** <https://github.com/parrot-stream/parrot.git>`__ is a distribution of `**Confluent Kafka Connect** <http://docs.confluent.io/current/kafka-connect/docs/intro.html>`__ togheter with the `Confluent certified connectors <https://www.confluent.io/product/connectors/>`__ and the `Parrot <https://github.com/parrot-stream/parrot.git>`__ ones. **Kafka Connect** is a framework for scalably and reliably connecting Kafka with external systems such as databases, key-value stores, search indexes, and file systems.
+`Parrot Stream`_ is a distribution of `Confluent Kafka Connect`_, the `Confluent certified connectors`_ and the `Parrot connectors`_.
+**Kafka Connect** is a framework for scalably and reliably connecting Kafka with external systems such as databases, key-value stores,
+search indexes, and file systems.
 
 You need to set the mandatory parameter ``bootstrap.servers`` which is a list of Kafka brokers to connect to. For example:
+
+.. htmlonly::
 
 +-------------------+-------------------------------------+
 | Parameter         | Value                               |
@@ -228,30 +265,42 @@ You need to set the mandatory parameter ``bootstrap.servers`` which is a list of
 |                   | SASL\_SSL://[hostname-3]:9093       |
 +-------------------+-------------------------------------+
 
-    **NOTE**: If you have less then 3 Kafka brokers instances, reduce the replication factor which has a default value of 3: it cannot be larger then the number of Kafka brokers. So if you have just 1 Kafka broker change the following values to 1:
+.. warning:: If you have less then 3 Kafka brokers instances, reduce the replication factor which has a default value of 3 as it cannot be larger then the number of Kafka brokers. So if you have just 1 Kafka broker change the following values to 1:
+   
+   .. htmlonly::
 
-+-----------------------------------+-----------+
-| >                                 | Parameter |
-+===================================+===========+
-| config.storage.replication.factor | 1         |
-+-----------------------------------+-----------+
-| offset.storage.replication.factor | 1         |
-+-----------------------------------+-----------+
-| status.storage.replication.factor | 1         |
-+-----------------------------------+-----------+
+   +-----------------------------------+-----------+
+   | Parameter                         | Parameter |
+   +===================================+===========+
+   | config.storage.replication.factor | 1         |
+   +-----------------------------------+-----------+
+   | offset.storage.replication.factor | 1         |
+   +-----------------------------------+-----------+
+   | status.storage.replication.factor | 1         |
+   +-----------------------------------+-----------+
+
+
 
 SSL configuration to communicate with Kafka brokers
 ---------------------------------------------------
 
 In case of SSL is enabled in Kafka you have to cases:
 
-1. parameter ``ssl.client.auth`` is ``none`` or ``requested`` in Kafka
-   brokers: you need just to configure the **truststore** file location and password:
+1. parameter ``ssl.client.auth`` is ``none`` or ``requested`` in Kafka brokers: you need just to configure the **truststore** file location and password:
 
-   +---------------------------+--------------------------------------------+ | Parameter                 | Value   | +===========================+============================================+ | ssl.truststore.location   | *[full path of the jks truststore file]*   | +---------------------------+--------------------------------------------+ | ssl.truststore.password   | *[trustore password]*                      | +---------------------------+--------------------------------------------+
+.. htmlonly::
 
-2. parameter ``ssl.client.auth`` is ``required`` in Kafka brokers: you
-   need also to configure the **keyststore** file location and password and the key password:
++-------------------------+------------------------------------------+
+| Parameter               | Value                                    |
++=========================+==========================================+
+| ssl.truststore.location | *[full path of the jks truststore file]* |
++-------------------------+------------------------------------------+
+| ssl.truststore.password | *[trustore password]*                    |
++-------------------------+------------------------------------------+
+
+2. parameter ``ssl.client.auth`` is ``required`` in Kafka brokers: you need also to configure the **keyststore** file location and password and the key password:
+
+.. htmlonly::
 
 +------------------------------+----------------------------------------+
 | Parameter                    | Value                                  |
@@ -266,7 +315,10 @@ In case of SSL is enabled in Kafka you have to cases:
 SSL configuration for Parrot Stream in HTTPS
 --------------------------------------------
 
-In case you want to expose Kafka Connect using SSL you have to enable it setting true the property ``ssl.enabled`` and define the keystore file location and password and the SSL private key password:
+In case you want to expose Kafka Connect using SSL you have to enable it setting true the property ``ssl.enabled`` and
+define the keystore file location and password and the SSL private key password:
+
+.. htmlonly::
 
 +-----------------------+----------------------------------------+
 | Parameter             | Value                                  |
@@ -283,19 +335,20 @@ Parrot Manager
 
 Parrot Manager is composed by the following UIs:
 
-1. `**Schema Registry
-   UI** <https://github.com/parrot-stream/schema-registry-ui.git>`__: a tool to create / view / search / evolve / view history and configure Avro schemas of your Kafka cluster using the Confluent Schema Registry
-2. `**Kafka Topics
-   UI** <https://github.com/parrot-stream/kafka-topics-ui.git>`__: a tool to browse Kafka topics
-3. `**Kafka Connect
-   UI** <https://github.com/parrot-stream/kafka-connect-ui.git>`__: a tool for setting up and managing connectors in Parrot Stream
+1. `Schema Registry UI`_: a tool to create / view / search / evolve history and configure Avro schemas of your Kafka cluster using
+the Confluent Schema Registry
+2. `Kafka Topics UI`_: a tool to browse Kafka topics
+3. `Kafka Connect UI`_: a tool for setting up and managing connectors in Parrot Stream
 
-When choosing the roles to install you can choose just the Schema Registry UI and Kafka Topics UI: the Kafka Connect UI will be installed on the same node chosen for Kafka Topics UI.
+When choosing the roles to install you can choose just the Schema Registry UI and Kafka Topics UI: the Kafka Connect UI
+will be installed on the same node chosen for Kafka Topics UI.
 
 SSL configuration for HTTPS
 ---------------------------
 
 To configure SSL you have to enable ``ssl.enabled`` and define the **keystore** in the UI you want to get secured:
+
+.. htmlonly::
 
 +-------------------------+----------------------------------------+
 | Parameter               | Value                                  |
@@ -307,7 +360,9 @@ To configure SSL you have to enable ``ssl.enabled`` and define the **keystore** 
 | ssl.truststore.password | *[ PEM truststore password]*           |
 +-------------------------+----------------------------------------+
 
-For developing purposes only you can instead enable the parameter ``ssl.generate.self.signed`` to get a self-signed certificate automatically created by Schema Registry UI. Alternatively, if you want to generate a PEM certificate to use setting the previous parameters you can use the PEM certificate generator as described in the following chapter.
+For developing purposes only you can instead enable the parameter ``ssl.generate.self.signed`` to get a self-signed
+certificate automatically created by Schema Registry UI. Alternatively, if you want to generate a PEM certificate to
+use setting the previous parameters you can use the PEM certificate generator as described in the following chapter.
 
 Self-signed certificates
 ************************
@@ -317,15 +372,20 @@ For developing purposes you can use self-signed certificate, JKS or PEM ones.
 JKS certificates
 ================
 
-The script ``jks-cert.sh`` helps you to automate the creation and installation of JKS certificates on the Cloudera cluster nodes.
+The script ``jks-cert.sh`` helps you to automate the creation and installation of JKS certificates on the Cloudera
+cluster nodes.
 
-The following command generates a self-signed JKS certificate for the FQDN host **hostname.domainname** with the alias **kafka** and puts it under the ``/var/private/ssl/kafka`` directory in the keystore file ``kafka-keystore.jks``. The password for the keystore and the key password is ``password``.
+The following command generates a self-signed JKS certificate for the FQDN host **hostname.domainname** with the alias
+**kafka** and puts it under the ``/var/private/ssl/kafka`` directory in the keystore file ``kafka-keystore.jks``. The
+password for the keystore and the key password is ``password``.
 
 ::
 
     sudo -E ./jks-cert.sh create -a=kafka -h=hostname.domainname -sd=/var/private/ssl/kafka
 
 You can use such certificate in the Parrot Manager:
+
+.. htmlonly::
 
 +-------------------------+-----------------------------------------------+
 | Parameter               | Value                                         |
@@ -344,69 +404,79 @@ You can use such certificate in the Parrot Manager:
 PEM certificates
 ================
 
-The script ``pem-cert.sh`` helps you to automate the creation and installation of self-signed PEM certificates on the Cloudera cluster nodes.
+The script ``pem-cert.sh`` helps you to automate the creation and installation of self-signed PEM certificates on the
+Cloudera cluster nodes.
 
-The following command generates a self-signed PEM certificate with the alias **parrot-manager** and puts it under the ``/var/private/ssl/parrot-manager`` directory in the keystore file ``parrot-manager-key.pem``. The password for the keystore and the key password is ``password``.
+The following command generates a self-signed PEM certificate with the alias **parrot-manager** and puts it under the
+``/var/private/ssl/parrot-manager`` directory in the keystore file ``parrot-manager-key.pem``. The password for the
+keystore and the key password is ``password``.
 
 sudo -E ./pem-cert.sh create -a=parrot-manager -sd=/var/private/ssl/parrot-manager
 
 setting the following configuration:
 
-+-------------------------+--------+
-| Parameter               | Value  |
-+=========================+========+
-| ssl.enabled             | true   |
-+-------------------------+--------+
-| ssl.self.signed.cert    | false  |
-+-------------------------+--------+
-| ssl.keystore.location   | /var/p |
-|                         | rivate |
-|                         | /ssl/p |
-|                         | arrot- |
-|                         | manage |
-|                         | r/parr |
-|                         | ot-man |
-|                         | ager-k |
-|                         | ey.pem |
-+-------------------------+--------+
-| ssl.keystore.password   | passwo |
-|                         | rd     |
-+-------------------------+--------+
-| ssl.truststore.location | /var/p |
-|                         | rivate |
-|                         | /ssl/p |
-|                         | arrot- |
-|                         | manage |
-|                         | r/parr |
-|                         | ot-man |
-|                         | ager-c |
-|                         | ert.pe |
-|                         | m      |
-+-------------------------+--------+
+.. htmlonly::
+
++-------------------------+---------------------------------------------------------+
+| Parameter               | Value                                                   |
++=========================+=========================================================+
+| ssl.enabled             | true                                                    |
++-------------------------+---------------------------------------------------------+
+| ssl.self.signed.cert    | false                                                   |
++-------------------------+---------------------------------------------------------+
+| ssl.keystore.location   | /var/private/ssl/parrot-manager/parrot-manager-key.pem  |
++-------------------------+---------------------------------------------------------+
+| ssl.keystore.password   | password                                                |
+|                         | rd                                                      |
++-------------------------+---------------------------------------------------------+
+| ssl.truststore.location | /var/private/ssl/parrot-manager/parrot-manager-cert.pem |
++-------------------------+---------------------------------------------------------+
 
 Cloudera Security
 *****************
 
-In this chapter you can find some hints to quickly configure TLS and SASL in a Cloudera cluster with a single node: this can be useful to quickly set up a development environment. For a production environment please refer to the `Cloudera Security <https://www.cloudera.com/documentation/enterprise/latest/topics/security.html>`__ official documentation.
+In this chapter you can find some hints to quickly configure TLS and SASL in a Cloudera cluster with a single node: this
+can be useful to quickly set up a development environment. For a production environment please refer to the
+`Cloudera Security`_ official documentation.
 
 TLS for Cloudera Manager
 ========================
 
-1. generate a self-signed certificate in the keystore with alias
-   ``cloudera-manager``, for the host with FQDN hostname ``[hostname.domainname]``:
+1. generate a self-signed certificate in the keystore with alias ``cloudera-manager``, for the host with FQDN hostname ``[hostname.domainname]``:
 
 ::
 
        ./jks-cert.sh create -a=cloudera-manager -h=[hostname.domainname] -sd=/opt/cloudera/security
 
-2. Configure Cloudera Manager Admin Security in *Administration ->
-   Settings -> Security*:
+2. Configure Cloudera Manager Admin Security in *Administration -> Settings -> Security*:
 
-   +------------------+------------+ | Parameter        | Value      | +==================+============+ | Use TLS  | true       | | Encryption for   |            | | Admin Console    |            | +------------------+------------+ | Cloudera Manager | /opt/cloud | | TLS/SSL Server   | era/securi | | JKS Keystore | ty/jks/clo | | File Location   | udera-mana | |                  | ger-keysto | |             | re.jks     | +------------------+------------+ | Cloudera Manager | password | | TLS/SSL Server   |            | | JKS Keystore  |        | | File Password    |    | +------------------+------------+ | Cloudera Manager | /opt/cloud | | TLS/SSL          | era/securi | | Certificate | ty/jks/clo | | Trust Store File | udera-mana | |        | ger-keysto | |  | re.jks     | +------------------+------------+ | Cloudera Manager | password | | TLS/SSL         |            | | Certificate   | | | Trust Store      |            | | Password         |       | +------------------+------------+
+.. htmlonly::
+
++------------------------------------------------------------+----------------------------------------------------------+
+| Parameter                                                  | Value                                                    |
++============================================================+==========================================================+
+| Use TLS Encryption for Admin Console                       | true                                                     |
++------------------------------------------------------------+----------------------------------------------------------+
+| Cloudera Manager TLS/SSL Server JKS Keystore File Location | /opt/cloudera/security/jks/cloudera-manager-keystore.jks |
++------------------------------------------------------------+----------------------------------------------------------+
+| Cloudera Manager TLS/SSL Server JKS Keystore File Password | password                                                 |
++------------------------------------------------------------+----------------------------------------------------------+
+| Cloudera Manager TLS/SSL Certificate Trust Store File      | /opt/cloudera/security/jks/cloudera-manager-keystore.jks |
++------------------------------------------------------------+----------------------------------------------------------+
+| Cloudera Manager TLS/SSL Certificate Trust Store Password  | password                                                 |
++------------------------------------------------------------+----------------------------------------------------------+
 
 3. Configure Cloudera Management Service in *Configuration -> Security*:
 
-   +------------------+------------+ | Parameter        | Value      | +==================+============+ | ssl.client.trust | /opt/cloud | | store.location   | era/securi | |                  | ty/jks/clo | |        | udera-mana | |                  | ger-keysto | |                 | re.jks | +------------------+------------+ | ssl.client.trust | password   | | store.password   |            | +------------------+------------+
+.. htmlonly::
+
++--------------------------------+----------------------------------------------------------+
+| Parameter                      | Value                                                    |
++================================+==========================================================+
+| ssl.client.truststore.location | /opt/cloudera/security/jks/cloudera-manager-keystore.jks |
++--------------------------------+----------------------------------------------------------+
+| ssl.client.truststore.password | password                                                 |
++--------------------------------+----------------------------------------------------------+
 
 4. Restart Cloudera Manager
 
@@ -419,7 +489,13 @@ Level 1: TLS for Cloudera Manager Agents
 
 1. Go to *Administration -> Settings -> Security*:
 
-   +---------------------------------+---------+ | Parameter                | Value   | +=================================+=========+ | Use TLS Encryption for Agents   | true    | +---------------------------------+---------+
+.. htmlonly::
+
++-------------------------------+-------+
+| Parameter                     | Value |
++===============================+=======+
+| Use TLS Encryption for Agents | true  |
++-------------------------------+-------+
 
 2. Edit ``/etc/cloudera-scm-agent/config.ini`` for each agent:
 
@@ -482,8 +558,7 @@ Level 3: TLS Authentication of Agents to the Cloudera Manager Server
 
 For each agent:
 
-1. Create a file with the kaystore password, for example
-   ``/etc/cloudera-scm-agent/agentkey.pw`` which will contain the password ``password``:
+1. Create a file with the kaystore password, for example ``/etc/cloudera-scm-agent/agentkey.pw`` which will contain the password ``password``:
 
 ::
 
@@ -504,10 +579,15 @@ For each agent:
 
        sudo service cloudera-scm-agent restart
 
-4. Enable Agent Authentication in *Administration -> Settings ->
-   Security*:
+4. Enable Agent Authentication in *Administration -> Settings -> Security*:
 
-   +----------------------------------------------+---------+ | Parameter   | Value   | +==============================================+=========+ | Use TLS Authentication of Agents to Server   | true   | +----------------------------------------------+---------+
+.. htmlonly::
+
++--------------------------------------------+-------+
+| Parameter                                  | Value |
++============================================+=======+
+| Use TLS Authentication of Agents to Server | true  |
++--------------------------------------------+-------+
 
 5. Restart Cloudera Manager Server and Agents:
 
@@ -524,7 +604,7 @@ In this chapter you'll read how to install and configure a KDC server and how to
 Install a KDC server
 --------------------
 
-These instructions are mainly based on `Configuring the Kerberos KDC <https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System-Level_Authentication_Guide/Configuring_a_Kerberos_5_Server.html>`__.
+These instructions are mainly based on `Configuring the Kerberos KDC`_.
 
 1. Install packages:
 
@@ -532,9 +612,7 @@ These instructions are mainly based on `Configuring the Kerberos KDC <https://ac
 
        sudo yum -y install ntp krb5-server krb5-workstation krb5-libs openldap-clients
 
-    **NOTE**: following, replace ``hostname``, ``HOSTNAME``,
-    ``domainname`` and ``DOMAINNAME`` with your real host name and
-    domain name (lower and upper case).
+.. note:: Following, replace ``hostname``, ``HOSTNAME``, ``domainname`` and ``DOMAINNAME`` with your real host name and domain name (lower and upper case).
 
 2. Edit ``/etc/krb5.conf`` as root and update with:
 
@@ -640,7 +718,7 @@ These instructions are mainly based on `Configuring the Kerberos KDC <https://ac
 Configure Kerberos in Cloudera Manager
 --------------------------------------
 
-Following instructions are base on `Cloudera Documentation <https://www.cloudera.com/documentation/enterprise/latest/topics/cm_sg_intro_kerb.html>`__.
+Following instructions are base on `Cloudera Documentation`_.
 
 1. Create a Kerberos Principal for the Cloudera Manager Server:
 
@@ -654,8 +732,19 @@ and test it with:
 
         kinit cloudera-scm/admin@CLOUDERA
 
-2. Enable Kerberos using the Wizard in *Administration -> Security* and
-   using the "cloudera-scm/admin@DOMAINNAME" user previously created
+2. Enable Kerberos using the Wizard in *Administration -> Security* and using the ``cloudera-scm/admin@DOMAINNAME`` user previously created
 
 .. _Kafka: https://www.cloudera.com/documentation/kafka/latest/topics/kafka_install.html
 .. _Parrot Stream CSD GitHub repository: https://github.com/parrot-stream/parrot-cloudera-csds/releases
+.. _Confluent Schema Registry: http://docs.confluent.io/current/schema-registry/docs/intro.html
+.. _Confluent Kafka REST Proxy: http://docs.confluent.io/current/kafka-rest/docs/intro.html
+.. _Schema Registry UI: https://github.com/parrot-stream/schema-registry-ui.git
+.. _Confluent Kafka Connect: http://docs.confluent.io/current/kafka-connect/docs/intro.html
+.. _Confluent certified connectors: https://www.confluent.io/product/connectors/
+.. _Parrot connectors: https://github.com/parrot-stream/parrot.git
+.. _Kafka Topics UI: https://github.com/parrot-stream/kafka-topics-ui.git
+.. _Kafka Connect UI: https://github.com/parrot-stream/kafka-connect-ui.git
+.. _Parrot Stream: https://github.com/parrot-stream/parrot.git
+.. _Cloudera Security: https://www.cloudera.com/documentation/enterprise/latest/topics/security.html
+.. _Configuring the Kerberos KDC: https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System-Level_Authentication_Guide/Configuring_a_Kerberos_5_Server.html
+.. _Cloudera Documentation: https://www.cloudera.com/documentation/enterprise/latest/topics/cm_sg_intro_kerb.html
